@@ -27,6 +27,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
@@ -316,7 +317,8 @@ public class DocumentToJavaMongoDB<T> {
                             Class cls = Class.forName(referencedBeans.getFacade());
                             Test.msg("paso 1");
 //                            Object obj  = getBean(cls);
-                            Object obj  = getBeanByName("TipovehiculoFacade");
+                        //    Object obj  = getBeanByName("TipovehiculoFacade");
+                      Object obj    =   lookUpClassInBeanManager(cls);
                             Test.msg("paso 2");
 //                            Object obj = cls.newInstance();
                             Method method;
@@ -371,6 +373,13 @@ public class DocumentToJavaMongoDB<T> {
         return null;
     }
     
+    
+    private static <T> T lookUpClassInBeanManager(Class<T> clazz) {
+    BeanManager bm = CDI.current().getBeanManager();
+    Bean<T> bean = (Bean<T>) bm.getBeans(clazz).iterator().next();
+    CreationalContext<T> ctx = bm.createCreationalContext(bean);
+    return (T) bm.getReference(bean, clazz, ctx);
+}
     public Object getBeanByName(String name) // eg. name=availableCountryDao
     {
         Object o = null;
