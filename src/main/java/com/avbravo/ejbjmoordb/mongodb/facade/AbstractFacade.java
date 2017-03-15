@@ -98,17 +98,17 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
     public MongoDatabase getMongoDatabase() {
         try {
 //            if(getMongoClient() == null){
-//                System.out.println("conexion es nula");
+//                //Test.msg("conexion es nula");
 //            }else{
-//                System.out.println("Este conectado ");
+//                //Test.msg("Este conectado ");
 //            }
             //getMongoClient().getConnectPoint();
-            System.out.println("---> getConnectPoint()" + getMongoClient().getConnectPoint());
+            //Test.msg("---> getConnectPoint()" + getMongoClient().getConnectPoint());
             MongoDatabase db = getMongoClient().getDatabase(database);
             if (db == null) {
-                Test.msg("+++AbstractFacade.getMonogDatabase() == null");
+                //Test.msg("+++AbstractFacade.getMonogDatabase() == null");
             } else {
-                Test.msg("+++AbstractFacade.getMonogDatabase() != null");
+                //Test.msg("+++AbstractFacade.getMonogDatabase() != null");
             }
             return db;
         } catch (Exception ex) {
@@ -411,9 +411,9 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
 
     public T search(String key, Object value) {
         try {
-            Test.msg("=====================================================");
-            Test.msg("Llego al search()");
-            Test.msg("=====================================================");
+            //Test.msg("=====================================================");
+            //Test.msg("Llego al search()");
+            //Test.msg("=====================================================");
             //   Object t = entityClass.newInstance();
             //MongoDatabase db = getMongoClient().getDatabase(database);
             //   MongoDatabase db =    getMongoDatabase();
@@ -421,18 +421,18 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
             MongoDatabase db = getMongoClient().getDatabase(database);
 //        MongoDatabase db = db_;
             if (db == null) {
-                Test.msg("+++AbstractFacade.getMonogDatabase() == null");
+                //Test.msg("+++AbstractFacade.getMonogDatabase() == null");
             } else {
-                Test.msg("+++AbstractFacade.getMonogDatabase() != null");
+                //Test.msg("+++AbstractFacade.getMonogDatabase() != null");
             }
             if (db == null) {
-                Test.msg("+++ db is null");
+                //Test.msg("+++ db is null");
                 return null;
             } else {
-                Test.msg("+++ db no is null");
+                //Test.msg("+++ db no is null");
             }
             FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
-            Test.msg("+++ paso iterable");
+            //Test.msg("+++ paso iterable");
             haveElements = false;
             iterable.forEach(new Block<Document>() {
                 @Override
@@ -509,7 +509,7 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
      */
     private T iterableSimple(FindIterable<Document> iterable) {
         try {
-            //      System.out.println("$$$$$$$iterable simple");
+            //      //Test.msg("$$$$$$$iterable simple");
             haveElements = false;
 
             iterable.forEach(new Block<Document>() {
@@ -623,8 +623,8 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
 
         } catch (Exception e) {
             Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-            new JmoordbException("find()");
+            exception = new Exception("findAll() ", e);
+            new JmoordbException("findAll()");
         }
 
         return list;

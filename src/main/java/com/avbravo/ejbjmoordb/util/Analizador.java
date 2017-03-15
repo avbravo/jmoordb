@@ -183,7 +183,7 @@ public class Analizador {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("verifyPrimaryKey() " + e.getLocalizedMessage());
+            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -197,7 +197,7 @@ public class Analizador {
             embeddedBeansList.add(embeddedBeans);
             return true;
         } catch (Exception e) {
-            System.out.println("verifyEmbedded() " + e.getLocalizedMessage());
+            //Test.msg("verifyEmbedded() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -225,7 +225,7 @@ public class Analizador {
             referencedBeansList.add(referencedBeans);
             return true;
         } catch (Exception e) {
-            System.out.println("verifyReferenced() " + e.getLocalizedMessage());
+            //Test.msg("verifyReferenced() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -249,7 +249,7 @@ public class Analizador {
             datePatternBeansList.add(datePatternBeans);
             return true;
         } catch (Exception e) {
-            System.out.println("verifyReferenced() " + e.getLocalizedMessage());
+            //Test.msg("verifyReferenced() " + e.getLocalizedMessage());
         }
         return false;
     }

@@ -24,7 +24,7 @@ public class Util {
 
             texto = letra.toUpperCase() + texto.substring(1);
         } catch (Exception ex) {
-          System.out.println("letterToUpper() " + ex.getLocalizedMessage());
+          //Test.msg("letterToUpper() " + ex.getLocalizedMessage());
         }
         return texto;
     }
@@ -49,7 +49,7 @@ public class Util {
 
             texto = letra.toLowerCase() + texto.substring(1);
         } catch (Exception ex) {
-          System.out.println("letterToLower() " + ex.getLocalizedMessage());
+          //Test.msg("letterToLower() " + ex.getLocalizedMessage());
         }
         return texto;
     }
@@ -59,7 +59,7 @@ public class Util {
         try {
             
         } catch (Exception e) {
-            System.out.println("traductor() "+e.getLocalizedMessage());
+            //Test.msg("traductor() "+e.getLocalizedMessage());
             new JmoordbException("traductor() "+e.getLocalizedMessage());
         }
  return traduccion;       
