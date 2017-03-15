@@ -411,25 +411,12 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
 
     public T search(String key, Object value) {
         try {
-            //Test.msg("=====================================================");
-            //Test.msg("Llego al search()");
-            //Test.msg("=====================================================");
-            //   Object t = entityClass.newInstance();
-            //MongoDatabase db = getMongoClient().getDatabase(database);
-            //   MongoDatabase db =    getMongoDatabase();
-//     getMongoClient()
+
             MongoDatabase db = getMongoClient().getDatabase(database);
-//        MongoDatabase db = db_;
+
             if (db == null) {
-                //Test.msg("+++AbstractFacade.getMonogDatabase() == null");
-            } else {
-                //Test.msg("+++AbstractFacade.getMonogDatabase() != null");
-            }
-            if (db == null) {
-                //Test.msg("+++ db is null");
                 return null;
             } else {
-                //Test.msg("+++ db no is null");
             }
             FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
             //Test.msg("+++ paso iterable");

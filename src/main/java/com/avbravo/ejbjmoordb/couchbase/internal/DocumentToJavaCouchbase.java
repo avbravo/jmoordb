@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.avbravo.ejbjmoordb.anotations.mongodb.internal;
+package com.avbravo.ejbjmoordb.couchbase.internal;
 
 import com.avbravo.ejbjmoordb.EmbeddedBeans;
 import com.avbravo.ejbjmoordb.JmoordbException;
@@ -12,7 +12,6 @@ import com.avbravo.ejbjmoordb.util.ClassDescriptor;
 import com.avbravo.ejbjmoordb.util.ClassDescriptorsCache;
 import com.avbravo.ejbjmoordb.util.FieldDescriptor;
 import com.avbravo.ejbjmoordb.util.ReflectionUtils;
-import com.avbravo.ejbjmoordb.util.Test;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -22,25 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.Any;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
-import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.context.FacesContext;
-import javax.naming.InitialContext;
-import javax.servlet.ServletContext;
 import org.bson.Document;
 
 /**
  *
  * @author avbravo
  */
-public class DocumentToJavaMongoDB<T> {
-
-    private static final Logger LOG = Logger.getLogger(DocumentToJavaMongoDB.class.getName());
+public class DocumentToJavaCouchbase<T> {
 
     private ClassDescriptorsCache cache = new ClassDescriptorsCache();
     List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
@@ -50,8 +41,11 @@ public class DocumentToJavaMongoDB<T> {
 
     @SuppressWarnings("unchecked")
     public <T> T fromDocument(Class<T> clazz, Document dbObject, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
-
+       
+         //Test.msg("public <T> T fromDocument()");
+       
         if (dbObject == null) {
+             //Test.msg("dbObject == null");
             return null;
         }
         this.embeddedBeansList = embeddedBeansList;
@@ -60,7 +54,7 @@ public class DocumentToJavaMongoDB<T> {
         Object object = classDescriptor.newInstance();
         for (FieldDescriptor fieldDescriptor : classDescriptor.getFields()) {
             try {
-                //Test.msg(" Analizando: " + fieldDescriptor.getName());
+                 //Test.msg("[ Analizando fieldDescriptor " + fieldDescriptor.getName()+ " ]");
                 fieldDescriptor.getField().set(object,
                         fromDocumentRecursive(dbObject.get(fieldDescriptor.getName()), fieldDescriptor));
             } catch (Exception e) {
@@ -80,9 +74,10 @@ public class DocumentToJavaMongoDB<T> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Object fromDocumentRecursive(Object dbObject, FieldDescriptor fieldDescriptor) {
         try {
-            //Test.msg("==================================================");
-            //Test.msg("  fromDocumentRecursive: " + fieldDescriptor.getName());
+             //Test.msg("     ---------------------------------------------------");
+             //Test.msg("            fromDocumentRecursive{} " + fieldDescriptor.getName());
 
+            //  System.out.println("  fromDocumentRecursive: " + fieldDescriptor.getName());
             if (dbObject == null) {
 
                 return fieldDescriptor.getDefaultValue();
@@ -90,10 +85,10 @@ public class DocumentToJavaMongoDB<T> {
 
             Class<?> fieldType = fieldDescriptor.getField().getType();
             if (fieldDescriptor.isSimple()) {
-                //Test.msg("   [isSimple] " + fieldDescriptor.getSimpleValue(dbObject));
+                 //Test.msg("                   [isSimple] " + fieldDescriptor.getSimpleValue(dbObject));
                 return fieldDescriptor.getSimpleValue(dbObject);
             } else if (fieldDescriptor.isArray()) {
-                //Test.msg("   [ isArray]");
+                 //Test.msg("                   [ isArray]");
                 BasicDBList dbList = (BasicDBList) dbObject;
                 if (fieldType.getComponentType().isPrimitive()) {
 
@@ -114,22 +109,24 @@ public class DocumentToJavaMongoDB<T> {
                 Object[] arrayPrototype = (Object[]) Array.newInstance(fieldType.getComponentType(), 0);
                 return list.toArray(arrayPrototype);
             } else if (fieldDescriptor.isList()) {
-                //Test.msg(" [isList()  ]" + fieldDescriptor.getName());
+                 //Test.msg("                 [isList()  ]" + fieldDescriptor.getName());
                 if (isEmbedded(fieldDescriptor.getName())) {
-                    //     //Test.msg("     [es Embebido]");
+                     //Test.msg("                          -->[isEmbedded().a  ]" + fieldDescriptor.getName());
 
-                    List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
-
+                        List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
+                     //Test.msg("                          -->[isEmbedded().b  ]" + fieldDescriptor.getName());
                     List list = (List) fieldDescriptor.newInstance();
-
+                     //Test.msg("                          -->[isEmbedded().c  ]" + fieldDescriptor.getName());
                     for (Object listEl : dbList) {
-
+                         //Test.msg("                          -->[isEmbedded().d  ]" + fieldDescriptor.getName());
                         if (ReflectionUtils.isSimpleClass(listEl.getClass())) {
-
+                             //Test.msg("                          -->[isEmbedded().e  ]" + fieldDescriptor.getName());
                             list.add(listEl);
+                             //Test.msg("                          -->[isEmbedded().f  ]" + fieldDescriptor.getName());
                         } else {
-
+                             //Test.msg("                          -->[isEmbedded().g  ]" + fieldDescriptor.getName());
                             list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedBeansList, referencedBeansList));
+                             //Test.msg("                          -->[isEmbedded().h  ]" + fieldDescriptor.getName());
                         }
                     }
 
@@ -137,9 +134,9 @@ public class DocumentToJavaMongoDB<T> {
                 } else {
                     if (isReferenced(fieldDescriptor.getName())) {
                         //Referenciado
-                        //Test.msg("     [es Referenciado]");
+                         //Test.msg("                    [es Referenciado]");
                         if (referencedBeans.getLazy()) {
-                            //Test.msg("[    Lazy == true no carga los relacionados ]");
+                             //Test.msg("                 [    Lazy == true no carga los relacionados ]");
 
                             List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
                             List list = (List) fieldDescriptor.newInstance();
@@ -153,7 +150,7 @@ public class DocumentToJavaMongoDB<T> {
 
                             return list;
                         } else {
-                            //Test.msg("[    Lazy == false carga los relacionados ]");
+                             //Test.msg("                 [    Lazy == false carga los relacionados ]");
 
                             List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
                             List list = (List) fieldDescriptor.newInstance();
@@ -167,26 +164,25 @@ public class DocumentToJavaMongoDB<T> {
                                     Class[] paramString = new Class[2];
                                     paramString[0] = String.class;
                                     Class cls = Class.forName(referencedBeans.getFacade());
+                             Object obj = lookUpClassInBeanManager(cls);
 //                                    Object obj = cls.newInstance();
-      Object obj = lookUpClassInBeanManager(cls);
                                     Method method;
                                     String value = "";
                                     if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
                                         //@Id de tipo Integer
+                                        //Test.msg(" @Id de tipo Integer");
                                         Integer n = (Integer) doc.get(referencedBeans.getField());
                                         method = cls.getDeclaredMethod("findById", String.class, Integer.class);
-////Test.msg(" voy a optional Integer");
 
                                         t1 = (T) method.invoke(obj, referencedBeans.getField(), n);
 
                                     } else {
-                                        //Test.msg(" voy a optional String");
+                                        //Test.msg(" @Id de tipo String");
                                         value = (String) doc.get(referencedBeans.getField());
                                         paramString[1] = String.class;
                                         method = cls.getDeclaredMethod("findById", paramString);
 
                                         String[] param = {referencedBeans.getField(), value};
-
                                         t1 = (T) method.invoke(obj, param);
                                     }
 
@@ -199,7 +195,7 @@ public class DocumentToJavaMongoDB<T> {
                         }
 
                     } else {
-                        //Test.msg("    No es[Embebido] ni  [Referenciado]");
+                         //Test.msg("                    No es[Embebido] ni  [Referenciado]");
                         List<BasicDBObject> foundDocument = (ArrayList<BasicDBObject>) dbObject;
                         List list = (List) fieldDescriptor.newInstance();
 
@@ -217,7 +213,7 @@ public class DocumentToJavaMongoDB<T> {
                 }
 
             } else if (fieldDescriptor.isSet()) {
-                //Test.msg(" [isSet()  ]");
+                 //Test.msg("                  [isSet()  ]");
                 BasicDBList dbList = (BasicDBList) dbObject;
                 Set set = (Set) fieldDescriptor.newInstance();
                 for (Object listEl : dbList) {
@@ -232,7 +228,7 @@ public class DocumentToJavaMongoDB<T> {
                 }
                 return set;
             } else if (fieldDescriptor.isMap()) {
-                //Test.msg(" isMap()  ]");
+                 //Test.msg("                 isMap()  ]");
                 DBObject dbMap = (DBObject) dbObject;
                 Map map = (Map) fieldDescriptor.newInstance();
                 for (Object key : dbMap.keySet()) {
@@ -250,9 +246,9 @@ public class DocumentToJavaMongoDB<T> {
                 }
                 return map;
             } else if (fieldDescriptor.isObject()) {
-                //Test.msg("   [isObject] " + fieldDescriptor.getName() + " ]");
+                 //Test.msg("                   [isObject] " + fieldDescriptor.getName() + " ]");
                 if (isEmbedded(fieldDescriptor.getName())) {
-                    //Test.msg("  [es Embebido]");
+                     //Test.msg("                  [es Embebido]");
                     Object object = fieldDescriptor.newInstance();
                     for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
                         try {
@@ -261,16 +257,16 @@ public class DocumentToJavaMongoDB<T> {
                                             fromDocumentRecursive(((Document) dbObject).get(childDescriptor.getName()),
                                                     childDescriptor));
                         } catch (Exception e) {
-                            throw new JmoordbException("[isObject]Failed to set field value " + childDescriptor.getName(), e);
+                            throw new JmoordbException("Failed to set field value " + childDescriptor.getName(), e);
                         }
                     }
                     return object;
                 } else {
                     if (isReferenced(fieldDescriptor.getName())) {
                         //Referenciado
-                        //Test.msg("         [es Referenciado] ");
+                         //Test.msg("                     [es Referenciado] ");
                         if (referencedBeans.getLazy()) {
-                            //Test.msg("[    {Lazy == true} No carga los relacionados ]");
+                             //Test.msg("               [    {Lazy == true} No carga los relacionados ]");
                             Object object = fieldDescriptor.newInstance();
                             for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
                                 try {
@@ -288,14 +284,17 @@ public class DocumentToJavaMongoDB<T> {
                             return object;
 //                       
                         } else {
-  //Test.msg("                 [   Lazy == false carga los relacionados ]");
+                             //Test.msg("                 [   Lazy == false carga los relacionados ]");
+                            //cargar todos los relacionads
+                            Object object = fieldDescriptor.newInstance();
                             Class cls = Class.forName(referencedBeans.getFacade());
-
-                            Object obj = lookUpClassInBeanManager(cls);
+                              Object obj = lookUpClassInBeanManager(cls);
+//                            Object obj = cls.newInstance();
                             Method method;
 
                             //             
                             if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
+                                //Test.msg("         Integer");
                                 //@Id de tipo Integer
                                 Class[] paramString = new Class[2];
                                 method = cls.getDeclaredMethod("findById", String.class, Integer.class);
@@ -311,9 +310,11 @@ public class DocumentToJavaMongoDB<T> {
                                 t1 = (T) method.invoke(obj, referencedBeans.getField(), value);
 
                             } else {
+                                //Test.msg ( "       String");
                                 Class[] paramString = new Class[2];
                                 paramString[0] = String.class;
                                 paramString[1] = String.class;
+                                //Test.msg ( "       invocare method findById");
                                 method = cls.getDeclaredMethod("findById", paramString);
 
                                 String value = "";
@@ -321,17 +322,22 @@ public class DocumentToJavaMongoDB<T> {
                                     if (childDescriptor.getField().getName().equals(referencedBeans.getField())) {
                                         Object x = ((Document) dbObject).get(childDescriptor.getName());
                                         value = (String) childDescriptor.getSimpleValue(x);
+                                        //Test.msg("    value= "+value);
                                     }
                                 }
                                 String[] param = {referencedBeans.getField(), value};
+                                 //Test.msg("    param= "+referencedBeans.getField());
                                 t1 = (T) method.invoke(obj, param);
+                                //Test.msg("   paso  el  invoke t1");
+                               
                             }
-
+                            //Test.msg( " voy a imprimir t1");
+ //Test.msg(" t1= "+t1.toString());
                             return t1;
 
                         }
                     } else {
-                        //Test.msg("                   [No es Referenced]");
+                         //Test.msg("                   [No es Referenced]");
                         new JmoordbException("@Embedded or @Reference is required for this field " + fieldDescriptor.getName());
                         return new Document();
                     }
@@ -339,39 +345,11 @@ public class DocumentToJavaMongoDB<T> {
 
             }
         } catch (Exception e) {
-            throw new JmoordbException("fromDocumentRecursive() " + fieldDescriptor.getName(), e);
+            throw new JmoordbException("Failed to set field value " + fieldDescriptor.getName(), e);
         }
         return null;
     }
 
-//    public Object getBeanByName(String name) // eg. name=availableCountryDao
-//    {
-//        Object o = null;
-//        try {
-//             BeanManager bm = getBeanManager();
-//        Bean bean = bm.getBeans(name).iterator().next();
-//        CreationalContext ctx = bm.createCreationalContext(bean); // could be inlined below
-//     o = bm.getReference(bean, bean.getClass(), ctx); // could be inlined with
-//        } catch (Exception e) {
-//            LOG.warning("getBeanByName() "+e.getLocalizedMessage());
-//            //Test.msg("getBeanByName() "+e.getLocalizedMessage());
-//        }
-//  
-//        return o;
-//    }
-//     public static <T> T getBean(Class<T> clazz) {
-//    BeanManager bm = getBeanManager();
-//    Bean<T> bean = (Bean<T>) bm.getBeans(clazz).iterator().next();
-//    CreationalContext<T> ctx = bm.createCreationalContext(bean);
-//    return (T) bm.getReference(bean, clazz, ctx);
-//  }
-//
-//    private static BeanManager getBeanManager() {
-//        ServletContext servletContext = (ServletContext) FacesContext
-//                .getCurrentInstance().getExternalContext().getContext();
-//        return (BeanManager) servletContext
-//                .getAttribute("javax.enterprise.inject.spi.BeanManager");
-//    }
     private Boolean isEmbedded(String name) {
         try {
             if (embeddedBeansList.stream().anyMatch((eb) -> (eb.getName().equals(name)))) {
@@ -395,7 +373,7 @@ public class DocumentToJavaMongoDB<T> {
             for (ReferencedBeans eb : referencedBeansList) {
                 if (eb.getName().equals(name)) {
                     referencedBeans = eb;
-                    //Test.msg("Referenced() " + eb.toString());
+                    //   System.out.println("Referenced() "+eb.toString());
                     return true;
                 }
             }
@@ -405,11 +383,10 @@ public class DocumentToJavaMongoDB<T> {
         }
         return false;
     }
-
-    private static <T> T lookUpClassInBeanManager(Class<T> clazz) {
-        BeanManager bm = CDI.current().getBeanManager();
-        Bean<T> bean = (Bean<T>) bm.getBeans(clazz).iterator().next();
-        CreationalContext<T> ctx = bm.createCreationalContext(bean);
-        return (T) bm.getReference(bean, clazz, ctx);
-    }
+     private static <T> T lookUpClassInBeanManager(Class<T> clazz) {
+    BeanManager bm = CDI.current().getBeanManager();
+    Bean<T> bean = (Bean<T>) bm.getBeans(clazz).iterator().next();
+    CreationalContext<T> ctx = bm.createCreationalContext(bean);
+    return (T) bm.getReference(bean, clazz, ctx);
+}
 }
