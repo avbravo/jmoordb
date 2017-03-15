@@ -4,7 +4,7 @@
 
     <groupId>com.avbravo</groupId>
     <artifactId>ejbjmoordb</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.2.1</version>
     <packaging>ejb</packaging>
 
     <name>ejbjmoordb</name>
@@ -21,7 +21,11 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-    
+     <dependency>
+            <groupId>org.omnifaces</groupId>
+            <artifactId>omnifaces</artifactId>
+            <version>2.6.1</version>
+        </dependency>
          <dependency>
             <groupId>net.sf.flexjson</groupId>
             <artifactId>flexjson</artifactId>
