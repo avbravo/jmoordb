@@ -18,6 +18,7 @@ public class Test {
     
     public static void msg(String texto){
         LOG.warning(texto);
+
         //Test.msg( texto);
     }
 }
