@@ -825,8 +825,7 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
      * @param docSort
      * @return
      */
-    public List<T> findlike(String key, String value, Document... docSort) {
-        Document sortQuery = new Document();
+    public List<T> findlike(String key, String value, Document... docSort) {        Document sortQuery = new Document();
         list = new ArrayList<>();
 
         try {
