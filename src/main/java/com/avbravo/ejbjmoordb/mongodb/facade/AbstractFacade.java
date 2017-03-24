@@ -15,8 +15,8 @@ import com.avbravo.ejbjmoordb.anotations.mongodb.interfaces.AbstractInterface;
 import com.avbravo.ejbjmoordb.anotations.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.ejbjmoordb.anotations.mongodb.internal.JavaToDocument;
 import com.avbravo.ejbjmoordb.util.Analizador;
-import com.avbravo.ejbjmoordb.util.Test;
 import com.avbravo.ejbjmoordb.util.Util;
+import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.CursorType;
 import com.mongodb.Function;
@@ -30,6 +30,7 @@ import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gt;
 import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.regex;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import static com.mongodb.client.model.Indexes.ascending;
 import static com.mongodb.client.model.Indexes.descending;
@@ -40,7 +41,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -51,8 +51,6 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.FacesContext;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -825,7 +823,8 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
      * @param docSort
      * @return
      */
-    public List<T> findlike(String key, String value, Document... docSort) {        Document sortQuery = new Document();
+    public List<T> findLike(String key, String value, Document... docSort) {    
+        Document sortQuery = new Document();
         list = new ArrayList<>();
 
         try {
@@ -836,14 +835,75 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
             }
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
-
+//            Pattern regex = Pattern.compile(value,Pattern.CASE_INSENSITIVE);
+     //String pattern = "/.*"+value+".*/";
+//String pattern = ".*" + value + ".*";
             MongoDatabase db = getMongoClient().getDatabase(database);
-            FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, regex)).sort(sortQuery);
+            //FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, regex)).sort(sortQuery);
+//           FindIterable<Document> iterable = db.getCollection(collection).
+//                   find(new Document(key, regex)).sort(sortQuery);
+//Document doc = new Document();
+//doc.put("$regex",value);
+//
+//           FindIterable<Document> iterable = db.getCollection(collection).
+//                   find(new Document(key, doc)).sort(sortQuery);
+           
+           
+ FindIterable<Document> iterable = db.getCollection(collection)
+         .find(new Document("$text", new Document("$search", value)));
+           
+//            FindIterable<Document> iterable = db.getCollection(collection).
+//                    find(regex(key, pattern)).sort(sortQuery);
+            
+            
+            
+            
+            
             list = iterableList(iterable);
+            
+            
+            
+            
 
         } catch (Exception e) {
             Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findLike()", e);
+        }
+        return list;
+    }
+    
+    /**
+     * Requiere que se cree un indice primero
+     * URL:https://docs.mongodb.com/manual/reference/operator/query/text/
+     * Indice: db.planetas.createIndex( { idplaneta: "text" } )
+     *
+     * @param key
+     * @param value
+     * @param docSort
+     * @return
+     */
+    public List<T> findText(String key, String value, Document... docSort) {    
+        Document sortQuery = new Document();
+        list = new ArrayList<>();
+
+        try {
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Object t = entityClass.newInstance();
+            MongoDatabase db = getMongoClient().getDatabase(database);
+ FindIterable<Document> iterable = db.getCollection(collection)
+         .find(new Document("$text", new Document("$search", value)
+                 .append("$caseSensitive", true)
+                 .append("$diacriticSensitive", true)));
+                      
+            list = iterableList(iterable);
+          
+        } catch (Exception e) {
+            Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findText()", e);
         }
         return list;
     }
