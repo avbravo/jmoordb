@@ -823,7 +823,7 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
      * @param docSort
      * @return
      */
-    public List<T> findLike(String key, String value, Document... docSort) {    
+    public List<T> findRegex(String key, String value, Boolean caseSensitive, Document... docSort) {
         Document sortQuery = new Document();
         list = new ArrayList<>();
 
@@ -835,43 +835,28 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
             }
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
-//            Pattern regex = Pattern.compile(value,Pattern.CASE_INSENSITIVE);
-     //String pattern = "/.*"+value+".*/";
-//String pattern = ".*" + value + ".*";
+
             MongoDatabase db = getMongoClient().getDatabase(database);
-            //FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, regex)).sort(sortQuery);
-//           FindIterable<Document> iterable = db.getCollection(collection).
-//                   find(new Document(key, regex)).sort(sortQuery);
-//Document doc = new Document();
-//doc.put("$regex",value);
-//
-//           FindIterable<Document> iterable = db.getCollection(collection).
-//                   find(new Document(key, doc)).sort(sortQuery);
-           
-           
- FindIterable<Document> iterable = db.getCollection(collection)
-         .find(new Document("$text", new Document("$search", value)));
-           
-//            FindIterable<Document> iterable = db.getCollection(collection).
-//                    find(regex(key, pattern)).sort(sortQuery);
-            
-            
-            
-            
-            
+            FindIterable<Document> iterable;
+            if (!caseSensitive) {
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).sort(sortQuery);
+//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+            } else {
+                iterable = db.getCollection(collection)
+                        .find(new Document(key, new Document("$regex", value).append("$options", "si"))).sort(sortQuery);
+//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+
+            }
+
             list = iterableList(iterable);
-            
-            
-            
-            
 
         } catch (Exception e) {
             Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findLike()", e);
+            exception = new Exception("findRegex()", e);
         }
         return list;
     }
-    
+
     /**
      * Requiere que se cree un indice primero
      * URL:https://docs.mongodb.com/manual/reference/operator/query/text/
@@ -879,10 +864,12 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
      *
      * @param key
      * @param value
+     * @param caseSensitive = true
+     * @param diacriticSensitive = true
      * @param docSort
      * @return
      */
-    public List<T> findText(String key, String value, Document... docSort) {    
+    public List<T> findText(String key, String value, Boolean caseSensitive, Boolean diacriticSensitive, Document... docSort) {
         Document sortQuery = new Document();
         list = new ArrayList<>();
 
@@ -894,13 +881,13 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
             }
             Object t = entityClass.newInstance();
             MongoDatabase db = getMongoClient().getDatabase(database);
- FindIterable<Document> iterable = db.getCollection(collection)
-         .find(new Document("$text", new Document("$search", value)
-                 .append("$caseSensitive", true)
-                 .append("$diacriticSensitive", true)));
-                      
+            FindIterable<Document> iterable = db.getCollection(collection)
+                    .find(new Document("$text", new Document("$search", value)
+                            .append("$caseSensitive", caseSensitive)
+                            .append("$diacriticSensitive", diacriticSensitive)));
+
             list = iterableList(iterable);
-          
+
         } catch (Exception e) {
             Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findText()", e);
@@ -1457,11 +1444,11 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
     }
 
     public static <T> T getBean(Class<T> clazz) {
-    BeanManager bm = getBeanManager();
-    Bean<T> bean = (Bean<T>) bm.getBeans(clazz).iterator().next();
-    CreationalContext<T> ctx = bm.createCreationalContext(bean);
-    return (T) bm.getReference(bean, clazz, ctx);
-  }
+        BeanManager bm = getBeanManager();
+        Bean<T> bean = (Bean<T>) bm.getBeans(clazz).iterator().next();
+        CreationalContext<T> ctx = bm.createCreationalContext(bean);
+        return (T) bm.getReference(bean, clazz, ctx);
+    }
 
     private static BeanManager getBeanManager() {
         ServletContext servletContext = (ServletContext) FacesContext
