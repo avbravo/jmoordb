@@ -16,17 +16,17 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Userinfo {
+public class UserInfo {
 
     @Id
     private String username;
     private Date datetime;
     private String description;
 
-    public Userinfo() {
+    public UserInfo() {
     }
 
-    public Userinfo(String username, Date datetime, String description) {
+    public UserInfo(String username, Date datetime, String description) {
         this.username = username;
         this.datetime = datetime;
         this.description = description;

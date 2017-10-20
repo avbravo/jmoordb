@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class Revisionhistory {
+public class RevisionHistory {
 
     @Id
     private String idrevisionhistory;
@@ -26,12 +26,12 @@ public class Revisionhistory {
     private String description;
     private String content;
     @Embedded
-    private Userinfo userinfo;
+    private UserInfo userInfo;
 
-    public Revisionhistory() {
+    public RevisionHistory() {
     }
 
-    public Revisionhistory(String idrevisionhistory, String document, String id, String description, String content) {
+    public RevisionHistory(String idrevisionhistory, String document, String id, String description, String content) {
         this.idrevisionhistory = idrevisionhistory;
         this.document = document;
         this.id = id;
