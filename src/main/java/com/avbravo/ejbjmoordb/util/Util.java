@@ -6,6 +6,9 @@
 package com.avbravo.ejbjmoordb.util;
 
 import com.avbravo.ejbjmoordb.JmoordbException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  *
@@ -63,5 +66,12 @@ public class Util {
             new JmoordbException("traductor() "+e.getLocalizedMessage());
         }
  return traduccion;       
+    }
+    
+    
+     public  Date getFechaHoraActual() {
+        LocalDateTime ahora = LocalDateTime.now();
+        Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+        return date2;
     }
 }
