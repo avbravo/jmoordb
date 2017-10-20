@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author avbravo
  */
 @Stateless
-public class AccesInfoServices {
+public class AccessInfoServices {
     
 /**
  * 
