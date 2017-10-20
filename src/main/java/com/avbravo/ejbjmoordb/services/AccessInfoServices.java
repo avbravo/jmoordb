@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,8 @@ public class AccessInfoServices {
         try {
             LocalDateTime ahora = LocalDateTime.now();
             Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+            UUID uuid = UUID.randomUUID();
+            accessInfo.setIdaccessinfo(uuid.toString());
             accessInfo.setUsername(username);
             accessInfo.setDatetime(date2);
             accessInfo.setForm(form);
