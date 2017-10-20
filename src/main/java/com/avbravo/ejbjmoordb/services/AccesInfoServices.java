@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -33,7 +35,7 @@ public class AccesInfoServices {
  * @param description
  * @return 
  */
-    public AccessInfo generateAccessInfo(String username,String form,String ip, String description) {
+    public AccessInfo generateAccessInfo(String username,String form, String description) {
         AccessInfo accessInfo = new AccessInfo();
         try {
             LocalDateTime ahora = LocalDateTime.now();
@@ -41,7 +43,7 @@ public class AccesInfoServices {
             accessInfo.setUsername(username);
             accessInfo.setDatetime(date2);
             accessInfo.setForm(form);
-            accessInfo.setIp(ip);
+            accessInfo.setIp(getIp());
             accessInfo.setDescription(description);
 
         } catch (Exception e) {
@@ -49,5 +51,21 @@ public class AccesInfoServices {
         }
         return accessInfo;
     }
+    
+     private String getIp() {
+        String myip = "";
+        try {
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String ipAddress = request.getHeader("X-FORWARDED-FOR");
+            if (ipAddress == null) {
+                ipAddress = request.getRemoteAddr();
+                
+            }
+            myip = ipAddress;
+        } catch (Exception e) {
+            System.out.println("getIp() "+e.getLocalizedMessage());
+        }
+        return myip;
+    }// </editor-fold>
 
 }
