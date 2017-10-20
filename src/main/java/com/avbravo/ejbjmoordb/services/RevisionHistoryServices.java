@@ -20,7 +20,7 @@ import javax.ejb.Stateless;
 @Stateless
 public class RevisionHistoryServices {
 
-    public RevisionHistory getRevisionhistory(String id, String username, String operation, String document, String content) {
+    public RevisionHistory getRevisionHistory(String id, String username, String operation, String document, String content) {
         RevisionHistory revisionhistory = new RevisionHistory();
         try {
             UUID uuid = UUID.randomUUID();
