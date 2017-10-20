@@ -16,29 +16,31 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserInfo {
-
+public class AccessInfo {
     @Id
-    private String iduserinfo;
+    private String idaccessinfo;
     private String username;
     private Date datetime;
+    private String form;
+    private String ip;
     private String description;
 
-    public UserInfo() {
+    public AccessInfo() {
     }
 
-    public UserInfo(String iduserinfo, String username, Date datetime, String description) {
-        this.iduserinfo = iduserinfo;
+    public AccessInfo(String idaccessinfo, String username, Date datetime, String form, String ip, String description) {
+        this.idaccessinfo = idaccessinfo;
         this.username = username;
         this.datetime = datetime;
+        this.form = form;
+        this.ip = ip;
         this.description = description;
     }
 
-  
-
     @Override
     public String toString() {
-        return "Userinfo{" + "username=" + username + ", datetime=" + datetime + ", description=" + description + '}';
+        return "AcessInfo{" + "idaccessinfo=" + idaccessinfo + ", username=" + username + ", datetime=" + datetime + ", form=" + form + ", ip=" + ip + ", description=" + description + '}';
     }
-
+    
+    
 }

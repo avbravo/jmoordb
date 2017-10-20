@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import javax.ejb.Stateless;
 
 /**
@@ -30,8 +31,10 @@ public class UserInfoServices {
         try {
             LocalDateTime ahora = LocalDateTime.now();
             Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+ UUID uuid = UUID.randomUUID();
 
-            listUserinfo.add(new UserInfo(username, date2, description));
+
+            listUserinfo.add(new UserInfo(uuid.toString(),username, date2, description));
         } catch (Exception e) {
             System.out.println("generateListUserinfo() " + e.getLocalizedMessage());
         }
@@ -48,6 +51,8 @@ public class UserInfoServices {
         try {
             LocalDateTime ahora = LocalDateTime.now();
             Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+             UUID uuid = UUID.randomUUID();
+             userinfo.setIduserinfo(uuid.toString());
             userinfo.setUsername(username);
             userinfo.setDatetime(date2);
             userinfo.setDescription(description);

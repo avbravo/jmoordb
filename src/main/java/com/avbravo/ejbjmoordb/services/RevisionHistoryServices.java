@@ -25,7 +25,7 @@ public class RevisionHistoryServices {
         try {
             UUID uuid = UUID.randomUUID();
 
-            revisionhistory.setIdrevisionhistory(uuid.toString().toLowerCase());
+            revisionhistory.setIdrevisionhistory(uuid.toString());
             revisionhistory.setId(id);
             revisionhistory.setDocument(document);
 
@@ -33,7 +33,8 @@ public class RevisionHistoryServices {
             revisionhistory.setContent(content);
             LocalDateTime ahora = LocalDateTime.now();
             Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
-            UserInfo userinfo = new UserInfo(username, date2, operation);
+        UUID uuiduser = UUID.randomUUID();
+            UserInfo userinfo = new UserInfo(uuiduser.toString(),username, date2, operation);
             revisionhistory.setUserInfo(userinfo);
 
         } catch (Exception e) {
