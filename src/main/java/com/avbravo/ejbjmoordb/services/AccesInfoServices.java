@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Stateless
 public class AccesInfoServices {
+    
 /**
  * 
  * @param username
