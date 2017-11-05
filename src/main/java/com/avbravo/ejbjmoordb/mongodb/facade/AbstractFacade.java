@@ -176,7 +176,6 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
 
                 T t_ = (T) findInternal(findDocPrimaryKey(t));
 
-//                if (t_ == null) {
                 if (t_ == null) {
                     // no lo encontro
                 } else {
