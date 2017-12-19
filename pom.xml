@@ -4,7 +4,7 @@
 
     <groupId>com.avbravo</groupId>
     <artifactId>ejbjmoordb</artifactId>
-    <version>0.2.9</version>
+    <version>0.3</version>
     <packaging>ejb</packaging>
 
     <name>ejbjmoordb</name>
@@ -39,8 +39,13 @@
          <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>
-            <version>3.4.0</version>
+            <version>3.6.0</version>
         </dependency>
+<!--         <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>3.4.0</version>
+        </dependency>-->
          <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
