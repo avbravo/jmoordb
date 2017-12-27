@@ -557,8 +557,13 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
      */
     public Integer sizeOfPage(Integer rowsForPage, Document... doc) {
         Integer size = 0;
+         Integer mod =0;
         try {
             size = count(doc) / rowsForPage;
+            mod = count(doc) % rowsForPage;
+            if(mod > 0){
+                size++;
+            }
         } catch (Exception e) {
             Logger.getLogger(AbstractFacade.class.getName() + "sizeOfPage()").log(Level.SEVERE, null, e);
             exception = new Exception("sizeOfPage()", e);
