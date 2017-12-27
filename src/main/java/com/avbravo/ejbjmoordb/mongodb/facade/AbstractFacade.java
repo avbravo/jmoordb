@@ -549,6 +549,24 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
     }
 
     /**
+     * Devuele el numero de paginas en una coleccion
+     *
+     * @param rowsForPage
+     * @param doc
+     * @return
+     */
+    public Integer sizeOfPage(Integer rowsForPage, Document... doc) {
+        Integer size = 0;
+        try {
+            size = count(doc) / rowsForPage;
+        } catch (Exception e) {
+            Logger.getLogger(AbstractFacade.class.getName() + "sizeOfPage()").log(Level.SEVERE, null, e);
+            exception = new Exception("sizeOfPage()", e);
+        }
+        return size;
+    }
+
+    /**
      *
      * @param doc
      * @return el numero de documentos en la coleccion
@@ -609,6 +627,65 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
             Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findAll() ", e);
             new JmoordbException("findAll()");
+        }
+
+        return list;
+    }
+
+    /**
+     * Busca con paginacion en una coleccion
+     *
+     * @param document
+     * @return
+     */
+    public List< T> findPagination(Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        Document sortQuery = new Document();
+        try {
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).
+                    find().skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                    limit(rowsForPage).sort(sortQuery);
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findPagination() ", e);
+            new JmoordbException("findPagination()");
+        }
+
+        return list;
+    }
+    /**
+     * Busca con paginacion en una coleccion con filtro
+     *
+     * @param document
+     * @return
+     */
+    public List< T> findFilterPagination(Document filter,Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        Document sortQuery = new Document();
+        try {
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).
+                    find(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                    limit(rowsForPage).sort(sortQuery);
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(AbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findPagination() ", e);
+            new JmoordbException("findPagination()");
         }
 
         return list;
