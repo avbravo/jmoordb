@@ -570,6 +570,34 @@ public abstract class AbstractFacade<T> implements AbstractInterface {
         }
         return size;
     }
+    
+    // <editor-fold defaultstate="collapsed" desc="public List<Integer> listOfPage(Integer rowsForPage)">
+    /**
+     * Devuele una lista de numeros correspondientes a las paginas
+     *
+     * @param rowsForPage
+     * @param doc
+     * @return
+     */
+    public List<Integer> listOfPage(Integer rowsForPage) {
+      List<Integer> pages = new ArrayList<>();
+        try {
+           
+           
+        Integer size = sizeOfPage(rowsForPage);
+        for (int i = 1; i <= size; i++) {
+            pages.add(new Integer(i));
+
+        }
+        return pages;
+        
+        } catch (Exception e) {
+            Logger.getLogger(AbstractFacade.class.getName() + "listOfPage()").log(Level.SEVERE, null, e);
+            exception = new Exception("listOfPage()", e);
+        }
+        return pages;
+    }
+    // </editor-fold>
 
     /**
      *
