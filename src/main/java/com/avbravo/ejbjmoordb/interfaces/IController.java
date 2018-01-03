@@ -13,7 +13,9 @@ package com.avbravo.ejbjmoordb.interfaces;
  */
 public interface IController<T> {
 
-//action= new, search, writable, ("edit", entity)
+     public String preRenderView();
+     
+//action= new, edit, ("edit", entity)
     public String prepare(String action, Object... item) ;
     
 //public String prepareNew();
@@ -43,7 +45,7 @@ public interface IController<T> {
       reset = true resetea el formulario (view), list reset = false;
       removeFromList= true remueve de la lista se llama desde el list.
      */
-    public String delete(Object item, Boolean donotleave, Boolean reset, Boolean removeFromList);
+    public String delete(Object item, Boolean deleteonviewpage );
 
     public String deleteAll();
 
