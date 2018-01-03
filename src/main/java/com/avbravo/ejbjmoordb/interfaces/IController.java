@@ -13,7 +13,7 @@ package com.avbravo.ejbjmoordb.interfaces;
  */
 public interface IController<T> {
 
-     public String preRenderView();
+     public String preRenderView(String action);
      
 //action= new, edit, ("edit", entity)
     public String prepare(String action, Object... item) ;
