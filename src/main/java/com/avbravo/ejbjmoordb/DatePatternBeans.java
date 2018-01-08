@@ -15,7 +15,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DatePatternBeans {
+
     private String name;
     private String type;
-  String dateformat;
+    String dateformat;
 }

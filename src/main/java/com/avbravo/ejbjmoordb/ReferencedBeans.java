@@ -20,7 +20,7 @@ public class ReferencedBeans {
     private String document;
     private String field;
     private String javatype;
-    private String facade;
+    private String repository;
     private Boolean lazy;
 
     public ReferencedBeans() {
@@ -28,7 +28,7 @@ public class ReferencedBeans {
 
     @Override
     public String toString() {
-        return "ReferencedBeans{" + "name=" + name + ", type=" + type + ", document=" + document + ", field=" + field + ", facade=" + facade + ", lazy=" + lazy + '}';
+        return "ReferencedBeans{" + "name=" + name + ", type=" + type + ", document=" + document + ", field=" + field + ", javatype=" + javatype + ", repository=" + repository + ", lazy=" + lazy + '}';
     }
 
    

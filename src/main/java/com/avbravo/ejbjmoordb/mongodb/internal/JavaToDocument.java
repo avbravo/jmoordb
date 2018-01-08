@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.avbravo.ejbjmoordb.anotations.mongodb.internal;
+package com.avbravo.ejbjmoordb.mongodb.internal;
 
 import com.avbravo.ejbjmoordb.EmbeddedBeans;
 import com.avbravo.ejbjmoordb.JmoordbException;

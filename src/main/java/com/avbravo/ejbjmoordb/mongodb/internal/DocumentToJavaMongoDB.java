@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.avbravo.ejbjmoordb.anotations.mongodb.internal;
+package com.avbravo.ejbjmoordb.mongodb.internal;
 
 import com.avbravo.ejbjmoordb.EmbeddedBeans;
 import com.avbravo.ejbjmoordb.JmoordbException;
@@ -166,7 +166,7 @@ public class DocumentToJavaMongoDB<T> {
                                     Document doc = (Document) listEl;
                                     Class[] paramString = new Class[2];
                                     paramString[0] = String.class;
-                                    Class cls = Class.forName(referencedBeans.getFacade());
+                                    Class cls = Class.forName(referencedBeans.getRepository());
 //                                    Object obj = cls.newInstance();
       Object obj = lookUpClassInBeanManager(cls);
                                     Method method;
@@ -289,7 +289,7 @@ public class DocumentToJavaMongoDB<T> {
 //                       
                         } else {
   //Test.msg("                 [   Lazy == false carga los relacionados ]");
-                            Class cls = Class.forName(referencedBeans.getFacade());
+                            Class cls = Class.forName(referencedBeans.getRepository());
 
                             Object obj = lookUpClassInBeanManager(cls);
                             Method method;

@@ -163,7 +163,7 @@ public class DocumentToJavaCouchbase<T> {
                                     Document doc = (Document) listEl;
                                     Class[] paramString = new Class[2];
                                     paramString[0] = String.class;
-                                    Class cls = Class.forName(referencedBeans.getFacade());
+                                    Class cls = Class.forName(referencedBeans.getRepository());
                              Object obj = lookUpClassInBeanManager(cls);
 //                                    Object obj = cls.newInstance();
                                     Method method;
@@ -287,7 +287,7 @@ public class DocumentToJavaCouchbase<T> {
                              //Test.msg("                 [   Lazy == false carga los relacionados ]");
                             //cargar todos los relacionads
                             Object object = fieldDescriptor.newInstance();
-                            Class cls = Class.forName(referencedBeans.getFacade());
+                            Class cls = Class.forName(referencedBeans.getRepository());
                               Object obj = lookUpClassInBeanManager(cls);
 //                            Object obj = cls.newInstance();
                             Method method;
