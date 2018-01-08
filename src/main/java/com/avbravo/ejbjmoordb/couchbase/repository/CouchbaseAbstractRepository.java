@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.avbravo.ejbjmoordb.couchbase.facade;
+package com.avbravo.ejbjmoordb.couchbase.repository;
 
 import com.avbravo.ejbjmoordb.DatePatternBeans;
 import com.avbravo.ejbjmoordb.EmbeddedBeans;
@@ -45,7 +45,7 @@ import org.bson.Document;
  * @author avbravo
  * @param <T>
  */
-public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInterface {
+public abstract class CouchbaseAbstractRepository<T> implements CouchbaseAbstractInterface {
 
     protected abstract Cluster getCluster();
     private JavaToDocumentCouchbase javaToDocumentCouchbase = new JavaToDocumentCouchbase();
@@ -76,7 +76,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
         this.exception = exception;
     }
 
-    public CouchbaseAbstractFacade(Class<T> entityClass, String database, String collection, Boolean... lazy) {
+    public CouchbaseAbstractRepository(Class<T> entityClass, String database, String collection, Boolean... lazy) {
 
         this.entityClass = entityClass;
         this.database = database;
@@ -140,7 +140,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
          jsonObject =     javaToDocumentCouchbase.toDocument(t, embeddedBeansList, referencedBeansList);
              
         } catch (Exception e) {
-             Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+             Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             new JmoordbException("toDocument() " + e.getLocalizedMessage());
             exception = new Exception("toDocument " + e.getLocalizedMessage());
         }
@@ -157,7 +157,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             getBucket().bucketManager().createN1qlPrimaryIndex(database, true, false);
             return true;
         } catch (Exception ex) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("createPrimaryIndex() " + ex.getLocalizedMessage());
             exception = new Exception("createPrimaryIndex() " + ex.getLocalizedMessage());
         }
@@ -201,7 +201,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("save() " + ex.getLocalizedMessage());
             exception = new Exception("save() " + ex.getLocalizedMessage());
         }
@@ -244,7 +244,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("save() " + ex.getLocalizedMessage());
             exception = new Exception("save() " + ex.getLocalizedMessage());
         }
@@ -277,7 +277,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("save() " + ex.getLocalizedMessage());
             exception = new Exception("save() " + ex.getLocalizedMessage());
         }
@@ -304,12 +304,12 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
                     o = method.invoke(t2);
 
                 } catch (Exception e) {
-                    Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("getDocumentPrimaryKey() ", e);
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("getDocumentPrimaryKey() ", e);
         }
         return o;
@@ -324,7 +324,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
 
             }
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("getDocumentPrimaryKey() ", e);
         }
         return type;
@@ -348,12 +348,12 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
                     doc.put(p.getName(), method.invoke(t2));
 
                 } catch (Exception e) {
-                    Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("getDocumentPrimaryKey() ", e);
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("getDocumentPrimaryKey() ", e);
         }
         return doc;
@@ -378,7 +378,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
          
             docR = Document.parse(n);
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
             exception = new Exception("rowToString() ", e);
         }
         return docR;
@@ -401,7 +401,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
 
             doc = Document.parse(n);
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
             exception = new Exception("rowToString() ", e);
         }
         return doc;
@@ -419,7 +419,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
 
             doc = Document.parse(n);
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "searchQueryRowToDocument").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "searchQueryRowToDocument").log(Level.SEVERE, null, e);
             exception = new Exception("searchQueryRowToDocument ", e);
         }
         return doc;
@@ -442,7 +442,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
 
             doc = Document.parse(n);
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
             exception = new Exception("rowToString() ", e);
         }
         return doc;
@@ -460,7 +460,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
 
             doc = Document.parse(texto);
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "rowToString()").log(Level.SEVERE, null, e);
             exception = new Exception("rowToString() ", e);
         }
         return doc;
@@ -484,12 +484,12 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
                     where += p.getName() + " = '" + method.invoke(t2) + "'";
                     contador++;
                 } catch (Exception e) {
-                    Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("wherePrimaryKey() ", e);
                 }
             }
         } catch (Exception e) {
-              Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "wherePrimaryKey()").log(Level.SEVERE, null, e);
+              Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "wherePrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("wherePrimaryKey() ", e);
         }
         return where;
@@ -522,7 +522,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
                     where += p.getName() + " = '" + method.invoke(t2) + "'";
                     contador++;
                 } catch (Exception e) {
-                    Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("findById() ", e);
                 }
             }
@@ -531,7 +531,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
 
             return find(statement);
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "findById()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "findById()").log(Level.SEVERE, null, e);
             exception = new Exception("findById() ", e);
         }
         return Optional.empty();
@@ -556,7 +556,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("find() ", e);
             new JmoordbException("find()");
         }
@@ -587,7 +587,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("find() ", e);
             new JmoordbException("find()");
         }
@@ -616,7 +616,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("find() ", e);
             new JmoordbException("find()");
         }
@@ -648,7 +648,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("find() ", e);
             new JmoordbException("find()");
         }
@@ -684,7 +684,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("search() ", e);
             new JmoordbException("search()");
         }
@@ -713,7 +713,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findBy() ", e);
             new JmoordbException("findBy()");
         }
@@ -740,7 +740,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findBy() ", e);
             new JmoordbException("findBy()");
         }
@@ -768,7 +768,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findBy() ", e);
             new JmoordbException("findBy()");
         }
@@ -795,7 +795,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
             }
 
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findBy() ", e);
             new JmoordbException("findBy()");
         }
@@ -815,7 +815,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
            JsonDocument removed = getBucket().remove(value );
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "delete()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "delete()").log(Level.SEVERE, null, e);
             exception = new Exception("delete() ", e);
         }
         return false;
@@ -833,7 +833,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
          
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "delete()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "delete()").log(Level.SEVERE, null, e);
             exception = new Exception("delete() ", e);
         }
         return false;
@@ -855,7 +855,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
                     
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "delete()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "delete()").log(Level.SEVERE, null, e);
             exception = new Exception("deleteAll() ", e);
         }
         return false;
@@ -873,7 +873,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
            JsonDocument documentupdate= getBucket().replace(document );
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "update()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "update()").log(Level.SEVERE, null, e);
             exception = new Exception("update() ", e);
         }
         return false;
@@ -889,7 +889,7 @@ public abstract class CouchbaseAbstractFacade<T> implements CouchbaseAbstractInt
 JsonDocument inserted = getBucket().replace(doc);
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "update()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "update()").log(Level.SEVERE, null, e);
             exception = new Exception("update() ", e);
         }
         return false;
@@ -907,7 +907,7 @@ JsonDocument inserted = getBucket().upsert(doc);
        getBucket().replace(doc);
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "update()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "update()").log(Level.SEVERE, null, e);
             exception = new Exception("update() ", e);
         }
         return false;
@@ -927,7 +927,7 @@ JsonDocument inserted = getBucket().upsert(doc);
        getBucket().replace(doc, persist, replicate);
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "update()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "update()").log(Level.SEVERE, null, e);
             exception = new Exception("update() ", e);
         }
         return false;
@@ -949,7 +949,7 @@ getBucket().query(query);
 //           JsonDocument removed = getBucket().replace(document );
           return true;
         } catch (Exception e) {
-            Logger.getLogger(CouchbaseAbstractFacade.class.getName() + "update()").log(Level.SEVERE, null, e);
+            Logger.getLogger(CouchbaseAbstractRepository.class.getName() + "update()").log(Level.SEVERE, null, e);
             exception = new Exception("update() ", e);
         }
         return false;

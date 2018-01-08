@@ -16,7 +16,7 @@ public @interface Referenced {
  String documment();
  String field();
  String javatype() default "String";
- String facade();
+ String repository();
  boolean lazy() default false;
 }
 

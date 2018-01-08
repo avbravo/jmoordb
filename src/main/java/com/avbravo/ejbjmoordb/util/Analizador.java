@@ -219,7 +219,7 @@ public class Analizador {
             referencedBeans.setDocument(referenced.documment());
             referencedBeans.setField(referenced.field());
             referencedBeans.setJavatype(referenced.javatype());
-            referencedBeans.setFacade(referenced.facade());
+            referencedBeans.setFacade(referenced.repository());
             referencedBeans.setLazy(referenced.lazy());
 
             referencedBeansList.add(referencedBeans);
