@@ -11,7 +11,6 @@ import com.avbravo.ejbjmoordb.FieldBeans;
 import com.avbravo.ejbjmoordb.JmoordbException;
 import com.avbravo.ejbjmoordb.PrimaryKey;
 import com.avbravo.ejbjmoordb.ReferencedBeans;
-import com.avbravo.ejbjmoordb.couchbase.interfaces.CouchbaseAbstractInterface;
 import com.avbravo.ejbjmoordb.couchbase.internal.DocumentToJavaCouchbase;
 import com.avbravo.ejbjmoordb.couchbase.internal.JavaToDocumentCouchbase;
 import com.avbravo.ejbjmoordb.util.Analizador;

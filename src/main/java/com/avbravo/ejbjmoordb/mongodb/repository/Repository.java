@@ -11,12 +11,10 @@ import com.avbravo.ejbjmoordb.FieldBeans;
 import com.avbravo.ejbjmoordb.JmoordbException;
 import com.avbravo.ejbjmoordb.PrimaryKey;
 import com.avbravo.ejbjmoordb.ReferencedBeans;
-import com.avbravo.ejbjmoordb.anotations.mongodb.interfaces.AbstractInterface;
 import com.avbravo.ejbjmoordb.anotations.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.ejbjmoordb.anotations.mongodb.internal.JavaToDocument;
 import com.avbravo.ejbjmoordb.util.Analizador;
 import com.avbravo.ejbjmoordb.util.Util;
-import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.CursorType;
 import com.mongodb.Function;
@@ -30,7 +28,6 @@ import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gt;
 import static com.mongodb.client.model.Filters.lt;
-import static com.mongodb.client.model.Filters.regex;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import static com.mongodb.client.model.Indexes.ascending;
 import static com.mongodb.client.model.Indexes.descending;
@@ -60,7 +57,7 @@ import org.bson.conversions.Bson;
  * @author avbravo
  * @param <T>
  */
-public abstract class AbstractRepository<T> implements AbstractInterface {
+public abstract class Repository<T> implements InterfaceRepository {
 
     protected abstract MongoClient getMongoClient();
 
@@ -104,14 +101,14 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             }
             return db;
         } catch (Exception ex) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
         }
         return null;
     }
 
-    public AbstractRepository(Class<T> entityClass, String database, String collection, Boolean... lazy) {
+    public Repository(Class<T> entityClass, String database, String collection, Boolean... lazy) {
 
         this.entityClass = entityClass;
         this.database = database;
@@ -183,7 +180,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("save() " + ex.getLocalizedMessage());
             exception = new Exception("save() " + ex.getLocalizedMessage());
         }
@@ -222,7 +219,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("save() " + ex.getLocalizedMessage());
             exception = new Exception("save() " + ex.getLocalizedMessage());
         }
@@ -256,12 +253,12 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                     doc.put(p.getName(), method.invoke(t2));
 
                 } catch (Exception e) {
-                    Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("getDocumentPrimaryKey() ", e);
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("getDocumentPrimaryKey() ", e);
         }
         return doc;
@@ -279,7 +276,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                 doc.put(p.getName(), 1);
             });
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "getIndexPrimaryKey()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "getIndexPrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("getIndexPrimaryKey() ", e);
         }
         return doc;
@@ -302,7 +299,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             getMongoDatabase().getCollection(collection).createIndex(docIndex);
             return true;
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "createIndex()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "createIndex()").log(Level.SEVERE, null, e);
             exception = new Exception("createIndex() ", e);
         }
         return false;
@@ -329,12 +326,12 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
 
                     return find(doc);
                 } catch (Exception e) {
-                    Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("findById() ", e);
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "findById()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
             exception = new Exception("findById() ", e);
         }
         return Optional.empty();
@@ -353,7 +350,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             }
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "findById()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
             exception = new Exception("findById() ", e);
         }
         return Optional.empty();
@@ -376,7 +373,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                         haveElements = true;
                         tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                     } catch (Exception e) {
-                        Logger.getLogger(AbstractRepository.class.getName() + "find()").log(Level.SEVERE, null, e);
+                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
                         exception = new Exception("find() ", e);
                     }
 
@@ -391,7 +388,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return Optional.empty();
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("find() ", e);
 
         }
@@ -419,7 +416,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                         haveElements = true;
                         tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                     } catch (Exception e) {
-                        Logger.getLogger(AbstractRepository.class.getName() + "search()").log(Level.SEVERE, null, e);
+                        Logger.getLogger(Repository.class.getName() + "search()").log(Level.SEVERE, null, e);
                         exception = new Exception("search() ", e);
                     }
 
@@ -431,7 +428,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return null;
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("search() ", e);
 
         }
@@ -455,7 +452,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return Optional.of(tlocal);
             //return (T) tlocal;
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("find() ", e);
             new JmoordbException("find()");
         }
@@ -472,7 +469,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return tlocal;
             //return (T) tlocal;
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("find() ", e);
             new JmoordbException("find()");
         }
@@ -497,7 +494,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                         haveElements = true;
                         t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                     } catch (Exception e) {
-                        Logger.getLogger(AbstractRepository.class.getName() + "find()").log(Level.SEVERE, null, e);
+                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
                         exception = new Exception("find() ", e);
                     }
 
@@ -505,7 +502,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             });
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("iterableSimple() ", e);
 
         }
@@ -526,7 +523,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                         t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                         l.add(t1);
                     } catch (Exception e) {
-                        Logger.getLogger(AbstractRepository.class.getName() + "find()").log(Level.SEVERE, null, e);
+                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
                         exception = new Exception("find() ", e);
                     }
 
@@ -534,7 +531,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             });
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("iterableSimple() ", e);
 
         }
@@ -559,7 +556,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                 size++;
             }
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "sizeOfPage()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "sizeOfPage()").log(Level.SEVERE, null, e);
             exception = new Exception("sizeOfPage()", e);
         }
         return size;
@@ -586,7 +583,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
         return pages;
         
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "listOfPage()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "listOfPage()").log(Level.SEVERE, null, e);
             exception = new Exception("listOfPage()", e);
         }
         return pages;
@@ -613,7 +610,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                         try {
                             contador++;
                         } catch (Exception e) {
-                            Logger.getLogger(AbstractRepository.class.getName() + "count()").log(Level.SEVERE, null, e);
+                            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
                             exception = new Exception("count()", e);
                         }
                     }
@@ -626,7 +623,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             }
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "count()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
             exception = new Exception("count()", e);
         }
         return contador;
@@ -651,7 +648,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findAll() ", e);
             new JmoordbException("findAll()");
         }
@@ -681,7 +678,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findPagination() ", e);
             new JmoordbException("findPagination()");
         }
@@ -710,7 +707,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findPagination() ", e);
             new JmoordbException("findPagination()");
         }
@@ -751,12 +748,12 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                 t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
 
             } catch (Exception e) {
-                Logger.getLogger(AbstractRepository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
+                Logger.getLogger(Repository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
                 exception = new Exception("findOneAndUpdate()", e);
             }
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findOneAndUpdate()", e);
         }
 
@@ -797,12 +794,12 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
 //                Method method = entityClass.getDeclaredMethod("toPojo", Document.class);
 //                list.add((T) method.invoke(t, iterable));
             } catch (Exception e) {
-                Logger.getLogger(AbstractRepository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
+                Logger.getLogger(Repository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
                 exception = new Exception("findOneAndUpdate()", e);
             }
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findOneAndUpdate()", e);
         }
 
@@ -835,12 +832,12 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
 //                Method method = entityClass.getDeclaredMethod("toPojo", Document.class);
 //                list.add((T) method.invoke(t, iterable));
             } catch (Exception e) {
-                Logger.getLogger(AbstractRepository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
+                Logger.getLogger(Repository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
                 exception = new Exception("findOneAndUpdate()", e);
             }
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findOneAndUpdate()", e);
         }
 
@@ -867,7 +864,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findBy() ", e);
         }
         return list;
@@ -886,7 +883,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
             list = iterableList(iterable);
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findBy() ", e);
         }
         return list;
@@ -913,7 +910,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             FindIterable<Document> iterable = db.getCollection(collection).find(filter).sort(sortQuery);
             list = iterableList(iterable);
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findBy() ", e);
         }
         return list;
@@ -954,7 +951,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findRegex()", e);
         }
         return list;
@@ -992,7 +989,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findText()", e);
         }
         return list;
@@ -1010,7 +1007,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                 list.add(name.get("name").toString());
             }
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "drop()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
             exception = new Exception("listCollecctions() ", e);
         }
         return list;
@@ -1032,7 +1029,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             }
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "existsCollection()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "existsCollection()").log(Level.SEVERE, null, e);
             exception = new Exception("existsCollection() ", e);
         }
         return false;
@@ -1049,7 +1046,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             getMongoDatabase().createCollection(nameCollection);
             return true;
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "existsCollection()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "existsCollection()").log(Level.SEVERE, null, e);
             exception = new Exception("existsCollection() ", e);
         }
         return false;
@@ -1071,7 +1068,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return false;
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "drop()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
             exception = new Exception("drop() ", e);
         }
         return false;
@@ -1091,7 +1088,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return true;
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "drop()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
             exception = new Exception("drop() ", e);
         }
         return false;
@@ -1108,7 +1105,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return true;
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "drop()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
             exception = new Exception("drop() ", e);
         }
         return false;
@@ -1135,7 +1132,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("findHelperSort()", e);
         }
         return list;
@@ -1176,7 +1173,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             list = iterableList(iterable);
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("helpers()", e);
         }
         return list;
@@ -1336,7 +1333,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                 return true;
             }
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "delete()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "delete()").log(Level.SEVERE, null, e);
             exception = new Exception("delete() ", e);
         }
         return false;
@@ -1356,7 +1353,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             }
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "remove()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "remove()").log(Level.SEVERE, null, e);
             exception = new Exception("remove() ", e);
         }
         return false;
@@ -1374,7 +1371,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(doc);
             cont = (int) dr.getDeletedCount();
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
             exception = new Exception("deleteMany() ", e);
         }
         return cont;
@@ -1391,7 +1388,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(doc);
             cont = (int) dr.getDeletedCount();
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
             exception = new Exception("deleteMany() ", e);
         }
         return cont;
@@ -1409,7 +1406,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
 
             cont = (int) dr.getDeletedCount();
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "removeDocument()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "removeDocument()").log(Level.SEVERE, null, e);
             exception = new Exception("removeAll() ", e);
         }
         return cont;
@@ -1436,7 +1433,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return (int) updateResult.getModifiedCount();
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
             exception = new Exception("updateOne() ", e);
         }
         return 0;
@@ -1451,7 +1448,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return (int) updateResult.getModifiedCount();
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
             exception = new Exception("updateOne() ", e);
         }
         return 0;
@@ -1473,7 +1470,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return (int) updateResult.getModifiedCount();
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "updateMany()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "updateMany()").log(Level.SEVERE, null, e);
             exception = new Exception("updateMany() ", e);
         }
         return 0;
@@ -1496,7 +1493,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return (int) updateResult.getModifiedCount();
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "replaceOne()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "replaceOne()").log(Level.SEVERE, null, e);
             exception = new Exception("replaceOne() ", e);
         }
         return 0;
@@ -1518,7 +1515,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return (int) updateResult.getModifiedCount();
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "replaceOne()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "replaceOne()").log(Level.SEVERE, null, e);
             exception = new Exception("replaceOne() ", e);
         }
         return 0;
@@ -1540,7 +1537,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
             return (int) updateResult.getModifiedCount();
 
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
             exception = new Exception("updateOne() ", e);
         }
         return 0;
@@ -1560,12 +1557,12 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
                     o = method.invoke(t2);
 
                 } catch (Exception e) {
-                    Logger.getLogger(AbstractRepository.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("getDocumentPrimaryKey() ", e);
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("getDocumentPrimaryKey() ", e);
         }
         return o;
@@ -1580,7 +1577,7 @@ public abstract class AbstractRepository<T> implements AbstractInterface {
 
             }
         } catch (Exception e) {
-            Logger.getLogger(AbstractRepository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
+            Logger.getLogger(Repository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
             exception = new Exception("getDocumentPrimaryKey() ", e);
         }
         return type;

@@ -3,22 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.avbravo.ejbjmoordb.couchbase.interfaces;
+package com.avbravo.ejbjmoordb.mongodb.repository;
 
-import com.couchbase.client.java.Bucket;
+import com.mongodb.client.MongoDatabase;
+import java.lang.reflect.Field;
+import org.bson.Document;
 
 /**
  *
  * @author avbravo
  */
-public interface CouchbaseAbstractInterface <T>{
-      public Bucket getBucket();
+public interface InterfaceRepository <T>{
+     public MongoDatabase getMongoDatabase() ;
+//     public Document findOne();
       public T findById(String key, String value);
       public T findById(String key, Integer value);
       
      public T find(String key, Object value);
 //     public T find(String key, Integer value);
-//     public T find(Document document);
+     public T find(Document document);
      
    //  public Boolean save(T t,Boolean... verifyID);
      
