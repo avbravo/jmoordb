@@ -943,6 +943,46 @@ public abstract class Repository<T> implements InterfaceRepository {
 //iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
             } else {
                 iterable = db.getCollection(collection)
+                        .find(new Document(key, new Document("$regex", value).append("$options", "m"))).sort(sortQuery);
+//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+
+            }
+
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findRegex()", e);
+        }
+        return list;
+    }
+    /**
+     *
+     * @param key
+     * @param value
+     * @param docSort
+     * @return
+     */
+    public List<T> findRegexInText(String key, String value, Boolean caseSensitive, Document... docSort) {
+        Document sortQuery = new Document();
+        list = new ArrayList<>();
+
+        try {
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Object t = entityClass.newInstance();
+            Pattern regex = Pattern.compile(value);
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable;
+            if (!caseSensitive) {
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).sort(sortQuery);
+//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+            } else {
+                iterable = db.getCollection(collection)
                         .find(new Document(key, new Document("$regex", value).append("$options", "si"))).sort(sortQuery);
 //               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
 
