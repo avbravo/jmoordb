@@ -923,7 +923,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param docSort
      * @return
      */
-    public List<T> findRegex(String key, String value, Boolean caseSensitive, Document... docSort) {
+    public List<T> findRegexInText(String key, String value, Boolean caseSensitive, Document... docSort) {
         Document sortQuery = new Document();
         list = new ArrayList<>();
 
@@ -939,11 +939,11 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).sort(sortQuery);
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^"+value))).sort(sortQuery);
 //iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", value).append("$options", "m"))).sort(sortQuery);
+                        .find(new Document(key, new Document("$regex", "^"+value).append("$options", "m"))).sort(sortQuery);
 //               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
 
             }
@@ -963,7 +963,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param docSort
      * @return
      */
-    public List<T> findRegexInText(String key, String value, Boolean caseSensitive, Document... docSort) {
+    public List<T> findRegex(String key, String value, Boolean caseSensitive, Document... docSort) {
         Document sortQuery = new Document();
         list = new ArrayList<>();
 
@@ -979,11 +979,11 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).sort(sortQuery);
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^"+value))).sort(sortQuery);
 //iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", value).append("$options", "si"))).sort(sortQuery);
+                        .find(new Document(key, new Document("$regex", "^"+value).append("$options", "i"))).sort(sortQuery);
 //               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
 
             }
