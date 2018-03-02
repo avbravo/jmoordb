@@ -25,7 +25,9 @@ public interface IController<T> {
 //
 //    public String prepareWritable();
 
-    
+    default public String refresh(){
+        return "";
+    }
     
 
     public String isNew();
