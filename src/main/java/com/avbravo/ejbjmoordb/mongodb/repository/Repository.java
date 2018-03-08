@@ -1661,7 +1661,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             Bson filter = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
 
-            list = filters(filter, new Document("idpermiso", -1));
+            list = filters(filter, sortQuery);
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
             exception = new Exception("filterBetweenDate() ", e);
