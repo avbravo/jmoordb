@@ -35,7 +35,7 @@ public interface IController<T> {
      * @param fieldfin
      * @return 
      */
-   public String searchBy(String field, String... fieldfin);
+   
     public String isNew();
 
     public void reset();
@@ -74,5 +74,7 @@ public interface IController<T> {
     public String skip(Integer page);
 
     public void move();
+    
+    public String searchBy(String field, Boolean... betweendate);
 
 }
