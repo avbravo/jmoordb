@@ -29,7 +29,13 @@ public interface IController<T> {
         return "";
     }
     
-
+    /**
+     * Metodo para busquedas por otros atributos.
+     * @param field
+     * @param fieldfin
+     * @return 
+     */
+   public String searchBy(String field, String... fieldfin);
     public String isNew();
 
     public void reset();

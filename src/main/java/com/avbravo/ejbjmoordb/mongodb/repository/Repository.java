@@ -38,6 +38,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -548,11 +549,11 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public Integer sizeOfPage(Integer rowsForPage, Document... doc) {
         Integer size = 0;
-         Integer mod =0;
+        Integer mod = 0;
         try {
             size = count(doc) / rowsForPage;
             mod = count(doc) % rowsForPage;
-            if(mod > 0){
+            if (mod > 0) {
                 size++;
             }
         } catch (Exception e) {
@@ -561,7 +562,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return size;
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="public List<Integer> listOfPage(Integer rowsForPage)">
     /**
      * Devuele una lista de numeros correspondientes a las paginas
@@ -571,17 +572,16 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return
      */
     public List<Integer> listOfPage(Integer rowsForPage) {
-      List<Integer> pages = new ArrayList<>();
+        List<Integer> pages = new ArrayList<>();
         try {
-           
-           
-        Integer size = sizeOfPage(rowsForPage);
-        for (int i = 1; i <= size; i++) {
-            pages.add(new Integer(i));
 
-        }
-        return pages;
-        
+            Integer size = sizeOfPage(rowsForPage);
+            for (int i = 1; i <= size; i++) {
+                pages.add(new Integer(i));
+
+            }
+            return pages;
+
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "listOfPage()").log(Level.SEVERE, null, e);
             exception = new Exception("listOfPage()", e);
@@ -685,13 +685,14 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }
+
     /**
      * Busca con paginacion en una coleccion con filtro
      *
      * @param document
      * @return
      */
-    public List< T> findFilterPagination(Document filter,Integer pageNumber, Integer rowsForPage, Document... docSort) {
+    public List< T> findFilterPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
         list = new ArrayList<>();
         Document sortQuery = new Document();
         try {
@@ -939,11 +940,11 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^"+value))).sort(sortQuery);
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).sort(sortQuery);
 //iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", "^"+value).append("$options", "m"))).sort(sortQuery);
+                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "m"))).sort(sortQuery);
 //               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
 
             }
@@ -956,6 +957,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }
+
     /**
      *
      * @param key
@@ -979,11 +981,11 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^"+value))).sort(sortQuery);
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).sort(sortQuery);
 //iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", "^"+value).append("$options", "i"))).sort(sortQuery);
+                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i"))).sort(sortQuery);
 //               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
 
             }
@@ -1637,4 +1639,35 @@ public abstract class Repository<T> implements InterfaceRepository {
                 .getAttribute("javax.enterprise.inject.spi.BeanManager");
     }
 
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     * repository.filterBetweenDate("fechainicio",permiso.getFechainicio(),"fechafin",permiso.getFechafin());
+     * @return
+     */
+    // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String startname, Date datestart ,String endname, Date datelimit) {">
+    public List<T> filterBetweenDate(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+
+            list = filters(filter, new Document("idpermiso", -1));
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
 }
