@@ -15,27 +15,14 @@ public interface IController<T> {
 
      public String preRenderView(String action);
      
-//action= new, edit, ("edit", entity)
+
     public String prepare(String action, Object... item) ;
     
-//public String prepareNew();
-//    //public String open(); se reemplazo por prepareSearch
-//    public String prepareSearch();
-//    //public String query();
-//
-//    public String prepareWritable();
 
     default public String refresh(){
         return "";
     }
-    
-    /**
-     * Metodo para busquedas por otros atributos.
-     * @param field
-     * @param fieldfin
-     * @return 
-     */
-   
+
     public String isNew();
 
     public void reset();
@@ -46,13 +33,7 @@ public interface IController<T> {
 
     public String edit();
 
-  //  public String prepareEdit(Object item);
 
-    /*
-      donotleave= true se queda en el form false = salta al formulario list
-      reset = true resetea el formulario (view), list reset = false;
-      removeFromList= true remueve de la lista se llama desde el list.
-     */
     public String delete(Object item, Boolean deleteonviewpage );
 
     public String deleteAll();
@@ -61,8 +42,8 @@ public interface IController<T> {
 
     public String printAll();
 
- //public void handleSelect(SelectEvent event);
 
+    public String clear();
     public String last();
 
     public String first();

@@ -1760,6 +1760,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return 0;
     }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="replaceOne(String key, String value, Document docUpdate) ">
     /**
      * implementa replaceOne
      *
@@ -1783,6 +1784,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return 0;
     }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="replaceOne(Bson search, Document docUpdate) ">
     /**
      *
      * @param key
@@ -1913,6 +1915,135 @@ public abstract class Repository<T> implements InterfaceRepository {
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
             exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+  
+    // <editor-fold defaultstate="collapsed" desc="filterBetweenInteger(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     * 
+     * @return
+     */
+  
+    public List<T> filterBetweenInteger(String fieldnamestart, Integer startvalue, String fieldlimitname, Integer limitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenInteger()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenInteger() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterBetweenInteger(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     * 
+     * @return
+     */
+  
+    public List<T> filterBetweenIntegerPagination(String fieldnamestart, Integer startvalue, String fieldlimitname, Integer limitvalue,Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
+
+            list = filtersPagination(filter, pageNumber,rowsForPage,sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenIntegerPagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenIntegerPagination() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="filterBetweenDouble(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     * @return
+     */
+  
+    public List<T> filterBetweenDouble(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenIntege()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenInteger() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterBetweenDoublePagination(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     * @return
+     */
+  
+    public List<T> filterBetweenDoublePagination(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue,Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
+
+            list = filtersPagination(filter,pageNumber,rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenIntege()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenInteger() ", e);
         }
 
         return list;
