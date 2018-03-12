@@ -56,6 +56,6 @@ public interface IController<T> {
 
     public void move();
     
-    public String searchBy(String field, Boolean... betweendate);
+    public String searchBy(String field);
 
 }

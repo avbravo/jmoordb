@@ -1888,7 +1888,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 // </editor-fold>
     
-      // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String startname, Date datestart ,String endname, Date datelimit) {">
+      // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
     /**
      * Crea un filtro para filtrar entre fechas
      *
@@ -1896,7 +1896,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param datestart
      * @param endname
      * @param datelimit
-     * repository.filterBetweenDate("fechainicio",permiso.getFechainicio(),"fechafin",permiso.getFechafin());
+     
      * @return
      */
   
@@ -1920,7 +1920,108 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
+    
+    
+      // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String secondaryfield,String secondaryfieldvalue,String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+
+     * @return
+     */
   
+    public List<T> filterBetweenDate(String secondaryfield,String secondaryfieldvalue,String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                     Filters.eq(secondaryfield,secondaryfieldvalue)
+                     ,Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue)
+            );
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+      // <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     * repository.filterBetweenDate("fechainicio",permiso.getFechainicio(),"fechafin",permiso.getFechafin());
+     * @return
+     */
+  
+    public List<T> filterBetweenDatePagination(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+      // <editor-fold defaultstate="collapsed" desc="     * repository.filterBetweenDate("fechainicio",permiso.getFechainicio(),"fechafin",permiso.getFechafin());">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+
+     * @return
+     */
+  
+    public List<T> filterBetweenDatePagination(String secondaryfield,String secondaryfieldvalue,String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                      Filters.eq(secondaryfield,secondaryfieldvalue)
+                     ,Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="filterBetweenInteger(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue, Document... docSort)">
     /**
      * Crea un filtro para filtrar entre fechas
@@ -2049,19 +2150,21 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-      // <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
-    /**
-     * Crea un filtro para filtrar entre fechas
-     *
-     * @param startname
-     * @param datestart
-     * @param endname
-     * @param datelimit
-     * repository.filterBetweenDate("fechainicio",permiso.getFechainicio(),"fechafin",permiso.getFechafin());
-     * @return
-     */
   
-    public List<T> filterBetweenDatePagination(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+    
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String secondaryfield,String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return 
+     */
+    public List<T> filterDayWithoutHourPagination(String secondaryfield,String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
         list = new ArrayList<>();
         try {
             Document sortQuery = new Document();
@@ -2070,7 +2173,11 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Bson filter = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+              Bson filter = Filters.and( 
+                                Filters.eq(secondaryfield,secondaryfieldvalue)
+                                        ,  Filters.gte(fielddate, datevalue),
+                                        Filters.lte(fielddate, datevalue));
+              
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
         } catch (Exception e) {
@@ -2081,4 +2188,185 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String secondaryfield,Integer secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * 
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return 
+     */
+    public List<T> filterDayWithoutHourPagination(String secondaryfield,Integer secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+                           Bson filter = Filters.and( 
+                                Filters.eq(secondaryfield,secondaryfieldvalue)
+                                        ,  Filters.gte(fielddate, datevalue),
+                                        Filters.lte(fielddate, datevalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHourPagination ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHour(String secondaryfield,String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return 
+     */
+    public List<T> filterDayWithoutHour(String secondaryfield,String secondaryfieldvalue, String fielddate, Date datevalue,  Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+              Bson filter = Filters.and( 
+                                Filters.eq(secondaryfield,secondaryfieldvalue)
+                                        ,  Filters.gte(fielddate, datevalue),
+                                        Filters.lte(fielddate, datevalue));
+              
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHour(String secondaryfield,Integer secondaryfieldvalue, String fielddate, Date datevalue,  Document... docSort)">
+    /**
+     * 
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return 
+     */
+    public List<T> filterDayWithoutHour(String secondaryfield,Integer secondaryfieldvalue, String fielddate, Date datevalue,  Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+                           Bson filter = Filters.and( 
+                                Filters.eq(secondaryfield,secondaryfieldvalue)
+                                        ,  Filters.gte(fielddate, datevalue),
+                                        Filters.lte(fielddate, datevalue));
+
+            list = filters(filter,sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHourPagination ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHour(String fielddate, Date datevalue,  Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return 
+     */
+    public List<T> filterDayWithoutHour(String fielddate, Date datevalue,  Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+              Bson filter = Filters.and(  Filters.gte(fielddate, datevalue),
+                                        Filters.lte(fielddate, datevalue));
+              
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHour() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String fielddate, Date datevalue,  Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return 
+     */
+    public List<T> filterDayWithoutHourPagination(String fielddate, Date datevalue,  Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+              Bson filter = Filters.and(  Filters.gte(fielddate, datevalue),
+                                        Filters.lte(fielddate, datevalue));
+              
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHourPagination() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    
+   
+
+    
+    
 }
