@@ -62,7 +62,7 @@ import org.bson.conversions.Bson;
  */
 public abstract class Repository<T> implements InterfaceRepository {
 // <editor-fold defaultstate="collapsed" desc="field">
- 
+
     protected abstract MongoClient getMongoClient();
 
     Integer contador = 0;
@@ -83,10 +83,10 @@ public abstract class Repository<T> implements InterfaceRepository {
     List<FieldBeans> fieldBeansList = new ArrayList<>();
     Exception exception;
     Util util = new Util();
-       // </editor-fold>
+    // </editor-fold>
 //MongoDatabase db_;
 // <editor-fold defaultstate="collapsed" desc="get/set">
-  
+
     public Exception getException() {
         return exception;
     }
@@ -94,7 +94,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public void setException(Exception exception) {
         this.exception = exception;
     }
-      // </editor-fold>
+    // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
 
     @Override
@@ -238,7 +238,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Document toDocument(Object t)">
-
     /**
      *
      * @param t2
@@ -248,9 +247,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return javaToDocument.toDocument(t, embeddedBeansList, referencedBeansList);
     }// </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="Document findDocPrimaryKey(T t2)">
-
     /**
      *
      * @return Document() correspondiente a la llave primaria
@@ -281,7 +278,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Document getIndexPrimaryKey()">
-
     /**
      * Crea un Index en base a la llave primaria
      *
@@ -301,7 +297,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="createIndex(Document... doc)">
-   
     /**
      *
      * @param doc
@@ -326,7 +321,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findById(T t2)">
-  
     /**
      * Busca por la llave primaria del documento
      *
@@ -360,7 +354,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findById(Document doc)">
-
     public Optional<T> findById(Document doc) {
 
         try {
@@ -381,7 +374,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="find(String key, Object value">
-   
     @Override
     public Optional<T> find(String key, Object value) {
         try {
@@ -424,7 +416,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="T search(String key, Object value)">
-
     public T search(String key, Object value) {
         try {
 
@@ -506,7 +497,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="T iterableSimple(FindIterable<Document> iterable)">
-
     /**
      * Internamente recorre el iterable
      *
@@ -545,7 +535,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="iterableList(FindIterable<Document> iterable)">
- 
     private List< T> iterableList(FindIterable<Document> iterable) {
         List< T> l = new ArrayList<>();
         try {
@@ -573,7 +562,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="sizeOfPage(Integer rowsForPage, Document... doc)">
- 
     /**
      * Devuele el numero de paginas en una coleccion
      *
@@ -693,7 +681,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findPagination(Integer pageNumber, Integer rowsForPage, Document... docSort)">
-   
     /**
      * Busca con paginacion en una coleccion
      *
@@ -725,7 +712,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findFilterPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort)o">
-
     /**
      * Busca con paginacion en una coleccion con filtro
      *
@@ -756,9 +742,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }// </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="findOneAndUpdate(String key, String value, String field, Integer... incremento) ">
-
     /**
      *
      * @param key
@@ -805,7 +789,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findOneAndUpdate(Document doc, String field, Integer... incremento)">
-  
     /**
      * findOneAndUpdate
      *
@@ -853,7 +836,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findOneAndUpdate(Document doc, Document inc, Integer... incremento)">
- 
     /**
      *
      * @param doc
@@ -893,7 +875,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc=" findBy(Document doc, Document... docSort)">
- 
     /**
      *
      * @param doc
@@ -1845,7 +1826,6 @@ public abstract class Repository<T> implements InterfaceRepository {
      *
      * @return
      */
-
     public List<T> filterBetweenInteger(String fieldnamestart, Integer startvalue, String fieldlimitname, Integer limitvalue, Document... docSort) {
         list = new ArrayList<>();
         try {
@@ -2256,7 +2236,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }// </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive, Document... docSort)">
     /**
      *
@@ -2328,6 +2307,65 @@ public abstract class Repository<T> implements InterfaceRepository {
             } else {
                 iterable = db.getCollection(collection)
                         .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, valueSecond)).sort(sortQuery);
+//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+
+            }
+
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findRegex()", e);
+        }
+        return list;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive, String keySecond, Object valueSecond, Document... docSort)">
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @param docSort
+     * @return
+     */
+    public List<T> findRegex(String key, String value, Boolean caseSensitive, String keySecond, Object valueSecond, Document... docSort) {
+        Document sortQuery = new Document();
+        list = new ArrayList<>();
+
+        try {
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Object t = entityClass.newInstance();
+            Pattern regex = Pattern.compile(value);
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable;
+            if (!caseSensitive) {
+                switch (typeOfObject(valueSecond)) {
+                    case "String":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, valueSecond.toString())).sort(sortQuery);
+                        break;
+                    case "Integer":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, Integer.parseInt(valueSecond.toString()))).sort(sortQuery);
+                        break;
+
+                    case "Double":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, Double.parseDouble(valueSecond.toString()))).sort(sortQuery);
+                        break;
+                    case "Date":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, new Date(valueSecond.toString()))).sort(sortQuery);
+                        break;
+                    default:
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, valueSecond.toString())).sort(sortQuery);
+                        break;
+
+                }
+
+            } else {
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, valueSecond)).sort(sortQuery);
 //               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
 
             }
@@ -2424,7 +2462,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>    
-    
+
     // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, Document... docSort)">
     /**
      *
@@ -2508,8 +2546,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, String keySecond, String valueSecond,String keyThree, String valueTree, Document... docSort)">
 
+    // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, String keySecond, String valueSecond,String keyThree, String valueTree, Document... docSort)">
     /**
      *
      * @param key
@@ -2592,11 +2630,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    
-    
-    
-    // <editor-fold defaultstate="collapsed" desc="findRegexPagination(String key, String value, Boolean caseSensitive, Integer pageNumber, Integer rowsForPage,Document... docSort)">
 
+    // <editor-fold defaultstate="collapsed" desc="findRegexPagination(String key, String value, Boolean caseSensitive, Integer pageNumber, Integer rowsForPage,Document... docSort)">
     /**
      *
      * @param key
@@ -2772,10 +2807,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }// </editor-fold>
 
-
-    
     // <editor-fold defaultstate="collapsed" desc="findRegexInTextPagination(String key, String value, Boolean caseSensitive, Integer pageNumber, Integer rowsForPage, Document... docSort))">
-
     /**
      *
      * @param key
@@ -2950,5 +2982,40 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="metodo">
+    /**
+     * se usa para comparar el tipo que es el objeto
+     *
+     * @param o
+     * @return
+     */
+    public String typeOfObject(Object o) {
+        String type = "String";
+        try {
+            if (o instanceof String) {
+                type = "String";
+            } else {
+                if (o instanceof Integer) {
+                    type = "Integer";
+
+                } else {
+                    if (o instanceof Date) {
+                        type = "Date";
+
+                    } else {
+                        if (o instanceof Double) {
+                            type = "Double";
+
+                        }
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        return type;
+    }
+    // </editor-fold>
 }
