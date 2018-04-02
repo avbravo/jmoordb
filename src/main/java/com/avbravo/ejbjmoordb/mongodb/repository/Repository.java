@@ -900,6 +900,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }
+    // </editor-fold>
+    
 // <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
 
     public List<T> findBy(String key, Object value, Document... docSort) {
