@@ -901,9 +901,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-    
-// <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
 
+// <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
     public List<T> findBy(String key, Object value, Document... docSort) {
         Document sortQuery = new Document();
         try {
@@ -2367,8 +2366,27 @@ public abstract class Repository<T> implements InterfaceRepository {
                 }
 
             } else {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, valueSecond)).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+//                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, valueSecond)).sort(sortQuery);
+                switch (typeOfObject(valueSecond)) {
+                    case "String":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, valueSecond.toString())).sort(sortQuery);
+                        break;
+                    case "Integer":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, Integer.parseInt(valueSecond.toString()))).sort(sortQuery);
+                        break;
+
+                    case "Double":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, Double.parseDouble(valueSecond.toString()))).sort(sortQuery);
+                        break;
+                    case "Date":
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, new Date(valueSecond.toString()))).sort(sortQuery);
+                        break;
+                    default:
+                        iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, valueSecond.toString())).sort(sortQuery);
+                        
+                        break;
+
+                }
 
             }
 
@@ -2422,48 +2440,49 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive,Bson filter, Document... docSort) ">
-
-    /**
-     *
-     * @param key
-     * @param value
-     * @param docSort
-     * @return
-     */
-    public List<T> findRegex(String key, String value, Boolean caseSensitive, Bson filter, Document... docSort) {
-        Document sortQuery = new Document();
-        list = new ArrayList<>();
-
-        try {
-
-            if (docSort.length != 0) {
-                sortQuery = docSort[0];
-
-            }
-            Object t = entityClass.newInstance();
-            Pattern regex = Pattern.compile(value);
-
-            MongoDatabase db = getMongoClient().getDatabase(database);
-            FindIterable<Document> iterable;
-            if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
-            } else {
-                iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i"))).filter(filter).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
-
-            }
-
-            list = iterableList(iterable);
-
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
-        }
-        return list;
-    }// </editor-fold>    
+  
+//    // <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive,Bson filter, Document... docSort) ">
+//
+//    /**
+//     *
+//     * @param key
+//     * @param value
+//     * @param docSort
+//     * @return
+//     */
+//    public List<T> findRegex(String key, String value, Boolean caseSensitive, Bson filter, Document... docSort) {
+//        Document sortQuery = new Document();
+//        list = new ArrayList<>();
+//
+//        try {
+//
+//            if (docSort.length != 0) {
+//                sortQuery = docSort[0];
+//
+//            }
+//            Object t = entityClass.newInstance();
+//            Pattern regex = Pattern.compile(value);
+//
+//            MongoDatabase db = getMongoClient().getDatabase(database);
+//            FindIterable<Document> iterable;
+//            if (!caseSensitive) {
+//                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).sort(sortQuery);
+////iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+//            } else {
+//                iterable = db.getCollection(collection)
+//                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i"))).filter(filter).sort(sortQuery);
+////               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+//
+//            }
+//
+//            list = iterableList(iterable);
+//
+//        } catch (Exception e) {
+//            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+//            exception = new Exception("findRegex()", e);
+//        }
+//        return list;
+//    }// </editor-fold>    
 
     // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, Document... docSort)">
     /**
@@ -2590,48 +2609,48 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>    
-    // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, Bson filter, Document... docSort)">
-
-    /**
-     *
-     * @param key
-     * @param value
-     * @param docSort
-     * @return
-     */
-    public List<T> findRegexInText(String key, String value, Boolean caseSensitive, Bson filter, Document... docSort) {
-        Document sortQuery = new Document();
-        list = new ArrayList<>();
-
-        try {
-
-            if (docSort.length != 0) {
-                sortQuery = docSort[0];
-
-            }
-            Object t = entityClass.newInstance();
-            Pattern regex = Pattern.compile(value);
-
-            MongoDatabase db = getMongoClient().getDatabase(database);
-            FindIterable<Document> iterable;
-            if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
-            } else {
-                iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "m"))).filter(filter).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
-
-            }
-
-            list = iterableList(iterable);
-
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
-        }
-        return list;
-    }// </editor-fold>
+//    // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, Bson filter, Document... docSort)">
+//
+//    /**
+//     *
+//     * @param key
+//     * @param value
+//     * @param docSort
+//     * @return
+//     */
+//    public List<T> findRegexInText(String key, String value, Boolean caseSensitive, Bson filter, Document... docSort) {
+//        Document sortQuery = new Document();
+//        list = new ArrayList<>();
+//
+//        try {
+//
+//            if (docSort.length != 0) {
+//                sortQuery = docSort[0];
+//
+//            }
+//            Object t = entityClass.newInstance();
+//            Pattern regex = Pattern.compile(value);
+//
+//            MongoDatabase db = getMongoClient().getDatabase(database);
+//            FindIterable<Document> iterable;
+//            if (!caseSensitive) {
+//                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).sort(sortQuery);
+////iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+//            } else {
+//                iterable = db.getCollection(collection)
+//                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "m"))).filter(filter).sort(sortQuery);
+////               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+//
+//            }
+//
+//            list = iterableList(iterable);
+//
+//        } catch (Exception e) {
+//            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+//            exception = new Exception("findRegex()", e);
+//        }
+//        return list;
+//    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findRegexPagination(String key, String value, Boolean caseSensitive, Integer pageNumber, Integer rowsForPage,Document... docSort)">
     /**
@@ -2764,50 +2783,50 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="findRegexPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort)">
-
-    /**
-     *
-     * @param key
-     * @param value
-     * @param docSort
-     * @return
-     */
-    public List<T> findRegexPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
-        Document sortQuery = new Document();
-        list = new ArrayList<>();
-
-        try {
-
-            if (docSort.length != 0) {
-                sortQuery = docSort[0];
-
-            }
-            Object t = entityClass.newInstance();
-            Pattern regex = Pattern.compile(value);
-
-            MongoDatabase db = getMongoClient().getDatabase(database);
-            FindIterable<Document> iterable;
-            if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
-                        limit(rowsForPage).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
-            } else {
-                iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i"))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
-                        limit(rowsForPage).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
-
-            }
-
-            list = iterableList(iterable);
-
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexPagination()", e);
-        }
-        return list;
-    }// </editor-fold>
+//    // <editor-fold defaultstate="collapsed" desc="findRegexPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+//
+//    /**
+//     *
+//     * @param key
+//     * @param value
+//     * @param docSort
+//     * @return
+//     */
+//    public List<T> findRegexPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+//        Document sortQuery = new Document();
+//        list = new ArrayList<>();
+//
+//        try {
+//
+//            if (docSort.length != 0) {
+//                sortQuery = docSort[0];
+//
+//            }
+//            Object t = entityClass.newInstance();
+//            Pattern regex = Pattern.compile(value);
+//
+//            MongoDatabase db = getMongoClient().getDatabase(database);
+//            FindIterable<Document> iterable;
+//            if (!caseSensitive) {
+//                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+//                        limit(rowsForPage).sort(sortQuery);
+////iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+//            } else {
+//                iterable = db.getCollection(collection)
+//                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i"))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+//                        limit(rowsForPage).sort(sortQuery);
+////               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+//
+//            }
+//
+//            list = iterableList(iterable);
+//
+//        } catch (Exception e) {
+//            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+//            exception = new Exception("findRegexPagination()", e);
+//        }
+//        return list;
+//    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findRegexInTextPagination(String key, String value, Boolean caseSensitive, Integer pageNumber, Integer rowsForPage, Document... docSort))">
     /**
@@ -2940,50 +2959,50 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="findRegexInTextPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort)">
-
-    /**
-     *
-     * @param key
-     * @param value
-     * @param docSort
-     * @return
-     */
-    public List<T> findRegexInTextPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
-        Document sortQuery = new Document();
-        list = new ArrayList<>();
-
-        try {
-
-            if (docSort.length != 0) {
-                sortQuery = docSort[0];
-
-            }
-            Object t = entityClass.newInstance();
-            Pattern regex = Pattern.compile(value);
-
-            MongoDatabase db = getMongoClient().getDatabase(database);
-            FindIterable<Document> iterable;
-            if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
-                        limit(rowsForPage).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
-            } else {
-                iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "m"))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
-                        limit(rowsForPage).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
-
-            }
-
-            list = iterableList(iterable);
-
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexInTextPagination()", e);
-        }
-        return list;
-    }// </editor-fold>
+//    // <editor-fold defaultstate="collapsed" desc="findRegexInTextPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+//
+//    /**
+//     *
+//     * @param key
+//     * @param value
+//     * @param docSort
+//     * @return
+//     */
+//    public List<T> findRegexInTextPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+//        Document sortQuery = new Document();
+//        list = new ArrayList<>();
+//
+//        try {
+//
+//            if (docSort.length != 0) {
+//                sortQuery = docSort[0];
+//
+//            }
+//            Object t = entityClass.newInstance();
+//            Pattern regex = Pattern.compile(value);
+//
+//            MongoDatabase db = getMongoClient().getDatabase(database);
+//            FindIterable<Document> iterable;
+//            if (!caseSensitive) {
+//                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+//                        limit(rowsForPage).sort(sortQuery);
+////iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+//            } else {
+//                iterable = db.getCollection(collection)
+//                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "m"))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+//                        limit(rowsForPage).sort(sortQuery);
+////               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+//
+//            }
+//
+//            list = iterableList(iterable);
+//
+//        } catch (Exception e) {
+//            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+//            exception = new Exception("findRegexInTextPagination()", e);
+//        }
+//        return list;
+//    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="metodo">
     /**
