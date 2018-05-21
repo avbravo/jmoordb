@@ -480,6 +480,40 @@ public abstract class Repository<T> implements InterfaceRepository {
 //        return null;
     }
 
+    // <editor-fold defaultstate="collapsed" desc="findFirst(Document... doc) ">
+    /**
+     *Devuelve el primer documento de la coleccion
+     * @param document
+     * @return
+     */
+    @Override
+    public Optional<T> findFirst(Document... doc) {
+        try {
+            Document document = new Document();
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            if (doc.length != 0) {
+                document = doc[0];
+
+                FindIterable<Document> iterable = db.getCollection(collection).find(document).limit(1);
+                tlocal = (T) iterableSimple(iterable);
+                return Optional.of(tlocal);
+            } else {
+
+                FindIterable<Document> iterable = db.getCollection(collection).find().limit(1);
+                tlocal = (T) iterableSimple(iterable);
+                return Optional.of(tlocal);
+            }
+
+            //return (T) tlocal;
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("find() ", e);
+            new JmoordbException("find()");
+        }
+        return Optional.empty();
+//        return null;
+    }
+
     private T findInternal(Document document) {
         try {
             //   Object t = entityClass.newInstance();
@@ -2383,7 +2417,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                         break;
                     default:
                         iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value).append("$options", "i")).append(keySecond, valueSecond.toString())).sort(sortQuery);
-                        
+
                         break;
 
                 }
@@ -2440,7 +2474,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-  
+
 //    // <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive,Bson filter, Document... docSort) ">
 //
 //    /**
@@ -2483,7 +2517,6 @@ public abstract class Repository<T> implements InterfaceRepository {
 //        }
 //        return list;
 //    }// </editor-fold>    
-
     // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, Document... docSort)">
     /**
      *

@@ -22,6 +22,7 @@ public interface InterfaceRepository <T>{
      public T find(String key, Object value);
 //     public T find(String key, Integer value);
      public T find(Document document);
+     public T findFirst(Document... document);
      
    //  public Boolean save(T t,Boolean... verifyID);
      
