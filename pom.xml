@@ -4,7 +4,7 @@
 
     <groupId>com.avbravo</groupId>
     <artifactId>ejbjmoordb</artifactId>
-    <version>0.5.8.27</version>
+    <version>0.5.10</version>
     <packaging>ejb</packaging>
 
     <name>ejbjmoordb</name>
@@ -22,19 +22,19 @@
     </properties>
 
     <dependencies>
-<!--       <dependency>
+      <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>8.0</version>
             <scope>provided</scope>
-        </dependency>-->
+        </dependency>
         
-       <dependency>
+<!--       <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
         
      <dependency>
             <groupId>org.omnifaces</groupId>
