@@ -16,7 +16,7 @@ public interface IController<T> {
      public String preRenderView(String action);
      
 
-    public String prepare(String action, Object... item) ;
+ //   public String prepare(String action, Object... item) ;
     
 
     default public String refresh(){
