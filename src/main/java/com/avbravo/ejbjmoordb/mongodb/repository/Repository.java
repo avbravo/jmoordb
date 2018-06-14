@@ -94,6 +94,17 @@ public abstract class Repository<T> implements InterfaceRepository {
     public void setException(Exception exception) {
         this.exception = exception;
     }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+    
+    
+    
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
 
@@ -158,6 +169,9 @@ public abstract class Repository<T> implements InterfaceRepository {
 //db_ = getMongoDatabase();
     }// </editor-fold>
 
+    
+    // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="save(T t, Boolean... verifyID)">
     /**
      *
