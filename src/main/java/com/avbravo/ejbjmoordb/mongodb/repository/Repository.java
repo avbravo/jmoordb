@@ -103,12 +103,9 @@ public abstract class Repository<T> implements InterfaceRepository {
     public void setDatabase(String database) {
         this.database = database;
     }
-    
-    
-    
+
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
-
     @Override
     public MongoDatabase getMongoDatabase() {
         try {
@@ -170,7 +167,6 @@ public abstract class Repository<T> implements InterfaceRepository {
 //db_ = getMongoDatabase();
     }// </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="save(T t, Boolean... verifyID)">
@@ -424,7 +420,6 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         }
 
-
         return Optional.empty();
     }// </editor-fold>
 
@@ -494,8 +489,10 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="findFirst(Document... doc) ">
+
     /**
-     *Devuelve el primer documento de la coleccion
+     * Devuelve el primer documento de la coleccion
+     *
      * @param document
      * @return
      */
@@ -2445,7 +2442,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive, String keySecond, String valueSecond,  String keyThree, String valueTree, Document... docSort)">
+    
+// <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive, String keySecond, String valueSecond,  String keyThree, String valueTree, Document... docSort)">
 
     /**
      *
@@ -2554,12 +2552,11 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex",  value))).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).sort(sortQuery);
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex",  value).append("$options", "m"))).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+                        .find(new Document(key, new Document("$regex", value).append("$options", "i"))).sort(sortQuery);
+                
 
             }
 
@@ -2571,9 +2568,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive,  String keySecond,String valueSecond,Document... docSort)">
 
+    // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive,  String keySecond,String valueSecond,Document... docSort)">
     /**
      *
      * @param key
@@ -2597,12 +2593,12 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex",  value)).append(keySecond, valueSecond)).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond)).sort(sortQuery);
+
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex",  value).append("$options", "m")).append(keySecond, valueSecond)).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+                        .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond)).sort(sortQuery);
+
 
             }
 
@@ -2639,12 +2635,12 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex",  value)).append(keySecond, valueSecond).append(keyThree, valueThree)).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond).append(keyThree, valueThree)).sort(sortQuery);
+
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex", value).append("$options", "m")).append(keySecond, valueSecond).append(keyThree, valueThree)).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+                        .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond).append(keyThree, valueThree)).sort(sortQuery);
+
 
             }
 
@@ -2656,7 +2652,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>    
-
 
     // <editor-fold defaultstate="collapsed" desc="findRegexPagination(String key, String value, Boolean caseSensitive, Integer pageNumber, Integer rowsForPage,Document... docSort)">
     /**
@@ -2860,12 +2855,12 @@ public abstract class Repository<T> implements InterfaceRepository {
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex",  value).append("$options", "m"))).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                        .find(new Document(key, new Document("$regex", value).append("$options", "i"))).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+
 
             }
 
@@ -2902,14 +2897,14 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex",  value)).append(keySecond, valueSecond)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex",  value).append("$options", "m")).append(keySecond, valueSecond)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                        .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+
 
             }
 
@@ -2946,14 +2941,14 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = getMongoClient().getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
-                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex",  value)).append(keySecond, valueSecond).append(keyThree, valueThree)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond).append(keyThree, valueThree)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
-//iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
+
             } else {
                 iterable = db.getCollection(collection)
-                        .find(new Document(key, new Document("$regex",  value).append("$options", "m")).append(keySecond, valueSecond).append(keyThree, valueThree)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                        .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond).append(keyThree, valueThree)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
-//               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
+
 
             }
 
@@ -3001,8 +2996,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return type;
     }
     // </editor-fold>
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="complete(String query)">
     /**
      *
@@ -3016,28 +3010,26 @@ public abstract class Repository<T> implements InterfaceRepository {
         list = new ArrayList<>();
 
         try {
-            
-              query = query.trim();
+
+            query = query.trim();
             String field = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("field");
             String fromstart = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fromstart");
             String fielddropdown = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fielddropdown");
             String fieldminquerylength = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fieldminquerylength");
-
+            if (query.length() < Integer.parseInt(fieldminquerylength)) {
+                return list;
+            }
             if (fielddropdown.equals("false")) {
-                if (query.length() < Integer.parseInt(fieldminquerylength)) {
-                    return list;
-                }
+
                 if (fromstart.equals("true")) {
-                   list = findRegex(field, query, true, new Document(field, 1));
+                    list = findRegex(field, query, true, new Document(field, 1));
                 } else {
-                    list = findRegexInText(field, query, false, new Document(field, 1));
+                    list = findRegexInText(field, query, true, new Document(field, 1));
                 }
             } else {
                 list = findRegexInText(field, query, false, new Document(field, 1));
 
             }
-
-          
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
