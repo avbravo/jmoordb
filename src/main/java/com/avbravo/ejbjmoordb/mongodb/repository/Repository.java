@@ -3021,10 +3021,10 @@ public abstract class Repository<T> implements InterfaceRepository {
             String field = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("field");
             String fromstart = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fromstart");
             String fielddropdown = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fielddropdown");
-            String fieldquerylenth = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fieldquerylenth");
+            String fieldminquerylength = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fieldminquerylength");
 
             if (fielddropdown.equals("false")) {
-                if (query.length() < Integer.parseInt(fieldquerylenth)) {
+                if (query.length() < Integer.parseInt(fieldminquerylength)) {
                     return list;
                 }
                 if (fromstart.equals("true")) {
