@@ -49,6 +49,7 @@ import java.util.regex.Pattern;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.bson.Document;
@@ -413,10 +414,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             });
             if (haveElements) {
 
-//                return tlocal;
                 return Optional.of(tlocal);
             }
-//            return null;
             return Optional.empty();
 
         } catch (Exception e) {
@@ -425,7 +424,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         }
 
-//        return null;
+
         return Optional.empty();
     }// </editor-fold>
 
@@ -493,7 +492,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return Optional.empty();
 //        return null;
     }
-
+// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="findFirst(Document... doc) ">
     /**
      *Devuelve el primer documento de la coleccion
@@ -3002,4 +3001,48 @@ public abstract class Repository<T> implements InterfaceRepository {
         return type;
     }
     // </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="complete(String query)">
+    /**
+     *
+     * @param key
+     * @param value
+     * @param docSort
+     * @return
+     */
+    public List<T> complete(String query) {
+        Document sortQuery = new Document();
+        list = new ArrayList<>();
+
+        try {
+            
+              query = query.trim();
+            String field = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("field");
+            String fromstart = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fromstart");
+            String fielddropdown = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fielddropdown");
+            String fieldquerylenth = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("fieldquerylenth");
+
+            if (fielddropdown.equals("false")) {
+                if (query.length() < Integer.parseInt(fieldquerylenth)) {
+                    return list;
+                }
+                if (fromstart.equals("true")) {
+                   list = findRegex(field, query, true, new Document(field, 1));
+                } else {
+                    list = findRegexInText(field, query, false, new Document(field, 1));
+                }
+            } else {
+                list = findRegexInText(field, query, false, new Document(field, 1));
+
+            }
+
+          
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("complete()", e);
+        }
+        return list;
+    }// </editor-fold>
 }
