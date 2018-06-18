@@ -23,6 +23,7 @@ public class Configuracion {
     private Integer idconfiguracion;
     private Double itbms;
     private Integer decimales;
+    private String formatodecimal;
     private String formatofecha;
     private String formatofechahora;
     private Integer minQueryLengthAutocompleteSmall;
