@@ -29,6 +29,7 @@ public class Configuracion {
     private Integer minQueryLengthAutocompleteSmall;
     private Integer minQueryLengthAutocompleteMedium;
     private Integer minQueryLengthAutocompleteLarge;
+    private Integer rowsforpage;
     private String activo;
     
     
