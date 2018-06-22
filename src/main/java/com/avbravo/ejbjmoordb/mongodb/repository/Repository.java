@@ -3027,7 +3027,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                     list = findRegexInText(field, query, true, new Document(field, 1));
                 }
             } else {
-                list = findRegexInText(field, query, false, new Document(field, 1));
+                list = findRegexInText(field, query, true, new Document(field, 1));
 
             }
 
