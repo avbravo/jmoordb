@@ -14,8 +14,7 @@ import lombok.Setter;
  *
  * @author avbravo
  */
-@Getter
-@Setter
+
 public class AccessInfo {
     @Id
     private String idaccessinfo;
@@ -41,6 +40,57 @@ public class AccessInfo {
     public String toString() {
         return "AcessInfo{" + "idaccessinfo=" + idaccessinfo + ", username=" + username + ", datetime=" + datetime + ", form=" + form + ", ip=" + ip + ", description=" + description + '}';
     }
+
+    public String getIdaccessinfo() {
+        return idaccessinfo;
+    }
+
+    public void setIdaccessinfo(String idaccessinfo) {
+        this.idaccessinfo = idaccessinfo;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
+    }
+
+    public String getForm() {
+        return form;
+    }
+
+    public void setForm(String form) {
+        this.form = form;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
+    
     
     
 }

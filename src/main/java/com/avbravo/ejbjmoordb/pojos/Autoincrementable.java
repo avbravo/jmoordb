@@ -13,8 +13,7 @@ import lombok.Setter;
  *
  * @author avbravo
  */
-@Getter
-@Setter
+
 public class Autoincrementable {
 
     @Id
@@ -33,4 +32,23 @@ public class Autoincrementable {
     public String toString() {
         return "Autoincrementable{" + "documento=" + documento + ", contador=" + contador + '}';
     }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
+    public Integer getContador() {
+        return contador;
+    }
+
+    public void setContador(Integer contador) {
+        this.contador = contador;
+    }
+    
+    
+    
 }

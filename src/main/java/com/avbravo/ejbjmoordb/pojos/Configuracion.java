@@ -16,8 +16,7 @@ import lombok.Setter;
  *
  * @author avbravo
  */
-@Getter
-@Setter
+
 public class Configuracion {
     @Id
     private Integer idconfiguracion;
@@ -35,4 +34,105 @@ public class Configuracion {
     
     @Embedded
     private List<UserInfo> userInfo;
+
+    public Integer getIdconfiguracion() {
+        return idconfiguracion;
+    }
+
+    public void setIdconfiguracion(Integer idconfiguracion) {
+        this.idconfiguracion = idconfiguracion;
+    }
+
+    public Double getItbms() {
+        return itbms;
+    }
+
+    public void setItbms(Double itbms) {
+        this.itbms = itbms;
+    }
+
+    public Integer getDecimales() {
+        return decimales;
+    }
+
+    public void setDecimales(Integer decimales) {
+        this.decimales = decimales;
+    }
+
+    public String getFormatodecimal() {
+        return formatodecimal;
+    }
+
+    public void setFormatodecimal(String formatodecimal) {
+        this.formatodecimal = formatodecimal;
+    }
+
+    public String getFormatofecha() {
+        return formatofecha;
+    }
+
+    public void setFormatofecha(String formatofecha) {
+        this.formatofecha = formatofecha;
+    }
+
+    public String getFormatofechahora() {
+        return formatofechahora;
+    }
+
+    public void setFormatofechahora(String formatofechahora) {
+        this.formatofechahora = formatofechahora;
+    }
+
+    public Integer getMinQueryLengthAutocompleteSmall() {
+        return minQueryLengthAutocompleteSmall;
+    }
+
+    public void setMinQueryLengthAutocompleteSmall(Integer minQueryLengthAutocompleteSmall) {
+        this.minQueryLengthAutocompleteSmall = minQueryLengthAutocompleteSmall;
+    }
+
+    public Integer getMinQueryLengthAutocompleteMedium() {
+        return minQueryLengthAutocompleteMedium;
+    }
+
+    public void setMinQueryLengthAutocompleteMedium(Integer minQueryLengthAutocompleteMedium) {
+        this.minQueryLengthAutocompleteMedium = minQueryLengthAutocompleteMedium;
+    }
+
+    public Integer getMinQueryLengthAutocompleteLarge() {
+        return minQueryLengthAutocompleteLarge;
+    }
+
+    public void setMinQueryLengthAutocompleteLarge(Integer minQueryLengthAutocompleteLarge) {
+        this.minQueryLengthAutocompleteLarge = minQueryLengthAutocompleteLarge;
+    }
+
+    public Integer getRowsforpage() {
+        return rowsforpage;
+    }
+
+    public void setRowsforpage(Integer rowsforpage) {
+        this.rowsforpage = rowsforpage;
+    }
+
+    public String getActivo() {
+        return activo;
+    }
+
+    public void setActivo(String activo) {
+        this.activo = activo;
+    }
+
+    public List<UserInfo> getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(List<UserInfo> userInfo) {
+        this.userInfo = userInfo;
+    }
+    
+    
+    
+    
+    
 }

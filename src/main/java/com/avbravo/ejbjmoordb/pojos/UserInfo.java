@@ -14,8 +14,7 @@ import lombok.Setter;
  *
  * @author avbravo
  */
-@Getter
-@Setter
+
 public class UserInfo {
 
     @Id
@@ -41,4 +40,41 @@ public class UserInfo {
         return "Userinfo{" + "username=" + username + ", datetime=" + datetime + ", description=" + description + '}';
     }
 
+    public String getIduserinfo() {
+        return iduserinfo;
+    }
+
+    public void setIduserinfo(String iduserinfo) {
+        this.iduserinfo = iduserinfo;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    
+    
+    
+    
+    
 }
