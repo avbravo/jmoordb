@@ -755,14 +755,14 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="findFilterPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort)o">
+    // <editor-fold defaultstate="collapsed" desc="findPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort)o">
     /**
      * Busca con paginacion en una coleccion con filtro
      *
      * @param document
      * @return
      */
-    public List< T> findFilterPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+    public List< T> findPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
         list = new ArrayList<>();
         Document sortQuery = new Document();
         try {
