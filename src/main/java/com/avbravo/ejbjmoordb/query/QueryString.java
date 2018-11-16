@@ -11,4 +11,5 @@ package com.avbravo.ejbjmoordb.query;
  */
 public class QueryString {
     
+    
 }
