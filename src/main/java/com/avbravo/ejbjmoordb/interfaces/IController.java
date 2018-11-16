@@ -57,5 +57,21 @@ public interface IController<T> {
     public void move();
     
     public String searchBy(String field);
+    
+     public default String nameOfClassAndMethod() {
+    final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+    final String s = e.getClassName();
+    return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
+}
+   public default String nameOfClass() {
+    final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+    final String s = e.getClassName();
+    return s.substring(s.lastIndexOf('.') + 1, s.length()) ;
+}
+   public default String nameOfMethod() {
+    final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+    final String s = e.getClassName();
+    return  e.getMethodName();
+}
 
 }
