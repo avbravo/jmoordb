@@ -7,8 +7,6 @@ package com.avbravo.ejbjmoordb.pojos;
 
 import com.avbravo.ejbjmoordb.anotations.Id;
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
