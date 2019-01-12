@@ -4,7 +4,7 @@
 
     <groupId>com.avbravo</groupId>
     <artifactId>ejbjmoordb</artifactId>
-    <version>0.9</version>
+    <version>0.10</version>
     <packaging>ejb</packaging>
 
     <name>ejbjmoordb</name>
@@ -62,6 +62,14 @@
             <artifactId>java-client</artifactId>
             <version>2.4.1</version>
         </dependency>
+        <!--
+        Para el sql query
+        -->
+         <dependency>
+   <groupId>com.github.vincentrussell</groupId>
+   <artifactId>sql-to-mongo-db-query-converter</artifactId>
+   <version>1.7</version>
+</dependency>
     </dependencies>
 
     <build>

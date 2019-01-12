@@ -16,6 +16,8 @@ import com.avbravo.ejbjmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.ejbjmoordb.mongodb.internal.JavaToDocument;
 import com.avbravo.ejbjmoordb.util.Analizador;
 import com.avbravo.ejbjmoordb.util.Util;
+import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
+import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
 import com.mongodb.Block;
 import com.mongodb.CursorType;
 import com.mongodb.Function;
@@ -384,6 +386,38 @@ public abstract class Repository<T> implements InterfaceRepository {
         return Optional.empty();
     }// </editor-fold>
 
+    
+    // <editor-fold defaultstate="collapsed" desc="findById(String sql)">
+    public Optional<T> findById(String sql) {
+        Document sortQuery = new Document();
+
+        Document doc = new Document();
+        try {
+              QueryConverter queryConverter = new QueryConverter(sql);
+            MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
+            String collection = mongoDBQueryHolder.getCollection();
+            doc = mongoDBQueryHolder.getQuery();
+            Document projection = mongoDBQueryHolder.getProjection();
+            if (sql.toLowerCase().indexOf("order by") != -1) {
+                sortQuery = mongoDBQueryHolder.getSort();
+            }
+
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            T t_ = (T) find(doc);
+
+            if (t_ == null) {
+                // no lo encontro
+            } else {
+                return Optional.of(t_);
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
+            exception = new Exception("findById() ", e);
+        }
+        return Optional.empty();
+    }// </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="find(String key, Object value">
     @Override
     public Optional<T> find(String key, Object value) {
@@ -696,6 +730,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return contador;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="count(Document... doc)">
+
     /**
      *
      * @param doc
@@ -704,24 +739,21 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Integer count(Bson filter) {
         try {
             contador = 0;
-        
-          
-                MongoDatabase db = getMongoClient().getDatabase(database);
-                FindIterable<Document> iterable = db.getCollection(collection).find(filter);
 
-                iterable.forEach(new Block<Document>() {
-                    @Override
-                    public void apply(final Document document) {
-                        try {
-                            contador++;
-                        } catch (Exception e) {
-                            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
-                            exception = new Exception("count()", e);
-                        }
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(filter);
+
+            iterable.forEach(new Block<Document>() {
+                @Override
+                public void apply(final Document document) {
+                    try {
+                        contador++;
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
+                        exception = new Exception("count()", e);
                     }
-                });
-
-           
+                }
+            });
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
@@ -789,7 +821,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="findPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort)o">
+    // <editor-fold defaultstate="collapsed" desc="findPagination(Document filter, Integer pageNumber, Integer rowsForPage, Document... docSort)">
     /**
      * Busca con paginacion en una coleccion con filtro
      *
@@ -819,6 +851,46 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }// </editor-fold>
+    
+    
+     // <editor-fold defaultstate="collapsed" desc="findPagination(String sql, Integer pageNumber, Integer rowsForPage)">
+    /**
+     * Busca con paginacion en una coleccion con filtro
+     *
+     * @param document
+     * @return
+     */
+    public List< T> findPagination(String sql, Integer pageNumber, Integer rowsForPage) {
+        list = new ArrayList<>();
+        Document sortQuery = new Document();
+
+        Document doc = new Document();
+        try {
+
+            QueryConverter queryConverter = new QueryConverter(sql);
+            MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
+            String collection = mongoDBQueryHolder.getCollection();
+            doc = mongoDBQueryHolder.getQuery();
+            Document projection = mongoDBQueryHolder.getProjection();
+            if (sql.toLowerCase().indexOf("order by") != -1) {
+                sortQuery = mongoDBQueryHolder.getSort();
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).
+                    find(doc).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                    limit(rowsForPage).sort(sortQuery);
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findPagination() ", e);
+            new JmoordbException("findPagination()");
+        }
+
+        return list;
+    }// </editor-fold>
+
 
     // <editor-fold defaultstate="collapsed" desc="findOneAndUpdate(String key, String value, String field, Integer... incremento) ">
     /**
@@ -978,8 +1050,42 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }
-    // </editor-fold>
 
+    // </editor-fold>
+    
+     // <editor-fold defaultstate="collapsed" desc=" findBy(String sql)">
+    /**
+     *
+     * @param doc
+     * @param docSort
+     * @return
+     */
+    public List<T> findBy(String sql) {
+        Document sortQuery = new Document();
+        Document doc = new Document();
+        try {
+
+            list = new ArrayList<>();
+            QueryConverter queryConverter = new QueryConverter(sql);
+            MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
+            String collection = mongoDBQueryHolder.getCollection();
+            doc = mongoDBQueryHolder.getQuery();
+            Document projection = mongoDBQueryHolder.getProjection();
+            if (sql.toLowerCase().indexOf("order by") != -1) {
+                sortQuery = mongoDBQueryHolder.getSort();
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("sql() ", e);
+        }
+        return list;
+    }
+    // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
     public List<T> findBy(String key, Object value, Document... docSort) {
         Document sortQuery = new Document();
@@ -2476,9 +2582,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
-    
-// <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive, String keySecond, String valueSecond,  String keyThree, String valueTree, Document... docSort)">
 
+// <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive, String keySecond, String valueSecond,  String keyThree, String valueTree, Document... docSort)">
     /**
      *
      * @param key
@@ -2590,7 +2695,6 @@ public abstract class Repository<T> implements InterfaceRepository {
             } else {
                 iterable = db.getCollection(collection)
                         .find(new Document(key, new Document("$regex", value).append("$options", "i"))).sort(sortQuery);
-                
 
             }
 
@@ -2633,7 +2737,6 @@ public abstract class Repository<T> implements InterfaceRepository {
                 iterable = db.getCollection(collection)
                         .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond)).sort(sortQuery);
 
-
             }
 
             list = iterableList(iterable);
@@ -2674,7 +2777,6 @@ public abstract class Repository<T> implements InterfaceRepository {
             } else {
                 iterable = db.getCollection(collection)
                         .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond).append(keyThree, valueThree)).sort(sortQuery);
-
 
             }
 
@@ -2895,7 +2997,6 @@ public abstract class Repository<T> implements InterfaceRepository {
                         .find(new Document(key, new Document("$regex", value).append("$options", "i"))).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
 
-
             }
 
             list = iterableList(iterable);
@@ -2939,7 +3040,6 @@ public abstract class Repository<T> implements InterfaceRepository {
                         .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
 
-
             }
 
             list = iterableList(iterable);
@@ -2982,7 +3082,6 @@ public abstract class Repository<T> implements InterfaceRepository {
                 iterable = db.getCollection(collection)
                         .find(new Document(key, new Document("$regex", value).append("$options", "i")).append(keySecond, valueSecond).append(keyThree, valueThree)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                         limit(rowsForPage).sort(sortQuery);
-
 
             }
 
@@ -3071,4 +3170,10 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }// </editor-fold>
+
+   
+
+   
+    
+
 }
