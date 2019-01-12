@@ -695,6 +695,40 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return contador;
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="count(Document... doc)">
+    /**
+     *
+     * @param doc
+     * @return el numero de documentos en la coleccion
+     */
+    public Integer count(Bson filter) {
+        try {
+            contador = 0;
+        
+          
+                MongoDatabase db = getMongoClient().getDatabase(database);
+                FindIterable<Document> iterable = db.getCollection(collection).find(filter);
+
+                iterable.forEach(new Block<Document>() {
+                    @Override
+                    public void apply(final Document document) {
+                        try {
+                            contador++;
+                        } catch (Exception e) {
+                            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
+                            exception = new Exception("count()", e);
+                        }
+                    }
+                });
+
+           
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
+            exception = new Exception("count()", e);
+        }
+        return contador;
+    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findAll(Document... docSort) ">
     /**
