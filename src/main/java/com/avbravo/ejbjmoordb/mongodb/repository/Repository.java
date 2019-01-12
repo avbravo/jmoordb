@@ -1611,6 +1611,37 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Boolean delete(String sql)">
+    /**
+     * elimina un documento
+     *
+     * @param doc
+     * @return
+     */
+    public Boolean delete(String sql) {
+        try {
+            Document doc = new Document();
+            Document sortQuery = new Document();
+              QueryConverter queryConverter = new QueryConverter(sql);
+            MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
+            String collection = mongoDBQueryHolder.getCollection();
+            doc = mongoDBQueryHolder.getQuery();
+            Document projection = mongoDBQueryHolder.getProjection();
+            if (sql.toLowerCase().indexOf("order by") != -1) {
+                sortQuery = mongoDBQueryHolder.getSort();
+            }
+
+            DeleteResult dr = getMongoDatabase().getCollection(collection).deleteOne(doc);
+            if (dr.getDeletedCount() >= 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "remove()").log(Level.SEVERE, null, e);
+            exception = new Exception("delete() ", e);
+        }
+        return false;
+    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="deleteMany(String key, Object value)">
     /**
@@ -1640,6 +1671,33 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Integer deleteMany(Document doc) {
         Integer cont = 0;
         try {
+            DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(doc);
+            cont = (int) dr.getDeletedCount();
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
+            exception = new Exception("deleteMany() ", e);
+        }
+        return cont;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Integer deleteMany(Document doc)">
+    /**
+     *
+     * @param doc
+     * @return
+     */
+    public Integer deleteMany(String sql) {
+        Integer cont = 0;
+        Document sortQuery = new Document();
+        Document doc = new Document();
+        try {
+              QueryConverter queryConverter = new QueryConverter(sql);
+            MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
+            String collection = mongoDBQueryHolder.getCollection();
+            doc = mongoDBQueryHolder.getQuery();
+            Document projection = mongoDBQueryHolder.getProjection();
+            if (sql.toLowerCase().indexOf("order by") != -1) {
+                sortQuery = mongoDBQueryHolder.getSort();
+            }
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(doc);
             cont = (int) dr.getDeletedCount();
         } catch (Exception e) {
