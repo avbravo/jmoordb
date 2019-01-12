@@ -555,9 +555,48 @@ public abstract class Repository<T> implements InterfaceRepository {
             new JmoordbException("find()");
         }
         return Optional.empty();
-//        return null;
     }
+// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="findFirst(Document... doc) ">
 
+    /**
+     * Devuelve el primer documento de la coleccion
+     *
+     * @param document
+     * @return
+     */
+
+    public Optional<T> findFirst(String sql) {
+        try {
+            Document doc = new Document();
+            Document sortQuery = new Document();
+              QueryConverter queryConverter = new QueryConverter(sql);
+            MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
+            String collection = mongoDBQueryHolder.getCollection();
+            doc = mongoDBQueryHolder.getQuery();
+            Document projection = mongoDBQueryHolder.getProjection();
+            if (sql.toLowerCase().indexOf("order by") != -1) {
+                sortQuery = mongoDBQueryHolder.getSort();
+            }
+            MongoDatabase db = getMongoClient().getDatabase(database);
+
+
+                FindIterable<Document> iterable = db.getCollection(collection).find(doc).limit(1);
+                tlocal = (T) iterableSimple(iterable);
+                return Optional.of(tlocal);
+            
+            //return (T) tlocal;
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("find() ", e);
+            new JmoordbException("find()");
+        }
+        return Optional.empty();
+    }
+// </editor-fold>
+    
+    
+    
     private T findInternal(Document document) {
         try {
             //   Object t = entityClass.newInstance();
