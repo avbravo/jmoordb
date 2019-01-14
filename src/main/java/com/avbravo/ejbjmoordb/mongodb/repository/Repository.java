@@ -711,7 +711,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     // <editor-fold defaultstate="collapsed" desc="processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable)">
 
     private List< JmoordbResult> processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable) {
-        List< JmoordbResult> l = new ArrayList<>();
+        List<JmoordbResult> l = new ArrayList<>();
         List<Map<String, Object>> lObject = new ArrayList<>();
         try {
             iterable.forEach(new Block<Document>() {
@@ -738,14 +738,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                     System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
                   
                     JmoordbResult jmoordbResult = new JmoordbResult();
-                    //entry.getValue().toString();
-//                    if ( entry.getValue().getClass().ge instanceof Integer){
-//                    
-//                }
-                    Object value =entry.getValue().toString();
-                    jmoordbResult.put(entry.getKey(), value);
+                    
+                    jmoordbResult.put(entry.getKey(), entry.getValue().toString());
                     l.add(jmoordbResult);
-
+                    System.out.println(" size of l "+l.size());
                 }
             }
 

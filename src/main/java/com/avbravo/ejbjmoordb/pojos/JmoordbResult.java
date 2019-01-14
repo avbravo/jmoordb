@@ -17,11 +17,29 @@ import java.util.logging.Logger;
  */
 public class JmoordbResult {
 
-    private HashMap<String, Object> field = new HashMap<>();
+    private HashMap<String, String> field = new HashMap<>();
         Exception exception = new Exception();
 
+    public HashMap<String, String> getField() {
+        return field;
+    }
+
+    public void setField(HashMap<String, String> field) {
+        this.field = field;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
+    }
+
+        
+        
     // <editor-fold defaultstate="collapsed" desc="put(String key, String value)">
-    public void put(String key, Object value) {
+    public void put(String key, String value) {
         try {
             field.put(key, value);
         } catch (Exception e) {
@@ -30,20 +48,12 @@ public class JmoordbResult {
         }
     }
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="put(String key, Integer value)">
-    public void put(String key, Integer value) {
-        try {
-            field.put(key, value);
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("put() ", e);
-        }
-    }
+  
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="get(String key)">
-    public Object get(String key) {
-       Object value = "";
+    public String get(String key) {
+       String value = "";
         try {
             value = field.get(key);
         } catch (Exception e) {
