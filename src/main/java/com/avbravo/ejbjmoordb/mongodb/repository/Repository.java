@@ -394,14 +394,13 @@ public abstract class Repository<T> implements InterfaceRepository {
         return Optional.empty();
     }// </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="findById(String sql)">
     public Optional<T> findById(String sql) {
         Document sortQuery = new Document();
 
         Document doc = new Document();
         try {
-              QueryConverter queryConverter = new QueryConverter(sql);
+            QueryConverter queryConverter = new QueryConverter(sql);
             MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
             String collection = mongoDBQueryHolder.getCollection();
             doc = mongoDBQueryHolder.getQuery();
@@ -425,7 +424,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="find(String key, Object value">
     @Override
     public Optional<T> find(String key, Object value) {
@@ -573,12 +572,11 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param document
      * @return
      */
-
     public Optional<T> findFirst(String sql) {
         try {
             Document doc = new Document();
             Document sortQuery = new Document();
-              QueryConverter queryConverter = new QueryConverter(sql);
+            QueryConverter queryConverter = new QueryConverter(sql);
             MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
             String collection = mongoDBQueryHolder.getCollection();
             doc = mongoDBQueryHolder.getQuery();
@@ -588,11 +586,10 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             MongoDatabase db = getMongoClient().getDatabase(database);
 
+            FindIterable<Document> iterable = db.getCollection(collection).find(doc).limit(1);
+            tlocal = (T) iterableSimple(iterable);
+            return Optional.of(tlocal);
 
-                FindIterable<Document> iterable = db.getCollection(collection).find(doc).limit(1);
-                tlocal = (T) iterableSimple(iterable);
-                return Optional.of(tlocal);
-            
             //return (T) tlocal;
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
@@ -602,9 +599,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         return Optional.empty();
     }
 // </editor-fold>
-    
-    
-        // <editor-fold defaultstate="collapsed" desc="findInternal(Document document)">
+
+    // <editor-fold defaultstate="collapsed" desc="findInternal(Document document)">
     private T findInternal(Document document) {
         try {
             //   Object t = entityClass.newInstance();
@@ -686,6 +682,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return l;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="iterableList(FindIterable<Document> iterable)">
+
     private List< T> processAggregateIterable(AggregateIterable<Document> iterable) {
         List< T> l = new ArrayList<>();
         try {
@@ -712,18 +709,19 @@ public abstract class Repository<T> implements InterfaceRepository {
         return l;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable)">
+
     private List< JmoordbResult> processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable) {
         List< JmoordbResult> l = new ArrayList<>();
-       List<Map<String, Object>> lObject = new ArrayList<>();
+        List<Map<String, Object>> lObject = new ArrayList<>();
         try {
             iterable.forEach(new Block<Document>() {
                 @Override
                 public void apply(final Document document) {
                     try {
-                        
-       // document.remove("_id");
-        Map<String, Object> map = new HashMap<>(document);
-        lObject.add(map);
+
+                        // document.remove("_id");
+                        Map<String, Object> map = new HashMap<>(document);
+                        lObject.add(map);
 //                        t1 = (T) documentToJavaJmoordbResult.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
 //                        l.add(t1);
                     } catch (Exception e) {
@@ -733,19 +731,17 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 }
             });
-            
-           
-            for(Map m:lObject) {
+
+            for (Map m : lObject) {
                 for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
-                     Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
-    System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-    JmoordbResult jmoordbResult =new JmoordbResult();
-    jmoordbResult.put(entry.getKey(), entry.getValue());
-    l.add(jmoordbResult);
-                    
+                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
+                    System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+                    JmoordbResult jmoordbResult = new JmoordbResult();
+                    jmoordbResult.put(entry.getKey(), entry.getValue());
+                    l.add(jmoordbResult);
+
                 }
             }
-     
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
@@ -968,9 +964,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }// </editor-fold>
-    
-    
-     // <editor-fold defaultstate="collapsed" desc="findPagination(String sql, Integer pageNumber, Integer rowsForPage)">
+
+    // <editor-fold defaultstate="collapsed" desc="findPagination(String sql, Integer pageNumber, Integer rowsForPage)">
     /**
      * Busca con paginacion en una coleccion con filtro
      *
@@ -1007,7 +1002,6 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }// </editor-fold>
-
 
     // <editor-fold defaultstate="collapsed" desc="findOneAndUpdate(String key, String value, String field, Integer... incremento) ">
     /**
@@ -1169,8 +1163,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-    
-     // <editor-fold defaultstate="collapsed" desc=" findBy(String sql)">
+    // <editor-fold defaultstate="collapsed" desc=" findBy(String sql)">
     /**
      *
      * @param doc
@@ -1203,7 +1196,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-     // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
+    // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
     /**
      *
      * @param doc
@@ -1216,7 +1209,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             list = new ArrayList<>();
 
             MongoDatabase db = getMongoClient().getDatabase(database);
-           AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
+            AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
             list = processAggregateIterable(iterable);
 
         } catch (Exception e) {
@@ -1226,7 +1219,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-     // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
+    // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
     /**
      *
      * @param doc
@@ -1235,7 +1228,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public List<JmoordbResult> aggregateJmoordbResult(List<Document> documentList) {
 //    public List<U extends Number> aggregate(List<Document> documentList) {      
-List<JmoordbResult> list = new ArrayList<>();
+        List<JmoordbResult> list = new ArrayList<>();
         try {
             list = new ArrayList<>();
 
@@ -1250,7 +1243,7 @@ List<JmoordbResult> list = new ArrayList<>();
         return list;
     }
     // </editor-fold>
-    
+
 // <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
     public List<T> findBy(String key, Object value, Document... docSort) {
         Document sortQuery = new Document();
@@ -1777,6 +1770,7 @@ List<JmoordbResult> list = new ArrayList<>();
         return false;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Boolean delete(String sql)">
+
     /**
      * elimina un documento
      *
@@ -1787,7 +1781,7 @@ List<JmoordbResult> list = new ArrayList<>();
         try {
             Document doc = new Document();
             Document sortQuery = new Document();
-              QueryConverter queryConverter = new QueryConverter(sql);
+            QueryConverter queryConverter = new QueryConverter(sql);
             MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
             String collection = mongoDBQueryHolder.getCollection();
             doc = mongoDBQueryHolder.getQuery();
@@ -1845,6 +1839,7 @@ List<JmoordbResult> list = new ArrayList<>();
         return cont;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Integer deleteMany(Document doc)">
+
     /**
      *
      * @param doc
@@ -1855,7 +1850,7 @@ List<JmoordbResult> list = new ArrayList<>();
         Document sortQuery = new Document();
         Document doc = new Document();
         try {
-              QueryConverter queryConverter = new QueryConverter(sql);
+            QueryConverter queryConverter = new QueryConverter(sql);
             MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
             String collection = mongoDBQueryHolder.getCollection();
             doc = mongoDBQueryHolder.getQuery();
@@ -3393,10 +3388,5 @@ List<JmoordbResult> list = new ArrayList<>();
         }
         return list;
     }// </editor-fold>
-
-   
-
-   
-    
 
 }
