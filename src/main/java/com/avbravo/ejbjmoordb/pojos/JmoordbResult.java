@@ -30,6 +30,16 @@ public class JmoordbResult {
         }
     }
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="put(String key, Integer value)">
+    public void put(String key, Integer value) {
+        try {
+            field.put(key, value);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("put() ", e);
+        }
+    }
+    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="get(String key)">
     public Object get(String key) {

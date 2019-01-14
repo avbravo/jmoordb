@@ -736,8 +736,14 @@ public abstract class Repository<T> implements InterfaceRepository {
                 for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
                     Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
                     System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+                  
                     JmoordbResult jmoordbResult = new JmoordbResult();
-                    jmoordbResult.put(entry.getKey(), entry.getValue());
+                    //entry.getValue().toString();
+//                    if ( entry.getValue().getClass().ge instanceof Integer){
+//                    
+//                }
+                    Object value =entry.getValue().toString();
+                    jmoordbResult.put(entry.getKey(), value);
                     l.add(jmoordbResult);
 
                 }
