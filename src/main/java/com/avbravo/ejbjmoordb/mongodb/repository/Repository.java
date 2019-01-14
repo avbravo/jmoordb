@@ -12,8 +12,10 @@ import com.avbravo.ejbjmoordb.FieldBeans;
 import com.avbravo.ejbjmoordb.JmoordbException;
 import com.avbravo.ejbjmoordb.PrimaryKey;
 import com.avbravo.ejbjmoordb.ReferencedBeans;
+import com.avbravo.ejbjmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.ejbjmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.ejbjmoordb.mongodb.internal.JavaToDocument;
+import com.avbravo.ejbjmoordb.pojos.JmoordbResult;
 import com.avbravo.ejbjmoordb.util.Analizador;
 import com.avbravo.ejbjmoordb.util.Util;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
@@ -43,8 +45,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import static java.util.Spliterators.iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,6 +78,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     Integer contador = 0;
     private JavaToDocument javaToDocument = new JavaToDocument();
     private DocumentToJavaMongoDB documentToJava = new DocumentToJavaMongoDB();
+    private DocumentToJavaJmoordbResult documentToJavaJmoordbResult = new DocumentToJavaJmoordbResult();
     T t1, tlocal;
     private Class<T> entityClass;
     private String database;
@@ -678,6 +685,76 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return l;
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="iterableList(FindIterable<Document> iterable)">
+    private List< T> processAggregateIterable(AggregateIterable<Document> iterable) {
+        List< T> l = new ArrayList<>();
+        try {
+            iterable.forEach(new Block<Document>() {
+                @Override
+                public void apply(final Document document) {
+                    try {
+                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        l.add(t1);
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
+                        exception = new Exception("find() ", e);
+                    }
+
+                }
+            });
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("iterableSimple() ", e);
+
+        }
+
+        return l;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable)">
+    private List< JmoordbResult> processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable) {
+        List< JmoordbResult> l = new ArrayList<>();
+       List<Map<String, Object>> lObject = new ArrayList<>();
+        try {
+            iterable.forEach(new Block<Document>() {
+                @Override
+                public void apply(final Document document) {
+                    try {
+                        
+       // document.remove("_id");
+        Map<String, Object> map = new HashMap<>(document);
+        lObject.add(map);
+//                        t1 = (T) documentToJavaJmoordbResult.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+//                        l.add(t1);
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
+                        exception = new Exception("find() ", e);
+                    }
+
+                }
+            });
+            
+           
+            for(Map m:lObject) {
+                for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
+                     Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
+    System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+    JmoordbResult jmoordbResult =new JmoordbResult();
+    jmoordbResult.put(entry.getKey(), entry.getValue());
+    l.add(jmoordbResult);
+                    
+                }
+            }
+     
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("iterableSimple() ", e);
+
+        }
+
+        return l;
+    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="sizeOfPage(Integer rowsForPage, Document... doc)">
     /**
@@ -1126,124 +1203,54 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-     // <editor-fold defaultstate="collapsed" desc="AggregateIterable<Document> aggregate(String sql)">
+     // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
     /**
      *
      * @param doc
      * @param docSort
      * @return
      */
-    public AggregateIterable<Document> aggregate(String sql) {
-        Document sortQuery = new Document();
-        Document doc = new Document();
-        AggregateIterable<Document> iterable = new AggregateIterable<Document>() {
-            @Override
-            public void toCollection() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> allowDiskUse(Boolean bln) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> batchSize(int i) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> maxTime(long l, TimeUnit tu) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> useCursor(Boolean bln) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> maxAwaitTime(long l, TimeUnit tu) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> bypassDocumentValidation(Boolean bln) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> collation(Collation cltn) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> comment(String string) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public AggregateIterable<Document> hint(Bson bson) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public MongoCursor<Document> iterator() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Document first() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public <U> MongoIterable<U> map(Function<Document, U> fnctn) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void forEach(Block<? super Document> block) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public <A extends Collection<? super Document>> A into(A a) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
+    public List<T> aggregate(List<Document> documentList) {
+//    public List<U extends Number> aggregate(List<Document> documentList) {      
         try {
-
             list = new ArrayList<>();
-//            QueryConverter queryConverter = new QueryConverter(sql);
-//            MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
-//            String collection = mongoDBQueryHolder.getCollection();
-//            doc = mongoDBQueryHolder.getQuery();
-//            Document projection = mongoDBQueryHolder.getProjection();
-//            if (sql.toLowerCase().indexOf("order by") != -1) {
-//                sortQuery = mongoDBQueryHolder.getSort();
-//            }
-//
-//            MongoDatabase db = getMongoClient().getDatabase(database);
-//          
-//           
-//          iterable = db.getCollection(collection).aggregate(Arrays.asList(
-//new Document("$match",
-//new Document("active", Boolean.TRUE)
-//.append("region", "India")),
-//new Document("$group",
-//new Document("_id", "$" + "deptId").append("count", new Document("$sum", 1)))));
 
-                    //find(doc).sort(sortQuery);
-           
+            MongoDatabase db = getMongoClient().getDatabase(database);
+           AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
+            list = processAggregateIterable(iterable);
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("sql() ", e);
+            exception = new Exception("aggregate() ", e);
         }
-        return iterable;
+        return list;
     }
     // </editor-fold>
+     // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
+    /**
+     *
+     * @param doc
+     * @param docSort
+     * @return
+     */
+    public List<JmoordbResult> aggregateJmoordbResult(List<Document> documentList) {
+//    public List<U extends Number> aggregate(List<Document> documentList) {      
+List<JmoordbResult> list = new ArrayList<>();
+        try {
+            list = new ArrayList<>();
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
+            list = processAggregateIterableJmoordbResult(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("aggregate() ", e);
+        }
+        return list;
+    }
+    // </editor-fold>
+    
 // <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
     public List<T> findBy(String key, Object value, Document... docSort) {
         Document sortQuery = new Document();
