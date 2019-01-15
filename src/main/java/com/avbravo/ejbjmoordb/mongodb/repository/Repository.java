@@ -29,6 +29,11 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
+import static com.mongodb.client.model.Accumulators.avg;
+import static com.mongodb.client.model.Accumulators.sum;
+import static com.mongodb.client.model.Aggregates.group;
+import static com.mongodb.client.model.Aggregates.match;
+import static com.mongodb.client.model.Aggregates.out;
 import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
@@ -43,6 +48,7 @@ import com.mongodb.client.result.UpdateResult;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -719,36 +725,34 @@ public abstract class Repository<T> implements InterfaceRepository {
                 public void apply(final Document document) {
                     try {
 
-                        // document.remove("_id");
+                       // document.remove("_id");
                         Map<String, Object> map = new HashMap<>(document);
                         lObject.add(map);
-//                        t1 = (T) documentToJavaJmoordbResult.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
-//                        l.add(t1);
+
                     } catch (Exception e) {
                         Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
                         exception = new Exception("find() ", e);
+                        System.out.println("apply error() "+e.getLocalizedMessage());
                     }
 
                 }
-            });
-
+            });            
             for (Map m : lObject) {
+                  JmoordbResult jmoordbResult = new JmoordbResult();
                 for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
-                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
-                    System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-                  
-                    JmoordbResult jmoordbResult = new JmoordbResult();
+                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();                                      
+//                    System.out.println("====>key "+entry.getKey() + " value "+entry.getValue().toString());
+                    jmoordbResult.put(entry.getKey(), entry.getValue().toString());                    
+                   
                     
-                    jmoordbResult.put(entry.getKey(), entry.getValue().toString());
-                    l.add(jmoordbResult);
-                    System.out.println(" size of l "+l.size());
                 }
+                 l.add(jmoordbResult);
             }
-
+          
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("iterableSimple() ", e);
-
+            System.out.println("error() "+e.getLocalizedMessage());
         }
 
         return l;
@@ -1165,6 +1169,34 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc=" findBy(Bson doc, Document... docSort)">
+    /**
+     *
+     * @param doc
+     * @param docSort
+     * @return
+     */
+        public List<T> findBy(Bson builder, Document... docSort) {
+        Document sortQuery = new Document();
+        try {
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            list = new ArrayList<>();
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(builder).sort(sortQuery);
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findBy() ", e);
+        }
+        return list;
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc=" findBy(String sql)">
     /**
      *
@@ -1205,13 +1237,15 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param docSort
      * @return
      */
-    public List<T> aggregate(List<Document> documentList) {
+    public List<T> aggregateToEntity(List<Document> documentList) {
 //    public List<U extends Number> aggregate(List<Document> documentList) {      
         try {
             list = new ArrayList<>();
 
             MongoDatabase db = getMongoClient().getDatabase(database);
             AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
+        
+            
             list = processAggregateIterable(iterable);
 
         } catch (Exception e) {
@@ -1221,14 +1255,18 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
+    
+     
+    
+
+    // <editor-fold defaultstate="collapsed" desc="aggregateJmoordbResult(List<Document> documentList)">
     /**
      *
      * @param doc
      * @param docSort
      * @return
      */
-    public List<JmoordbResult> aggregateJmoordbResult(List<Document> documentList) {
+    public List<JmoordbResult> aggregateFromDocument(List<Document> documentList) {
 //    public List<U extends Number> aggregate(List<Document> documentList) {      
         List<JmoordbResult> list = new ArrayList<>();
         try {
@@ -1245,6 +1283,33 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="aggregateJmoordbResult(List<Document> documentList)">
+    /**
+     *
+     * @param doc
+     * @param docSort
+     * @return
+     */
+    public List<JmoordbResult> aggregateFromBuilder(List<Bson> builder) {
+//    public List<U extends Number> aggregate(List<Document> documentList) {      
+        List<JmoordbResult> list = new ArrayList<>();
+        try {
+            list = new ArrayList<>();
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+           AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(builder);
+            list = processAggregateIterableJmoordbResult(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("aggregateFromBuilder ", e);
+        }
+        return list;
+    }
+    // </editor-fold>
+    
+    
+    
 
 // <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
     public List<T> findBy(String key, Object value, Document... docSort) {

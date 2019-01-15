@@ -36,6 +36,12 @@ public class JmoordbResult {
         this.exception = exception;
     }
 
+    public JmoordbResult() {
+    }
+    public JmoordbResult(String key, String value) {
+        put(key, value);
+    }
+
         
         
     // <editor-fold defaultstate="collapsed" desc="put(String key, String value)">
