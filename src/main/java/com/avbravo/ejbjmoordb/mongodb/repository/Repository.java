@@ -1125,8 +1125,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             try {
                 t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
-//                Method method = entityClass.getDeclaredMethod("toPojo", Document.class);
-//                list.add((T) method.invoke(t, iterable));
+
             } catch (Exception e) {
                 Logger.getLogger(Repository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
                 exception = new Exception("findOneAndUpdate()", e);
@@ -3456,7 +3455,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param document
      * @return
      */
-    public List<JmoordbResult> unknown(String database,String collection, Document... doc) {
+    public List<JmoordbResult> unknown(String database, String collection, Document... doc) {
         List<JmoordbResult> list = new ArrayList<>();
         Document docQuery = new Document();
         try {
@@ -3478,14 +3477,14 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }// </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="unknownSort(String database,String collection, Document doc,Document... docSort) ">
     /**
      *
      * @param document
      * @return
      */
-    public List<JmoordbResult> unknownSort(String database,String collection, Document doc,Document... docSort) {
+    public List<JmoordbResult> unknownSort(String database, String collection, Document doc, Document... docSort) {
         List<JmoordbResult> list = new ArrayList<>();
         Document sortQuery = new Document();
         try {
@@ -3508,12 +3507,13 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="unknown(String database,String collection, Bson filter,Document... docSort)">
+
     /**
      *
      * @param document
      * @return
      */
-    public List<JmoordbResult> unknown(String database,String collection, Bson filter,Document... docSort) {
+    public List<JmoordbResult> unknown(String database, String collection, Bson filter, Document... docSort) {
         List<JmoordbResult> list = new ArrayList<>();
         Document sortQuery = new Document();
         try {
@@ -3535,10 +3535,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }// </editor-fold>
-    
-    
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="public List<JmoordbResult> unknownPagination(String database,String collection,Integer pageNumber, Integer rowsForPage, Document... doc)">
     /**
      * Busca con paginacion en una coleccion
@@ -3546,8 +3543,8 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param document
      * @return
      */
-   public List<JmoordbResult> unknownPagination(String database,String collection,Integer pageNumber, Integer rowsForPage, Document... doc) {
-      List<JmoordbResult> list = new ArrayList<>();
+    public List<JmoordbResult> unknownPagination(String database, String collection, Integer pageNumber, Integer rowsForPage, Document... doc) {
+        List<JmoordbResult> list = new ArrayList<>();
         Document sortQuery = new Document();
         try {
             if (doc.length != 0) {
@@ -3559,7 +3556,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             FindIterable<Document> iterable = db.getCollection(collection).
                     find(sortQuery).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage);
-           list = processUnknownIterableJmoordbResult(iterable);
+            list = processUnknownIterableJmoordbResult(iterable);
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
@@ -3570,14 +3567,15 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="public List<JmoordbResult> unknownPaginationSort(String database,String collection,Integer pageNumber, Integer rowsForPage, Document doc,Document... docSort)">
+
     /**
      * Busca con paginacion en una coleccion
      *
      * @param document
      * @return
      */
-   public List<JmoordbResult> unknownPaginationSort(String database,String collection,Integer pageNumber, Integer rowsForPage, Document doc,Document... docSort) {
-      List<JmoordbResult> list = new ArrayList<>();
+    public List<JmoordbResult> unknownPaginationSort(String database, String collection, Integer pageNumber, Integer rowsForPage, Document doc, Document... docSort) {
+        List<JmoordbResult> list = new ArrayList<>();
         Document sortQuery = new Document();
         try {
             if (docSort.length != 0) {
@@ -3589,7 +3587,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             FindIterable<Document> iterable = db.getCollection(collection).
                     find(doc).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage).sort(sortQuery);
-           list = processUnknownIterableJmoordbResult(iterable);
+            list = processUnknownIterableJmoordbResult(iterable);
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
@@ -3599,7 +3597,6 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }// </editor-fold>
-
 
     // <editor-fold defaultstate="collapsed" desc="processUnknownIterableJmoordbResult(AggregateIterable<Document> iterable)">
     private List< JmoordbResult> processUnknownIterableJmoordbResult(FindIterable<Document> iterable) {
@@ -3641,4 +3638,160 @@ public abstract class Repository<T> implements InterfaceRepository {
         return l;
     }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Boolean unknownSave(String database, String collection,Document doc)">
+    /**
+     *
+     * @param doc
+     * @param verifyID
+     * @return
+     */
+    public Boolean unknownSave(String database, String collection, Document doc) {
+        try {
+ 
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            db.getCollection(collection).insertOne(doc);
+            return true;
+
+        } catch (Exception ex) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
+            new JmoordbException("unknownSave() " + ex.getLocalizedMessage());
+            exception = new Exception("unknownSave() " + ex.getLocalizedMessage());
+        }
+        return false;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Integer unknownReplaceOne(String database, String collection, Bson builder, Document docUpdate) ">
+    public Integer unknownReplaceOne(String database, String collection, Bson builder, Document docUpdate) {
+        Integer documentosModificados = 0;
+
+        try {
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            UpdateResult updateResult = db.getCollection(collection).replaceOne(builder, docUpdate);
+            return (int) updateResult.getModifiedCount();
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "unknownUpdate()").log(Level.SEVERE, null, e);
+            exception = new Exception("unknownUpdate() ", e);
+        }
+        return 0;
+    }// </editor-fold>
+    
+    
+    
+    
+    
+      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDelete(Document doc)">
+    /**
+     * elimina un documento
+     *
+     * @param doc
+     * @return
+     */
+    public Boolean unknownDelete(String database, String collection, Document doc) {
+        try {
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            DeleteResult dr = db.getCollection(collection).deleteOne(doc);
+            if (dr.getDeletedCount() >= 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "unknownDelete()").log(Level.SEVERE, null, e);
+            exception = new Exception("unknownDelete() ", e);
+        }
+        return false;
+    }// </editor-fold>
+      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDelete(String database, String collection, Bson builder)">
+    /**
+     * elimina un documento
+     *
+     * @param doc
+     * @return
+     */
+    public Boolean unknownDelete(String database, String collection, Bson builder) {
+        try {
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            DeleteResult dr = db.getCollection(collection).deleteOne(builder);
+            if (dr.getDeletedCount() >= 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "unknownDelete()").log(Level.SEVERE, null, e);
+            exception = new Exception("unknownDelete() ", e);
+        }
+        return false;
+    }// </editor-fold>
+      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteAll(String database, String collection)">
+    /**
+     * elimina un documento
+     *
+     * @param doc
+     * @return
+     */
+    public Boolean unknownDeleteAll(String database, String collection) {
+         Integer cont = 0;
+        try {
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            DeleteResult dr = db.getCollection(collection).deleteMany(new Document());
+            if (dr.getDeletedCount() >= 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "unknownDeleteAll()").log(Level.SEVERE, null, e);
+            exception = new Exception("unknownDeleteAll() ", e);
+        }
+        return false;
+    }// </editor-fold>
+    
+      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteMany(String database, String collection, Document doc)">
+    /**
+     * elimina un documento
+     *
+     * @param doc
+     * @return
+     */
+    public Boolean unknownDeleteMany(String database, String collection, Document doc) {
+         Integer cont = 0;
+        try {
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            DeleteResult dr = db.getCollection(collection).deleteMany(doc);
+            if (dr.getDeletedCount() >= 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "unknownDeleteMany()").log(Level.SEVERE, null, e);
+            exception = new Exception("unknownDeleteMany() ", e);
+        }
+        return false;
+    }// </editor-fold>
+    
+      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteMany(String database, String collection, Bson builder)">
+    /**
+     * elimina un documento
+     *
+     * @param doc
+     * @return
+     */
+    public Boolean unknownDeleteMany(String database, String collection, Bson builder) {
+         Integer cont = 0;
+        try {
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            DeleteResult dr = db.getCollection(collection).deleteMany(builder);
+            if (dr.getDeletedCount() >= 0) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "unknownDeleteAll()").log(Level.SEVERE, null, e);
+            exception = new Exception("unknownDeleteAll() ", e);
+        }
+        return false;
+    }// </editor-fold>
+    
+    
+    
+   
 }
