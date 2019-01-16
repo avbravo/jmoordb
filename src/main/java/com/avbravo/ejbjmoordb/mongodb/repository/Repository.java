@@ -725,34 +725,33 @@ public abstract class Repository<T> implements InterfaceRepository {
                 public void apply(final Document document) {
                     try {
 
-                       // document.remove("_id");
+                        // document.remove("_id");
                         Map<String, Object> map = new HashMap<>(document);
                         lObject.add(map);
 
                     } catch (Exception e) {
                         Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
                         exception = new Exception("find() ", e);
-                        System.out.println("apply error() "+e.getLocalizedMessage());
+                        System.out.println("apply error() " + e.getLocalizedMessage());
                     }
 
                 }
-            });            
+            });
             for (Map m : lObject) {
-                  JmoordbResult jmoordbResult = new JmoordbResult();
+                JmoordbResult jmoordbResult = new JmoordbResult();
                 for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
-                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();                                      
+                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
 //                    System.out.println("====>key "+entry.getKey() + " value "+entry.getValue().toString());
-                    jmoordbResult.put(entry.getKey(), entry.getValue().toString());                    
-                   
-                    
+                    jmoordbResult.put(entry.getKey(), entry.getValue().toString());
+
                 }
-                 l.add(jmoordbResult);
+                l.add(jmoordbResult);
             }
-          
+
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("iterableSimple() ", e);
-            System.out.println("error() "+e.getLocalizedMessage());
+            System.out.println("error() " + e.getLocalizedMessage());
         }
 
         return l;
@@ -1176,7 +1175,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param docSort
      * @return
      */
-        public List<T> findBy(Bson builder, Document... docSort) {
+    public List<T> findBy(Bson builder, Document... docSort) {
         Document sortQuery = new Document();
         try {
             if (docSort.length != 0) {
@@ -1229,6 +1228,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
     /**
@@ -1244,8 +1244,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             MongoDatabase db = getMongoClient().getDatabase(database);
             AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
-        
-            
+
             list = processAggregateIterable(iterable);
 
         } catch (Exception e) {
@@ -1255,9 +1254,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-    
-     
-    
 
     // <editor-fold defaultstate="collapsed" desc="aggregateJmoordbResult(List<Document> documentList)">
     /**
@@ -1282,6 +1278,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return list;
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="aggregateJmoordbResult(List<Document> documentList)">
     /**
@@ -1297,7 +1294,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             list = new ArrayList<>();
 
             MongoDatabase db = getMongoClient().getDatabase(database);
-           AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(builder);
+            AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(builder);
             list = processAggregateIterableJmoordbResult(iterable);
 
         } catch (Exception e) {
@@ -1307,9 +1304,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-    
-    
-    
 
 // <editor-fold defaultstate="collapsed" desc="findBy(String key, Object value, Document... docSort)">
     public List<T> findBy(String key, Object value, Document... docSort) {
@@ -3454,6 +3448,197 @@ public abstract class Repository<T> implements InterfaceRepository {
             exception = new Exception("complete()", e);
         }
         return list;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="unknown(Document... docSort) ">
+    /**
+     *
+     * @param document
+     * @return
+     */
+    public List<JmoordbResult> unknown(String database,String collection, Document... doc) {
+        List<JmoordbResult> list = new ArrayList<>();
+        Document docQuery = new Document();
+        try {
+            if (doc.length != 0) {
+                docQuery = doc[0];
+
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(docQuery);
+
+            list = processUnknownIterableJmoordbResult(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findAll() ", e);
+            new JmoordbException("findAll()");
+        }
+
+        return list;
+    }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="unknownSort(String database,String collection, Document doc,Document... docSort) ">
+    /**
+     *
+     * @param document
+     * @return
+     */
+    public List<JmoordbResult> unknownSort(String database,String collection, Document doc,Document... docSort) {
+        List<JmoordbResult> list = new ArrayList<>();
+        Document sortQuery = new Document();
+        try {
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
+
+            list = processUnknownIterableJmoordbResult(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findAll() ", e);
+            new JmoordbException("findAll()");
+        }
+
+        return list;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="unknown(String database,String collection, Bson filter,Document... docSort)">
+    /**
+     *
+     * @param document
+     * @return
+     */
+    public List<JmoordbResult> unknown(String database,String collection, Bson filter,Document... docSort) {
+        List<JmoordbResult> list = new ArrayList<>();
+        Document sortQuery = new Document();
+        try {
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(filter).sort(sortQuery);
+
+            list = processUnknownIterableJmoordbResult(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findAll() ", e);
+            new JmoordbException("findAll()");
+        }
+
+        return list;
+    }// </editor-fold>
+    
+    
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="public List<JmoordbResult> unknownPagination(String database,String collection,Integer pageNumber, Integer rowsForPage, Document... doc)">
+    /**
+     * Busca con paginacion en una coleccion
+     *
+     * @param document
+     * @return
+     */
+   public List<JmoordbResult> unknownPagination(String database,String collection,Integer pageNumber, Integer rowsForPage, Document... doc) {
+      List<JmoordbResult> list = new ArrayList<>();
+        Document sortQuery = new Document();
+        try {
+            if (doc.length != 0) {
+                sortQuery = doc[0];
+
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).
+                    find(sortQuery).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                    limit(rowsForPage);
+           list = processUnknownIterableJmoordbResult(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findPagination() ", e);
+            new JmoordbException("findPagination()");
+        }
+
+        return list;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="public List<JmoordbResult> unknownPaginationSort(String database,String collection,Integer pageNumber, Integer rowsForPage, Document doc,Document... docSort)">
+    /**
+     * Busca con paginacion en una coleccion
+     *
+     * @param document
+     * @return
+     */
+   public List<JmoordbResult> unknownPaginationSort(String database,String collection,Integer pageNumber, Integer rowsForPage, Document doc,Document... docSort) {
+      List<JmoordbResult> list = new ArrayList<>();
+        Document sortQuery = new Document();
+        try {
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).
+                    find(doc).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
+                    limit(rowsForPage).sort(sortQuery);
+           list = processUnknownIterableJmoordbResult(iterable);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findPagination() ", e);
+            new JmoordbException("findPagination()");
+        }
+
+        return list;
+    }// </editor-fold>
+
+
+    // <editor-fold defaultstate="collapsed" desc="processUnknownIterableJmoordbResult(AggregateIterable<Document> iterable)">
+    private List< JmoordbResult> processUnknownIterableJmoordbResult(FindIterable<Document> iterable) {
+        List<JmoordbResult> l = new ArrayList<>();
+        List<Map<String, Object>> lObject = new ArrayList<>();
+        try {
+            iterable.forEach(new Block<Document>() {
+                @Override
+                public void apply(final Document document) {
+                    try {
+
+                        Map<String, Object> map = new HashMap<>(document);
+                        lObject.add(map);
+
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
+                        exception = new Exception("find() ", e);
+                        System.out.println("apply error() " + e.getLocalizedMessage());
+                    }
+
+                }
+            });
+            for (Map m : lObject) {
+                JmoordbResult jmoordbResult = new JmoordbResult();
+                for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
+                    Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
+                    jmoordbResult.put(entry.getKey(), entry.getValue().toString());
+
+                }
+                l.add(jmoordbResult);
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("processUnkownIterableJmoordbResult() ", e);
+            System.out.println("error() " + e.getLocalizedMessage());
+        }
+
+        return l;
     }// </editor-fold>
 
 }

@@ -20,6 +20,7 @@ public class JmoordbResult {
     private HashMap<String, String> field = new HashMap<>();
         Exception exception = new Exception();
 
+        
     public HashMap<String, String> getField() {
         return field;
     }
