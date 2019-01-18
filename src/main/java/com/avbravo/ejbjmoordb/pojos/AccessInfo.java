@@ -7,8 +7,6 @@ package com.avbravo.ejbjmoordb.pojos;
 
 import com.avbravo.ejbjmoordb.anotations.Id;
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -89,7 +87,45 @@ public class AccessInfo {
         this.description = description;
     }
     
-    
+     public static class Builder {
+
+    private String idaccessinfo;
+    private String username;
+    private Date datetime;
+    private String form;
+    private String ip;
+    private String description;
+
+        public Builder withIdaccessinfo(String idaccessinfo) {
+            this.idaccessinfo= idaccessinfo;
+            return this;
+        }
+        public Builder withUsername(String username) {
+            this.username= username;
+            return this;
+        }
+        public Builder withDatetime(Date datetime) {
+            this.datetime= datetime;
+            return this;
+        }
+         public Builder withForm(String form) {
+            this.form= form;
+            return this;
+        }
+         public Builder withIp(String ip) {
+            this.ip= ip;
+            return this;
+        }
+         public Builder withDescription(String description) {
+            this.description= description;
+            return this;
+        }
+
+        public AccessInfo build() {
+            return new AccessInfo(idaccessinfo, username, datetime, form, ip, description);
+        }
+
+    }
     
     
     

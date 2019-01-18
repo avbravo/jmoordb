@@ -7,15 +7,11 @@ package com.avbravo.ejbjmoordb.pojos;
 
 import com.avbravo.ejbjmoordb.anotations.Embedded;
 import com.avbravo.ejbjmoordb.anotations.Id;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
  * @author avbravo
  */
-
-
 public class RevisionHistory {
 
     @Id
@@ -37,6 +33,18 @@ public class RevisionHistory {
         this.description = description;
         this.content = content;
     }
+
+    public RevisionHistory(String idrevisionhistory, String document, String id, String description, String content, UserInfo userInfo) {
+        this.idrevisionhistory = idrevisionhistory;
+        this.document = document;
+        this.id = id;
+        this.description = description;
+        this.content = content;
+        this.userInfo = userInfo;
+    }
+    
+    
+    
 
     @Override
     public String toString() {
@@ -91,9 +99,48 @@ public class RevisionHistory {
         this.userInfo = userInfo;
     }
 
-    
-    
-    
-    
-    
+    public static class Builder {
+
+        private String idrevisionhistory;
+        private String document;
+        private String id;
+        private String description;
+        private String content;
+        @Embedded
+        private UserInfo userInfo;
+
+        public Builder withUserInfo(UserInfo userInfo) {
+            this.userInfo = userInfo;
+            return this;
+        }
+
+        public Builder withIdrevisionhistory(String idrevisionhistory) {
+            this.idrevisionhistory = idrevisionhistory;
+            return this;
+        }
+        public Builder withDocument(String document) {
+            this.document = document;
+            return this;
+        }
+        public Builder withId(String id) {
+            this.id =  id;
+            return this;
+        }
+        public Builder withDescription(String description) {
+            this.description=  description;
+            return this;
+        }
+        public Builder withContent(String content) {
+            this.content=  content;
+            return this;
+        }
+
+       
+
+        public RevisionHistory build() {
+            return new RevisionHistory(idrevisionhistory, document, id, description, content, userInfo);
+        }
+
+    }
+
 }

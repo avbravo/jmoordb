@@ -12,7 +12,6 @@ import java.util.Date;
  *
  * @author avbravo
  */
-
 public class UserInfo {
 
     @Id
@@ -30,8 +29,6 @@ public class UserInfo {
         this.datetime = datetime;
         this.description = description;
     }
-
-  
 
     @Override
     public String toString() {
@@ -70,9 +67,37 @@ public class UserInfo {
         this.description = description;
     }
 
-    
-    
-    
-    
-    
+    public static class Builder {
+
+        private String iduserinfo;
+        private String username;
+        private Date datetime;
+        private String description;
+
+        public Builder withIduserinfo(String iduserinfo) {
+            this.iduserinfo = iduserinfo;
+            return this;
+        }
+
+        public Builder withUsername(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder datetime(Date datetime) {
+            this.datetime = datetime;
+            return this;
+        }
+
+        public Builder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public UserInfo build() {
+            return new UserInfo(iduserinfo, username, datetime, description);
+        }
+
+    }
+
 }

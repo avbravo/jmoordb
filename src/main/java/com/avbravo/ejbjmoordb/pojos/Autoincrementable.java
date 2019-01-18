@@ -6,8 +6,7 @@
 package com.avbravo.ejbjmoordb.pojos;
 
 import com.avbravo.ejbjmoordb.anotations.Id;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
 
 /**
  *
@@ -50,5 +49,23 @@ public class Autoincrementable {
     }
     
     
-    
+    public static class Builder {
+
+         private String documento;
+    private Integer contador;
+
+        public Builder withDocumento(String documento) {
+            this.documento = documento;
+            return this;
+        }
+        public Builder withContador(Integer contador) {
+            this.contador= contador;
+            return this;
+        }
+
+        public Autoincrementable build() {
+            return new Autoincrementable(documento, contador);
+        }
+
+    }
 }

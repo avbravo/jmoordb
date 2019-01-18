@@ -5,6 +5,7 @@
  */
 package com.avbravo.ejbjmoordb.pojos;
 
+import com.avbravo.ejbjmoordb.anotations.Embedded;
 import com.avbravo.ejbjmoordb.anotations.Id;
 import java.util.Date;
 
@@ -86,7 +87,48 @@ public class ErrorInfo {
         this.mensaje = mensaje;
     }
     
-    
+    public static class Builder {
+
+          private String iderror;
+    private String username;
+    private Date date;
+    private String clase;
+    private String metodo;
+    private String mensaje;
+
+       
+        public Builder withIderror(String iderror) {
+            this.iderror = iderror;
+            return this;
+        }
+        public Builder withUsername(String username) {
+            this.username = username;
+            return this;
+        }
+        public Builder withDate(Date date) {
+            this.date = date;
+            return this;
+        }
+       
+        public Builder withClase(String clase) {
+            this.clase = clase;
+            return this;
+        }
+        public Builder withMetodo(String metodo) {
+            this.metodo = metodo;
+            return this;
+        }
+        public Builder withMensaje(String mensaje) {
+            this.mensaje = mensaje;
+            return this;
+        }
+
+        public ErrorInfo build() {
+            return new ErrorInfo(iderror, username, date, clase, metodo, mensaje);
+        }
+
+    }
+
     
     
 }
