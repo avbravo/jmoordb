@@ -13,21 +13,18 @@ import org.bson.Document;
  *
  * @author avbravo
  */
-public interface InterfaceRepository <T>{
-     public MongoDatabase getMongoDatabase() ;
-//     public Document findOne();
-      public T findById(String key, String value);
-      public T findById(String key, Integer value);
-      
-     public T find(String key, Object value);
-//     public T find(String key, Integer value);
-     public T find(Document document);
-     public T findFirst(Document... document);
-     
-   //  public Boolean save(T t,Boolean... verifyID);
-     
-//     public Boolean save(T t);
-//     public Document toDocument(T t);
-   
-     
+public interface InterfaceRepository<T> {
+
+    public MongoDatabase getMongoDatabase();
+
+//    public T findById(String key, String value);
+//
+//    public T findById(String key, Integer value);
+
+    public T find(String key, Object value);
+
+    public T find(Document document);
+
+    public T findFirst(Document... document);
+
 }

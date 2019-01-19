@@ -510,6 +510,86 @@ public abstract class Repository<T> implements InterfaceRepository {
         return null;
 
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T search(String key, Integer value)">
+    public T search(String key, Integer value) {
+        try {
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+
+            if (db == null) {
+                return null;
+            } else {
+            }
+            FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
+            //Test.msg("+++ paso iterable");
+            haveElements = false;
+            iterable.forEach(new Block<Document>() {
+                @Override
+                public void apply(final Document document) {
+                    try {
+                        haveElements = true;
+                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName() + "search()").log(Level.SEVERE, null, e);
+                        exception = new Exception("search() ", e);
+                    }
+
+                }
+            });
+            if (haveElements) {
+                return tlocal;
+            }
+            return null;
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("search() ", e);
+
+        }
+
+        return null;
+
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T search(String key, String value)">
+    public T search(String key, String value) {
+        try {
+
+            MongoDatabase db = getMongoClient().getDatabase(database);
+
+            if (db == null) {
+                return null;
+            } else {
+            }
+            FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
+            //Test.msg("+++ paso iterable");
+            haveElements = false;
+            iterable.forEach(new Block<Document>() {
+                @Override
+                public void apply(final Document document) {
+                    try {
+                        haveElements = true;
+                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName() + "search()").log(Level.SEVERE, null, e);
+                        exception = new Exception("search() ", e);
+                    }
+
+                }
+            });
+            if (haveElements) {
+                return tlocal;
+            }
+            return null;
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("search() ", e);
+
+        }
+
+        return null;
+
+    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="find(Document document) ">
     /**

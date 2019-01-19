@@ -154,7 +154,7 @@ public class DocumentToJavaMongoDB<T> {
                             return list;
                         } else {
                             //Test.msg("[    Lazy == false carga los relacionados ]");
-
+//
                             List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
                             List list = (List) fieldDescriptor.newInstance();
 
@@ -168,13 +168,17 @@ public class DocumentToJavaMongoDB<T> {
                                     paramString[0] = String.class;
                                     Class cls = Class.forName(referencedBeans.getRepository());
 //                                    Object obj = cls.newInstance();
-      Object obj = lookUpClassInBeanManager(cls);
+                                    Object obj = lookUpClassInBeanManager(cls);
                                     Method method;
                                     String value = "";
                                     if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
                                         //@Id de tipo Integer
                                         Integer n = (Integer) doc.get(referencedBeans.getField());
-                                        method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+                                      //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+                                        //Invocar el metodod de la superclase
+                                         Class parent = cls.getSuperclass();
+                                        method = parent.getDeclaredMethod("search", String.class, Integer.class);
+                                        
 ////Test.msg(" voy a optional Integer");
 
                                         t1 = (T) method.invoke(obj, referencedBeans.getField(), n);
@@ -183,7 +187,10 @@ public class DocumentToJavaMongoDB<T> {
                                         //Test.msg(" voy a optional String");
                                         value = (String) doc.get(referencedBeans.getField());
                                         paramString[1] = String.class;
-                                        method = cls.getDeclaredMethod("findById", paramString);
+                                         Class parent = cls.getSuperclass();
+                                       method = parent.getDeclaredMethod("search", paramString);
+//                                        method = cls.getMethod("search", paramString);
+                                        //method = cls.getMethod("search", paramString);
 
                                         String[] param = {referencedBeans.getField(), value};
 
@@ -288,7 +295,7 @@ public class DocumentToJavaMongoDB<T> {
                             return object;
 //                       
                         } else {
-  //Test.msg("                 [   Lazy == false carga los relacionados ]");
+                            //Test.msg("                 [   Lazy == false carga los relacionados ]");
                             Class cls = Class.forName(referencedBeans.getRepository());
 
                             Object obj = lookUpClassInBeanManager(cls);
@@ -298,7 +305,9 @@ public class DocumentToJavaMongoDB<T> {
                             if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
                                 //@Id de tipo Integer
                                 Class[] paramString = new Class[2];
-                                method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+ Class parent = cls.getSuperclass();                                                                
+                              //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+                                method = parent.getDeclaredMethod("search", String.class, Integer.class);
 
                                 Integer value = 0;
                                 for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
@@ -314,7 +323,9 @@ public class DocumentToJavaMongoDB<T> {
                                 Class[] paramString = new Class[2];
                                 paramString[0] = String.class;
                                 paramString[1] = String.class;
-                                method = cls.getDeclaredMethod("findById", paramString);
+                                 Class parent = cls.getSuperclass();
+                                //method = cls.getDeclaredMethod("findById", paramString);
+                                method = parent.getDeclaredMethod("search", paramString);
 
                                 String value = "";
                                 for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
