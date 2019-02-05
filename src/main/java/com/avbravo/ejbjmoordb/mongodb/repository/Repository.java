@@ -2292,6 +2292,117 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String secondaryfield, Integer secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDate(String secondaryfield, Integer secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue)
+            );
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDate(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDate(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                   myfilter,
+                    Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue)
+            );
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDateOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDateOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson dates =  Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+            Bson filter = Filters.or(
+                   myfilter,dates
+                   
+            );
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    
+    
+    
+    
     // <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
     /**
      * Crea un filtro para filtrar entre fechas
