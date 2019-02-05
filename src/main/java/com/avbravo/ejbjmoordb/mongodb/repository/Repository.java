@@ -511,6 +511,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="T search(String key, Integer value)">
+
     public T search(String key, Integer value) {
         try {
 
@@ -551,6 +552,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="T search(String key, String value)">
+
     public T search(String key, String value) {
         try {
 
@@ -2292,7 +2294,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String secondaryfield, Integer secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
     /**
      * Crea un filtro para filtrar entre fechas
@@ -2349,7 +2350,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
             Bson filter = Filters.and(
-                   myfilter,
+                    myfilter,
                     Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue)
             );
 
@@ -2383,10 +2384,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Bson dates =  Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+            Bson dates = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
             Bson filter = Filters.or(
-                   myfilter,dates
-                   
+                    myfilter, dates
             );
 
             list = filters(filter, sortQuery);
@@ -2399,10 +2399,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-    
-    
-    
-    
     // <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
     /**
      * Crea un filtro para filtrar entre fechas
@@ -2467,9 +2463,113 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
 // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDatePagination(String secondaryfield, Integer secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePagination(String secondaryfield, Integer secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDatePagination(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePagination(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+
+            Bson filter = Filters.and(
+                    myfilter,
+                    Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDatePaginationOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) ">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson dates = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+            Bson filter = Filters.or(
+                    myfilter, dates
+            );
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="filterBetweenInteger(String fieldnamestart, Integer startvalue, String fieldlimitname, String limitvalue, Document... docSort)">
-
     /**
      * Crea un filtro para filtrar entre fechas
      *
@@ -2595,78 +2695,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String secondaryfield,String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
-    /**
-     * crea un filtro con paginacion de fechas and otro atributo
-     *
-     * @param primarykeyfield
-     * @param primarykeyvalue
-     * @param fieldnamestart
-     * @param datestartvalue
-     * @param pageNumber
-     * @param rowsForPage
-     * @param docSort
-     * @return
-     */
-    public List<T> filterDayWithoutHourPagination(String secondaryfield, String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
-        list = new ArrayList<>();
-        try {
-            Document sortQuery = new Document();
-
-            if (docSort.length != 0) {
-                sortQuery = docSort[0];
-
-            }
-            Bson filter = Filters.and(
-                    Filters.eq(secondaryfield, secondaryfieldvalue),
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
-
-            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
-        }
-
-        return list;
-    }
-
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String secondaryfield,Integer secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
-    /**
-     *
-     * @param primarykeyfield
-     * @param primarykeyvalue
-     * @param fieldnamestart
-     * @param datestartvalue
-     * @param pageNumber
-     * @param rowsForPage
-     * @param docSort
-     * @return
-     */
-    public List<T> filterDayWithoutHourPagination(String secondaryfield, Integer secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
-        list = new ArrayList<>();
-        try {
-            Document sortQuery = new Document();
-
-            if (docSort.length != 0) {
-                sortQuery = docSort[0];
-
-            }
-            Bson filter = Filters.and(
-                    Filters.eq(secondaryfield, secondaryfieldvalue),
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
-
-            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHourPagination ", e);
-        }
-
-        return list;
-    }
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHour(String secondaryfield,String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
     /**
@@ -2774,6 +2802,77 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return list;
     }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterDayWithoutHour(Bson myfilter,String fielddate, Date datevalue, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     *
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return
+     */
+    public List<T> filterDayWithoutHour(Bson myfilter, String fielddate, Date datevalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(myfilter, Filters.gte(fielddate, datevalue),
+                    Filters.lte(fielddate, datevalue));
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHour() ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterDayWithoutHourOR(Bson myfilter,String fielddate, Date datevalue, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     *
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return
+     */
+    public List<T> filterDayWithoutHourOR(Bson myfilter, String fielddate, Date datevalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson date = Filters.and(Filters.gte(fielddate, datevalue),
+                    Filters.lte(fielddate, datevalue));
+            Bson filter = Filters.and(myfilter, date);
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHour() ", e);
+        }
+
+        return list;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String fielddate, Date datevalue,  Integer pageNumber, Integer rowsForPage, Document... docSort)">
@@ -2805,6 +2904,152 @@ public abstract class Repository<T> implements InterfaceRepository {
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
             exception = new Exception("filterDayWithoutHourPagination() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String secondaryfield,String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     *
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return
+     */
+    public List<T> filterDayWithoutHourPagination(String secondaryfield, String secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.gte(fielddate, datevalue),
+                    Filters.lte(fielddate, datevalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterDayWithoutHourPagination(Bson myfilter, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     *
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return
+     */
+    public List<T> filterDayWithoutHourPagination(Bson myfilter, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                    myfilter,
+                    Filters.gte(fielddate, datevalue),
+                    Filters.lte(fielddate, datevalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterDayWithoutHourPaginationOR(Bson myfilter, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * crea un filtro con paginacion de fechas and otro atributo
+     *
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return
+     */
+    public List<T> filterDayWithoutHourPaginationOR(Bson myfilter, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                    myfilter,
+                    Filters.gte(fielddate, datevalue),
+                    Filters.lte(fielddate, datevalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterDayWithoutHourPagination(String secondaryfield,Integer secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     *
+     * @param primarykeyfield
+     * @param primarykeyvalue
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param pageNumber
+     * @param rowsForPage
+     * @param docSort
+     * @return
+     */
+    public List<T> filterDayWithoutHourPagination(String secondaryfield, Integer secondaryfieldvalue, String fielddate, Date datevalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.gte(fielddate, datevalue),
+                    Filters.lte(fielddate, datevalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHourPagination ", e);
         }
 
         return list;
@@ -3838,7 +4083,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public Boolean unknownSave(String database, String collection, Document doc) {
         try {
- 
+
             MongoDatabase db = getMongoClient().getDatabase(database);
             db.getCollection(collection).insertOne(doc);
             return true;
@@ -3866,12 +4111,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return 0;
     }// </editor-fold>
-    
-    
-    
-    
-    
-      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDelete(Document doc)">
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean unknownDelete(Document doc)">
     /**
      * elimina un documento
      *
@@ -3892,7 +4133,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
-      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDelete(String database, String collection, Bson builder)">
+    // <editor-fold defaultstate="collapsed" desc="Boolean unknownDelete(String database, String collection, Bson builder)">
+
     /**
      * elimina un documento
      *
@@ -3913,7 +4155,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
-      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteAll(String database, String collection)">
+    // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteAll(String database, String collection)">
+
     /**
      * elimina un documento
      *
@@ -3921,7 +4164,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return
      */
     public Boolean unknownDeleteAll(String database, String collection) {
-         Integer cont = 0;
+        Integer cont = 0;
         try {
             MongoDatabase db = getMongoClient().getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteMany(new Document());
@@ -3935,8 +4178,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
-    
-      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteMany(String database, String collection, Document doc)">
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteMany(String database, String collection, Document doc)">
     /**
      * elimina un documento
      *
@@ -3944,7 +4187,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return
      */
     public Boolean unknownDeleteMany(String database, String collection, Document doc) {
-         Integer cont = 0;
+        Integer cont = 0;
         try {
             MongoDatabase db = getMongoClient().getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteMany(doc);
@@ -3958,8 +4201,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
-    
-      // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteMany(String database, String collection, Bson builder)">
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean unknownDeleteMany(String database, String collection, Bson builder)">
     /**
      * elimina un documento
      *
@@ -3967,7 +4210,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return
      */
     public Boolean unknownDeleteMany(String database, String collection, Bson builder) {
-         Integer cont = 0;
+        Integer cont = 0;
         try {
             MongoDatabase db = getMongoClient().getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteMany(builder);
@@ -3981,8 +4224,5 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
-    
-    
-    
-   
+
 }
