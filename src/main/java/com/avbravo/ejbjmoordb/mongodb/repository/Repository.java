@@ -2563,7 +2563,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Date dateEnd = setHourToDate(datelimitvalue, 23);
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
-                    Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
         } catch (Exception e) {
