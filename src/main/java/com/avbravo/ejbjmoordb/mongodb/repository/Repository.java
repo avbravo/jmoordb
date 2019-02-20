@@ -50,6 +50,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -2365,6 +2366,43 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDateWithoutHours(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
+    /**
+     * Filtra entre fechas omitiendo las horas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDateWithoutHours(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Date dateStart = setHourToDate(datestartvalue, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23);
+            Bson filter = Filters.and(
+                    myfilter,
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd)
+            );
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDateWithoutHours()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDateWithoutHours() ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDateOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
     /**
      * Crea un filtro para filtrar entre fechas
@@ -2386,6 +2424,43 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
             Bson dates = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+            Bson filter = Filters.or(
+                    myfilter, dates
+            );
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDateWithoutHoursOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDateWithoutHoursOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Date dateStart = setHourToDate(datestartvalue, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23);
+            Bson dates = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
             Bson filter = Filters.or(
                     myfilter, dates
             );
@@ -2451,6 +2526,41 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield, String secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield, String secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+             Date dateStart = setHourToDate(datestartvalue, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23);
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
                     Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
@@ -2533,6 +2643,41 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
 // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDatePaginationWithoutHours(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHours(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+ Date dateStart = setHourToDate(datestartvalue, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23);
+            Bson filter = Filters.and(
+                    myfilter,
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDatePaginationOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) ">
 
     /**
@@ -2555,6 +2700,43 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
             Bson dates = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
+            Bson filter = Filters.or(
+                    myfilter, dates
+            );
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDatePaginationWithoutHoursOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) ">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHoursOR(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+             Date dateStart = setHourToDate(datestartvalue, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23);
+            Bson dates = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
             Bson filter = Filters.or(
                     myfilter, dates
             );
@@ -4379,4 +4561,22 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="setHourToDate()">
+    /**
+     * Asigna horas a la fecha util para cuando se desee buscar entre fechas que tengas horas excluyendolas
+     * @param date
+     * @param hour
+     * @return 
+     */
+     private Date setHourToDate(Date date,Integer hour) {
+        
+         Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.HOUR_OF_DAY, hour);
+    return calendar.getTime();
+     }
+     
+     // </editor-fold>
 }
