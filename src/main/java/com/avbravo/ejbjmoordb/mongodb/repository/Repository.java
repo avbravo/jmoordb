@@ -2386,8 +2386,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Date dateStart = setHourToDate(datestartvalue, 0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23);
+            Date dateStart = setHourToDate(datestartvalue, 0,0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
             Bson filter = Filters.and(
                     myfilter,
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd)
@@ -2458,8 +2458,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Date dateStart = setHourToDate(datestartvalue, 0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23);
+            Date dateStart = setHourToDate(datestartvalue, 0,0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
             Bson dates = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
             Bson filter = Filters.or(
                     myfilter, dates
@@ -2559,8 +2559,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datestartvalue, 0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23);
+             Date dateStart = setHourToDate(datestartvalue, 0,0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
@@ -2663,8 +2663,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
- Date dateStart = setHourToDate(datestartvalue, 0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23);
+ Date dateStart = setHourToDate(datestartvalue, 0,0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
             Bson filter = Filters.and(
                     myfilter,
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
@@ -2734,8 +2734,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datestartvalue, 0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23);
+             Date dateStart = setHourToDate(datestartvalue, 0,0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
             Bson dates = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
             Bson filter = Filters.or(
                     myfilter, dates
@@ -4570,11 +4570,12 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param hour
      * @return 
      */
-     private Date setHourToDate(Date date,Integer hour) {
+     private Date setHourToDate(Date date,Integer hour,Integer  minute) {
         
          Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     calendar.add(Calendar.HOUR_OF_DAY, hour);
+    calendar.add(Calendar.MINUTE, minute);
     return calendar.getTime();
      }
      
