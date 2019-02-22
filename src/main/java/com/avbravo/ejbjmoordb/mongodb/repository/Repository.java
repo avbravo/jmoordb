@@ -471,6 +471,57 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         return Optional.empty();
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="find(Document document) ">
+
+    /**
+     *
+     * @param document
+     * @return
+     */
+    @Override
+    public Optional<T> find(Document document) {
+        try {
+            //   Object t = entityClass.newInstance();
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(document);
+            tlocal = (T) iterableSimple(iterable);
+            return Optional.of(tlocal);
+            //return (T) tlocal;
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("find() ", e);
+            new JmoordbException("find()");
+        }
+        return Optional.empty();
+//        return null;
+    }
+// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="find(Bson filter) ">
+
+   /**
+    * Filtra en base a un Filter
+    * eq("activo","si")
+    * @param filter
+    * @return 
+    */
+
+    public Optional<T> find(Bson filter) {
+        try {
+            //   Object t = entityClass.newInstance();
+            MongoDatabase db = getMongoClient().getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(filter);
+            tlocal = (T) iterableSimple(iterable);
+            return Optional.of(tlocal);
+            //return (T) tlocal;
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("find() ", e);
+            new JmoordbException("find()");
+        }
+        return Optional.empty();
+//        return null;
+    }
+// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="T search(String key, Object value)">
     public T search(String key, Object value) {
@@ -595,32 +646,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     }// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="find(Document document) ">
-    /**
-     *
-     * @param document
-     * @return
-     */
-    @Override
-    public Optional<T> find(Document document) {
-        try {
-            //   Object t = entityClass.newInstance();
-            MongoDatabase db = getMongoClient().getDatabase(database);
-            FindIterable<Document> iterable = db.getCollection(collection).find(document);
-            tlocal = (T) iterableSimple(iterable);
-            return Optional.of(tlocal);
-            //return (T) tlocal;
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-            new JmoordbException("find()");
-        }
-        return Optional.empty();
-//        return null;
-    }
-// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="findFirst(Document... doc) ">
-
     /**
      * Devuelve el primer documento de la coleccion
      *
@@ -2386,8 +2412,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Date dateStart = setHourToDate(datestartvalue, 0,0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
             Bson filter = Filters.and(
                     myfilter,
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd)
@@ -2458,8 +2484,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Date dateStart = setHourToDate(datestartvalue, 0,0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
             Bson dates = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
             Bson filter = Filters.or(
                     myfilter, dates
@@ -2540,6 +2566,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield, String secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
     /**
      * Crea un filtro para filtrar entre fechas
      *
@@ -2559,8 +2586,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datestartvalue, 0,0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
@@ -2644,6 +2671,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="List<T> filterBetweenDatePaginationWithoutHours(Bson myfilter, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
     /**
      * Crea un filtro para filtrar entre fechas
      *
@@ -2663,8 +2691,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
- Date dateStart = setHourToDate(datestartvalue, 0,0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
             Bson filter = Filters.and(
                     myfilter,
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
@@ -2734,8 +2762,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datestartvalue, 0,0);
-            Date dateEnd = setHourToDate(datelimitvalue, 23,59);
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
             Bson dates = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
             Bson filter = Filters.or(
                     myfilter, dates
@@ -4410,7 +4438,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     // <editor-fold defaultstate="collapsed" desc="isAvailableBetweenDateHour(Bson filter, String namefieldOfStart,Date valueStart,namefieldOfEnd,Date valueEnd )">
     /**
-     * Devuelve true si no hay registros con la condicion fechay hora de inicio y fin  y el filtro que se pasa como parametro
+     * Devuelve true si no hay registros con la condicion fechay hora de inicio
+     * y fin y el filtro que se pasa como parametro
      *
      * @param filter
      * @param namefieldOfStart
@@ -4488,16 +4517,16 @@ public abstract class Repository<T> implements InterfaceRepository {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="List<T> notAvailableBetweenDateHour(Bson filter, String namefieldOfStart, Date valueStart, String namefieldOfEnd, Date valueEnd) ">
     /**
-     * Devuelve una lista de los elementos que estan en ese rango de fechas y que cumplan la condicion del filtro que se
-     * pasa como parametro
+     * Devuelve una lista de los elementos que estan en ese rango de fechas y
+     * que cumplan la condicion del filtro que se pasa como parametro
      *
      * @param filter
      * @param namefieldOfStart
      * @param valueStart
      * @param namefieldOfEnd
      * @param valueEnd
-     * @return Devuelve una lista de los elementos que estan en ese rango de fechas y que cumplan la condicion del filtro que se
-     * pasa como parametro
+     * @return Devuelve una lista de los elementos que estan en ese rango de
+     * fechas y que cumplan la condicion del filtro que se pasa como parametro
      */
     public List<T> notAvailableBetweenDateHour(Bson filter, String namefieldOfStart, Date valueStart, String namefieldOfEnd, Date valueEnd) {
         try {
@@ -4561,23 +4590,24 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="setHourToDate()">
     /**
-     * Asigna horas a la fecha util para cuando se desee buscar entre fechas que tengas horas excluyendolas
+     * Asigna horas a la fecha util para cuando se desee buscar entre fechas que
+     * tengas horas excluyendolas
+     *
      * @param date
      * @param hour
-     * @return 
+     * @return
      */
-     private Date setHourToDate(Date date,Integer hour,Integer  minute) {
-        
-         Calendar calendar = Calendar.getInstance();
-    calendar.setTime(date);
-    calendar.add(Calendar.HOUR_OF_DAY, hour);
-    calendar.add(Calendar.MINUTE, minute);
-    return calendar.getTime();
-     }
-     
-     // </editor-fold>
+    private Date setHourToDate(Date date, Integer hour, Integer minute) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, hour);
+        calendar.add(Calendar.MINUTE, minute);
+        return calendar.getTime();
+    }
+
+    // </editor-fold>
 }
