@@ -6,6 +6,8 @@ Es un Framework para integrar MongoDB/OrientDB/Cochbase con las aplicaciones Jav
 
 Sintaxis similiar a JPA
 
+ ##avbravo.github.io <https://avbravo.github.io/>
+
 ##Soporta
  Documentos embebidos mediante la anotación @Embedded
 
@@ -19,7 +21,7 @@ Dependencias
           <dependency>
 	    <groupId>com.github.avbravo</groupId>
 	    <artifactId>jmoordb</artifactId>
-	    <version>0.1.9.6</version>
+	    <version>0.23</version>
 	 </dependency>
      </dependencies>
 
