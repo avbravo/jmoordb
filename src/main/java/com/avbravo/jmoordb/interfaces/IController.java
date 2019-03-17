@@ -5,6 +5,9 @@
  */
 package com.avbravo.jmoordb.interfaces;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 /**
  *
  * @authoravbravo
@@ -37,17 +40,84 @@ public interface IController<T> {
 
     public String clear();
 
-    public String last();
+    // <editor-fold defaultstate="collapsed" desc="last">
+  
+    default public String last() {
+        try {
+              Integer page= 0;
+            Integer sizeOfPage = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("sizeOfPage");
+       
+            page = sizeOfPage;
+            move(page);
+        } catch (Exception e) {
+//           errorDialog(nameOfMethod(), e.getLocalizedMessage());
+        }
+        return "";
+    }// </editor-fold>
 
-    public String first();
+  // <editor-fold defaultstate="collapsed" desc="first">
 
-    public String next();
 
-    public String back();
+   default public String first() {
+        try {
+          Integer  page = 1;
+            move(page);
+        } catch (Exception e) {
+//        errorDialog(nameOfMethod(), e.getLocalizedMessage());
+        }
+        return "";
+    }// </editor-fold>
+
+     // <editor-fold defaultstate="collapsed" desc="next">
+    default public String next() {      
+        try {
+            Integer page= (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("page");
+            Integer sizeOfPage = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("sizeOfPage");
+       
+            if (page < sizeOfPage) {
+                page++;
+            }
+//            JsfUtil.warningDialog("IController.next", "page: " + page.toString());
+            move(page);
+        } catch (Exception e) {
+//            JsfUtil.errorDialog(nameOfMethod(), e.getLocalizedMessage());
+        }
+        return "";
+    }// </editor-fold>
+
+    
+ 
+     // <editor-fold defaultstate="collapsed" desc="back">
+   default public String back() {
+        try {
+              Integer page= (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("page");
+                  
+            if (page > 1) {
+                page--;
+            }
+            move(page);
+        } catch (Exception e) {
+//             JsfUtil.errorDialog(nameOfMethod(), e.getLocalizedMessage());
+        }
+        return "";
+    }// </editor-fold>
 
     public String skip(Integer page);
+    
+    // <editor-fold defaultstate="collapsed" desc="skip(Integer page)">
 
-    public void move();
+  
+//   default public String skip() {
+//        try {
+//              Integer page= (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("page");
+//            move(page);
+//        } catch (Exception e) {
+//           JsfUtil.errorDialog(nameOfMethod(), e.getLocalizedMessage());
+//        }
+//        return "";
+//    }// </editor-fold>
+
+    public void move(Integer page);
 
     public String searchBy(String field);
 
@@ -69,4 +139,6 @@ public interface IController<T> {
         return e.getMethodName();
     }
 
+   
+   public Integer sizeOfPage();
 }
