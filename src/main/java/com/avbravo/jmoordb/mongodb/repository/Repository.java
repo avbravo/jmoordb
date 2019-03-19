@@ -328,6 +328,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return doc;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Document getIndexSecondaryKey()">
+
     /**
      * Crea un Index en base a las llaves secundarias
      *
@@ -336,7 +337,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     private Document getIndexSecondaryKey() {
         Document doc = new Document();
         try {
-           secondaryKeyList.forEach((p) -> {
+            secondaryKeyList.forEach((p) -> {
                 doc.put(p.getName(), 1);
             });
         } catch (Exception e) {
@@ -402,7 +403,132 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="String primaryKeyValue(T t2)">
+
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public String primaryKeyValue(T t2) {
+
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (PrimaryKey p : primaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    value = (String) method.invoke(t2);
+                    //    doc.put(p.getName(), method.invoke(t2));
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("primaryKeyValue ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeyValue").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeyValue ", e);
+        }
+        return value;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String primaryKeyValue(T t2)">
+
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Map<String,String> primaryKey(T t2) {
+ HashMap<String, String> map = new HashMap<String, String>();
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (PrimaryKey p : primaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    value = (String) method.invoke(t2);
+                    map.put(p.getName(), value);
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("primaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKey ", e);
+        }
+        return map;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String primaryKeyName(T t2)">
+
+    /**
+     * Devuelve el nombre del campo @ID llave primaria
+     *
+     * @param t2
+     * @return
+     */
+    public String primaryKeyName(T t2) {
+
+        String name = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (PrimaryKey p : primaryKeyList) {
+                name = "get" + util.letterToUpper(p.getName());
+
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeyValue").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeyValue ", e);
+        }
+        return name;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Map<String, String> secondaryKey(T t2)">
+    /**
+     * devuelve la lista de SecondaryKey con las llaves secundarias,name, value
+     *
+     * @return
+     */
+    public Map<String, String> secondaryKey(T t2) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    value = (String) method.invoke(t2);
+                    map.put(name, value);
+                    //    doc.put(p.getName(), method.invoke(t2));
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("primaryKeyValue ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeyValue").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeyValue ", e);
+        }
+        return map;
+    }
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Optional<T> findBySecondaryKey(T t2)">
+
     /**
      * Busca por la llave secundaria del documento
      *
@@ -434,12 +560,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
-    
-    
-    
-     
-    
-    
 
     // <editor-fold defaultstate="collapsed" desc="findById(Document doc)">
     public Optional<T> findById(Document doc) {
@@ -461,6 +581,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return Optional.empty();
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Optional<T> findBySecondaryKey(Document doc)">
+
     public Optional<T> findBySecondaryKey(Document doc) {
 
         try {
