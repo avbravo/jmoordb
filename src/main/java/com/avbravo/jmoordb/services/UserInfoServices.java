@@ -20,39 +20,40 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class UserInfoServices {
-/**
- * 
- * @param username
- * @param description
- * @return 
- */
+
+    /**
+     *
+     * @param username
+     * @param description
+     * @return
+     */
     public List<UserInfo> generateListUserinfo(String username, String description) {
         List<UserInfo> listUserinfo = new ArrayList<>();
         try {
             LocalDateTime ahora = LocalDateTime.now();
             Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
- UUID uuid = UUID.randomUUID();
+            UUID uuid = UUID.randomUUID();
 
-
-            listUserinfo.add(new UserInfo(uuid.toString(),username, date2, description));
+            listUserinfo.add(new UserInfo(uuid.toString(), username, date2, description));
         } catch (Exception e) {
             System.out.println("generateListUserinfo() " + e.getLocalizedMessage());
         }
         return listUserinfo;
     }
-/**
- * 
- * @param username
- * @param description
- * @return 
- */
+
+    /**
+     *
+     * @param username
+     * @param description
+     * @return
+     */
     public UserInfo generateUserinfo(String username, String description) {
         UserInfo userinfo = new UserInfo();
         try {
             LocalDateTime ahora = LocalDateTime.now();
             Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
-             UUID uuid = UUID.randomUUID();
-             userinfo.setIduserinfo(uuid.toString());
+            UUID uuid = UUID.randomUUID();
+            userinfo.setIduserinfo(uuid.toString());
             userinfo.setUsername(username);
             userinfo.setDatetime(date2);
             userinfo.setDescription(description);

@@ -403,9 +403,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="String primaryKeyValue(T t2)">
 
+    // <editor-fold defaultstate="collapsed" desc="String primaryKeyValue(T t2)">
     /**
      * Devuelve el valor del campo primario
      *
@@ -423,9 +422,14 @@ public abstract class Repository<T> implements InterfaceRepository {
                 try {
 
                     method = entityClass.getDeclaredMethod(name);
-                    value = (String) method.invoke(t2);
-                    //    doc.put(p.getName(), method.invoke(t2));
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
 
+                    //    doc.put(p.getName(), method.invoke(t2));
                 } catch (Exception e) {
                     Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
                     exception = new Exception("primaryKeyValue ", e);
@@ -437,7 +441,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return value;
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="String primaryKeyValue(T t2)">
+    // <editor-fold defaultstate="collapsed" desc="Map<String,String> primaryKey(T t2) ">
 
     /**
      * Devuelve el valor del campo primario
@@ -445,8 +449,8 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param t2
      * @return
      */
-    public Map<String,String> primaryKey(T t2) {
- HashMap<String, String> map = new HashMap<String, String>();
+    public Map<String, String> primaryKey(T t2) {
+        HashMap<String, String> map = new HashMap<String, String>();
         String value = "";
         try {
             Object t = entityClass.newInstance();
@@ -456,7 +460,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                 try {
 
                     method = entityClass.getDeclaredMethod(name);
-                    value = (String) method.invoke(t2);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
                     map.put(p.getName(), value);
 
                 } catch (Exception e) {
@@ -511,7 +520,13 @@ public abstract class Repository<T> implements InterfaceRepository {
                 try {
 
                     method = entityClass.getDeclaredMethod(name);
-                    value = (String) method.invoke(t2);
+
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
                     map.put(name, value);
                     //    doc.put(p.getName(), method.invoke(t2));
 
