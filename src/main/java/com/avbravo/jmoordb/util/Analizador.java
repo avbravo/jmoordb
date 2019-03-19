@@ -10,10 +10,12 @@ import com.avbravo.jmoordb.EmbeddedBeans;
 import com.avbravo.jmoordb.FieldBeans;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.SecondaryKey;
 import com.avbravo.jmoordb.anotations.DatePattern;
 import com.avbravo.jmoordb.anotations.Embedded;
 import com.avbravo.jmoordb.anotations.Id;
 import com.avbravo.jmoordb.anotations.Referenced;
+import com.avbravo.jmoordb.anotations.Secondary;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,10 +28,11 @@ import java.util.List;
 public class Analizador {
 
     List<PrimaryKey> primaryKeyList = new ArrayList<>();
+    List<SecondaryKey> secondaryKeyList = new ArrayList<>();
     List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
     List<FieldBeans> fieldBeansList = new ArrayList<>();
-     List<ReferencedBeans> referencedBeansList = new ArrayList<>();
+    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
 
     Exception exception;
 
@@ -39,6 +42,14 @@ public class Analizador {
 
     public void setPrimaryKeyList(List<PrimaryKey> primaryKeyList) {
         this.primaryKeyList = primaryKeyList;
+    }
+
+    public List<SecondaryKey> getSecondaryKeyList() {
+        return secondaryKeyList;
+    }
+
+    public void setSecondaryKeyList(List<SecondaryKey> secondaryKeyList) {
+        this.secondaryKeyList = secondaryKeyList;
     }
 
     public List<EmbeddedBeans> getEmbeddedBeansList() {
@@ -82,19 +93,26 @@ public class Analizador {
     }
 
     public Analizador() {
-         primaryKeyList = new ArrayList<>();
+        primaryKeyList = new ArrayList<>();
+        secondaryKeyList = new ArrayList<>();
         embeddedBeansList = new ArrayList<>();
         referencedBeansList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
         fieldBeansList = new ArrayList<>();
     }
-    
-    
+
+    // <editor-fold defaultstate="collapsed" desc="analizar(Field[] fields)">
+/**
+ * Analiza el entity pasado
+ * @param fields
+ * @return 
+ */
     public Boolean analizar(Field[] fields) {
         try {
 
             for (final Field field : fields) {
                 Annotation anotacion = field.getAnnotation(Id.class);
+                Annotation anotacionSecondary = field.getAnnotation(Secondary.class);
                 Annotation anotacionEmbedded = field.getAnnotation(Embedded.class);
                 Annotation anotacionReferenced = field.getAnnotation(Referenced.class);
                 Annotation anotacionDateFormat = field.getAnnotation(DatePattern.class);
@@ -108,6 +126,7 @@ public class Analizador {
                 fieldBeans.setIsKey(false);
                 fieldBeans.setIsEmbedded(false);
                 fieldBeans.setIsReferenced(false);
+                fieldBeans.setIsSecondary(false);
                 fieldBeans.setName(field.getName());
                 fieldBeans.setType(field.getType().getName());
 
@@ -115,6 +134,12 @@ public class Analizador {
                 if (anotacion != null) {
                     verifyPrimaryKey(field, anotacion);
                     fieldBeans.setIsKey(true);
+
+                }
+//SecondaryKey
+                if (anotacionSecondary != null) {
+                    verifySecondaryKey(field, anotacionSecondary);
+                    fieldBeans.setIsSecondary(true);
 
                 }
 
@@ -154,7 +179,7 @@ public class Analizador {
             exception = new Exception("analizar() " + e.getLocalizedMessage());
         }
         return false;
-    }
+    }    // </editor-fold>
 
     /**
      *
@@ -188,7 +213,44 @@ public class Analizador {
         return false;
     }
     
-      private Boolean verifyEmbedded(Field variable, Annotation anotacion) {
+    // <editor-fold defaultstate="collapsed" desc="verifySecondaryKey(Field variable, Annotation anotacion)">
+  
+    /**
+     *
+     * @param variable
+     * @param anotacion
+     * @return
+     */
+    private Boolean verifySecondaryKey(Field variable, Annotation anotacion) {
+        try {
+            final Secondary anotacionSecondary = (Secondary) anotacion;
+            SecondaryKey secondaryKey = new SecondaryKey();
+
+            Boolean found = false;
+            for (SecondaryKey sk : secondaryKeyList) {
+                if (sk.getName().equals(secondaryKey.getName())) {
+                    found = true;
+                }
+            }
+
+            secondaryKey.setName(variable.getName());
+            secondaryKey.setType(variable.getType().getName());
+
+            // obtengo el valor del atributo
+            if (!found) {
+                secondaryKeyList.add(secondaryKey);
+            }
+            return true;
+        } catch (Exception e) {
+            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
+        }
+        return false;
+    }  // </editor-fold>
+    
+    
+    
+
+    private Boolean verifyEmbedded(Field variable, Annotation anotacion) {
         try {
             // final Embedded anotacionPK = (Embedded) anotacionEmbedded;
             EmbeddedBeans embeddedBeans = new EmbeddedBeans();

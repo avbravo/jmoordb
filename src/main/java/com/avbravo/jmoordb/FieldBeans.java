@@ -20,6 +20,7 @@ public class FieldBeans {
     private Boolean isKey;
     private Boolean isEmbedded;
     private Boolean isReferenced;
+    private Boolean isSecondary;
 
     public String getName() {
         return name;
@@ -59,6 +60,14 @@ public class FieldBeans {
 
     public void setIsReferenced(Boolean isReferenced) {
         this.isReferenced = isReferenced;
+    }
+
+    public Boolean getIsSecondary() {
+        return isSecondary;
+    }
+
+    public void setIsSecondary(Boolean isSecondary) {
+        this.isSecondary = isSecondary;
     }
     
     

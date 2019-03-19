@@ -12,6 +12,7 @@ import com.avbravo.jmoordb.FieldBeans;
 import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.SecondaryKey;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.jmoordb.mongodb.internal.JavaToDocument;
@@ -29,11 +30,6 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
-import static com.mongodb.client.model.Accumulators.avg;
-import static com.mongodb.client.model.Accumulators.sum;
-import static com.mongodb.client.model.Aggregates.group;
-import static com.mongodb.client.model.Aggregates.match;
-import static com.mongodb.client.model.Aggregates.out;
 import com.mongodb.client.model.Collation;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
@@ -49,7 +45,6 @@ import com.mongodb.client.result.UpdateResult;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -58,7 +53,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import static java.util.Spliterators.iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,6 +90,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     private Boolean lazy;
     List<T> list = new ArrayList<>();
     List<PrimaryKey> primaryKeyList = new ArrayList<>();
+    List<SecondaryKey> secondaryKeyList = new ArrayList<>();
     List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
     List<ReferencedBeans> referencedBeansList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
@@ -157,6 +152,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         this.lazy = l;
 
         primaryKeyList = new ArrayList<>();
+        secondaryKeyList = new ArrayList<>();
         embeddedBeansList = new ArrayList<>();
         referencedBeansList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
@@ -169,6 +165,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         Analizador analizador = new Analizador();
         analizador.analizar(fields);
         primaryKeyList = analizador.getPrimaryKeyList();
+        secondaryKeyList = analizador.getSecondaryKeyList();
         embeddedBeansList = analizador.getEmbeddedBeansList();
         referencedBeansList = analizador.getReferencedBeansList();
         datePatternBeansList = analizador.getDatePatternBeansList();
@@ -176,13 +173,19 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         //Llave primary
         if (primaryKeyList.isEmpty()) {
-            exception = new Exception("No have primaryKey() ");
+            exception = new Exception("No have primaryKey ");
 
+        } else {
+
+            if (primaryKeyList.size() > 1) {
+                exception = new Exception("the entity has more than one primary key @ID ");
+
+            }
         }
         if (fieldBeansList.isEmpty()) {
-            exception = new Exception("No have fields() ");
+            exception = new Exception("No have fields ");
         }
-//db_ = getMongoDatabase();
+
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
@@ -324,6 +327,24 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return doc;
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Document getIndexSecondaryKey()">
+    /**
+     * Crea un Index en base a las llaves secundarias
+     *
+     * @return
+     */
+    private Document getIndexSecondaryKey() {
+        Document doc = new Document();
+        try {
+           secondaryKeyList.forEach((p) -> {
+                doc.put(p.getName(), 1);
+            });
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "getIndexSecondaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("getIndexSecondaryKey ", e);
+        }
+        return doc;
+    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="createIndex(Document... doc)">
     /**
@@ -381,6 +402,44 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Optional<T> findBySecondaryKey(T t2)">
+    /**
+     * Busca por la llave secundaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Optional<T> findBySecondaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                    return find(doc);
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("findBySecondaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "findBySecondaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("findBySecondaryKey ", e);
+        }
+        return Optional.empty();
+    }// </editor-fold>
+    
+    
+    
+     
+    
+    
 
     // <editor-fold defaultstate="collapsed" desc="findById(Document doc)">
     public Optional<T> findById(Document doc) {
@@ -398,6 +457,25 @@ public abstract class Repository<T> implements InterfaceRepository {
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
             exception = new Exception("findById() ", e);
+        }
+        return Optional.empty();
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Optional<T> findBySecondaryKey(Document doc)">
+    public Optional<T> findBySecondaryKey(Document doc) {
+
+        try {
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            T t_ = (T) find(doc);
+
+            if (t_ == null) {
+                // no lo encontro
+            } else {
+                return Optional.of(t_);
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "findBySecondaryKey)").log(Level.SEVERE, null, e);
+            exception = new Exception("findBySecondaryKey ", e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -498,13 +576,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="find(Bson filter) ">
 
-   /**
-    * Filtra en base a un Filter
-    * eq("activo","si")
-    * @param filter
-    * @return 
-    */
-
+    /**
+     * Filtra en base a un Filter eq("activo","si")
+     *
+     * @param filter
+     * @return
+     */
     public Optional<T> find(Bson filter) {
         try {
             //   Object t = entityClass.newInstance();
