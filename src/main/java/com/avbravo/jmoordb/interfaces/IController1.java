@@ -26,8 +26,7 @@ import org.bson.Document;
  */
 public interface IController1<T, V> {
 
-
-    public String preRenderView(String action);
+public String preRenderView(String action);
 
     default public String refresh() {
         return "";
@@ -124,28 +123,31 @@ public interface IController1<T, V> {
     public void move(Integer page);
 
     public String searchBy(String field);
-
+    
+// <editor-fold defaultstate="collapsed" desc="nameOfClassAndMethod())">
     public default String nameOfClassAndMethod() {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         final String s = e.getClassName();
         return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
-    }
+    }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="nameOfClass()">
     public default String nameOfClass() {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         final String s = e.getClassName();
         return s.substring(s.lastIndexOf('.') + 1, s.length());
-    }
-
+    }// </editor-fold>
+  // <editor-fold defaultstate="collapsed" desc="nameOfMethod())">
     public default String nameOfMethod() {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         final String s = e.getClassName();
         return e.getMethodName();
-    }
+    }// </editor-fold>
 
     public Integer sizeOfPage();
-
+  // <editor-fold defaultstate="collapsed" desc="save()">
     default public String save() {
+        Boolean saved=false;
         try {
             //Se cargan en el LoginController
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -192,21 +194,70 @@ public interface IController1<T, V> {
             } else {
                 JsfUtil.successMessage("save() " + repository.getException().toString());
             }
-
-            afterSave();
+            saved=true;
+          
         } catch (Exception ex) {
 
             JsfUtil.warningDialog("save()", "error" + ex.getLocalizedMessage());
         }
+        afterSave(saved);
         return "";
 
-    }
+    }// </editor-fold>
 
+     // <editor-fold defaultstate="collapsed" desc="beforeSave()">
+    /**
+     * se inyecta en el metodo save() antes de ejecutar el repository.save();
+     * @return 
+     */
     default Boolean beforeSave() {
         return true;
-    }
+    }// </editor-fold>
 
-    default Boolean afterSave() {
+  // <editor-fold defaultstate="collapsed" desc="afterSave(Boolean saved)">
+    /**
+     * se invoca despues del metodo save()
+     * @param saved
+     * @return 
+     */
+    default Boolean afterSave(Boolean saved) {
         return true;
-    }
+    }// </editor-fold>
+  
+    // <editor-fold defaultstate="collapsed" desc="beforeEdit()">
+    /**
+     * se inyecta en el metodo save() antes de ejecutar el repository.edit();
+     * @return 
+     */
+    default Boolean beforeEdit() {
+        return true;
+    }// </editor-fold>
+
+  // <editor-fold defaultstate="collapsed" desc="afterEdit(Boolean edit)">
+    /**
+     * se invoca despues del metodo edit()
+     * @param edit
+     * @return 
+     */
+    default Boolean afterEdit(Boolean edit) {
+        return true;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc=" beforeDelete()">
+    /**
+     * se inyecta en el metodo antes de ejecutar el repository.edit();
+     * @return 
+     */
+    default Boolean beforeDelete() {
+        return true;
+    }// </editor-fold>
+
+  // <editor-fold defaultstate="collapsed" desc="afterDelete(Boolean edit)">
+    /**
+     * se invoca despues del metodo deleted()
+     * @param edit
+     * @return 
+     */
+    default Boolean afterDelete(Boolean edit) {
+        return true;
+    }// </editor-fold>
 }
