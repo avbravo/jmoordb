@@ -119,12 +119,13 @@ public interface IController1<T> {
     // <editor-fold defaultstate="collapsed" desc="next">
     default public String next() {
         try {
-            Integer page = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("page");
+          //  Integer page = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("page");
 //            Integer sizeOfPage = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("sizeOfPage");
-
+Integer page = getPage();
             if (page < sizeOfPage()) {
                 page++;
             }
+         
 //            JsfUtil.warningDialog("IController.next", "page: " + page.toString());
             move(page);
         } catch (Exception e) {
@@ -136,8 +137,8 @@ public interface IController1<T> {
     // <editor-fold defaultstate="collapsed" desc="back">
     default public String back() {
         try {
-            Integer page = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("page");
-
+          //  Integer page = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("page");
+Integer page= getPage();
             if (page > 1) {
                 page--;
             }
@@ -147,7 +148,15 @@ public interface IController1<T> {
         }
         return "";
     }// </editor-fold>
-
+//    default public String skip(Integer page) {
+//        try {
+//            this.page = page;
+//            move(this.page);
+//        } catch (Exception e) {
+//            errorServices.errorMessage(nameOfClass(), nameOfMethod(), e.getLocalizedMessage());
+//        }
+//        return "";
+//    }
     public String skip(Integer page);
 
     // <editor-fold defaultstate="collapsed" desc="skip(Integer page)">
@@ -188,11 +197,14 @@ public interface IController1<T> {
     default public Integer sizeOfPage() {
         Integer size = 0;
         try {
-            Repository repository = (Repository) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("repository");
+            Repository repository = (Repository) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("repository");            
             Integer rowPage = (Integer) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("rowPage");
+            String rowPage2 =FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("rowPage2");
+            
+         //   Integer rowPage = getRowPage();
             size = repository.sizeOfPage(rowPage);
         } catch (Exception e) {
-            //           errorDialog(nameOfMethod(), e.getLocalizedMessage());
+    JmoordbUtil.errorMessage(nameOfMethod() +e.getLocalizedMessage());
         }
 
         return size;
@@ -392,4 +404,11 @@ public interface IController1<T> {
         return true;
     }// </editor-fold>
 
+
+ default  public Integer getRowPage(){
+     return 0;
+ }
+ public Integer getPage();
+//public void setPage(Integer page);
+            
 }
