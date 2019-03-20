@@ -18,6 +18,7 @@ import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.jmoordb.mongodb.internal.JavaToDocument;
 import com.avbravo.jmoordb.pojos.JmoordbResult;
 import com.avbravo.jmoordb.util.Analizador;
+import com.avbravo.jmoordb.util.JmoordbUtils;
 import com.avbravo.jmoordb.util.Util;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
 import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
@@ -134,6 +135,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
+            JmoordbUtils.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
+           
         }
         return null;
     }// </editor-fold>
