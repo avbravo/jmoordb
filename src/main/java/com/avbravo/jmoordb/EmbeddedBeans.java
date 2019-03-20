@@ -5,15 +5,15 @@
  */
 package com.avbravo.jmoordb;
 
-import lombok.Getter;
-import lombok.Setter;
+ 
+ 
 
 /**
  *
  * @author avbravo
  */
-@Getter
-@Setter
+ 
+ 
 public class EmbeddedBeans {
     private String name;
     private String type;

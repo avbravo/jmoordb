@@ -5,19 +5,80 @@
  */
 package com.avbravo.jmoordb.util;
 
+import com.avbravo.jmoordb.JmoordbException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-
 
 /**
  *
  * @author avbravo
  */
-public class JmoordbUtils {
-         private static final Logger LOG = Logger.getLogger(JmoordbUtils.class.getName());
-     // <editor-fold defaultstate="collapsed" desc=" String textoDespuesUltimoPunto(String texto)">
+public class JmoordbUtil {
+      public  String letterToUpper(String texto) {
+        try {
+
+            texto = texto.trim();
+            int largo = texto.length();
+            if (largo <= 0) {
+                return texto;
+            }
+            String letra = texto.substring(0, 1);
+
+            texto = letra.toUpperCase() + texto.substring(1);
+        } catch (Exception ex) {
+          //Test.msg("letterToUpper() " + ex.getLocalizedMessage());
+        }
+        return texto;
+    }
+
+    /**
+     * ConvertirLetraMinuscula
+     *
+     * @param s_cadena
+     * @param caracter
+     * @return
+     */
+    public  String letterToLower(String texto) {
+
+        try {
+
+            texto = texto.trim();
+            int largo = texto.length();
+            if (largo <= 0) {
+                return texto;
+            }
+            String letra = texto.substring(0, 1);
+
+            texto = letra.toLowerCase() + texto.substring(1);
+        } catch (Exception ex) {
+          //Test.msg("letterToLower() " + ex.getLocalizedMessage());
+        }
+        return texto;
+    }
+    
+    public String traductor(String texto, String idioma){
+        String traduccion = "";
+        try {
+            
+        } catch (Exception e) {
+            //Test.msg("traductor() "+e.getLocalizedMessage());
+            new JmoordbException("traductor() "+e.getLocalizedMessage());
+        }
+ return traduccion;       
+    }
+    
+    
+     public  Date getFechaHoraActual() {
+        LocalDateTime ahora = LocalDateTime.now();
+        Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+        return date2;
+    }
+     
+     // <editor-fold defaultstate="collapsed" desc="nombreEntity(String texto)">
    
    /**
     * obtiene el texto despues del ultimo puento
@@ -39,6 +100,7 @@ public class JmoordbUtils {
         
    }
     // </editor-fold>
+   
    
    
        // <editor-fold defaultstate="collapsed" desc="errorMessage"> 
@@ -65,7 +127,7 @@ public class JmoordbUtils {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 msg, msg);
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-        LOG.warning(msg);
+     
     }    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="testMessage"> 
@@ -73,7 +135,8 @@ public class JmoordbUtils {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 msg, msg);
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-        LOG.warning(msg);
+   
+        
     }    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="successMessage"> 
@@ -86,7 +149,7 @@ public class JmoordbUtils {
 
     public static void warningMessage(String msg) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, msg, ""));
-        LOG.warning(msg);
+       
     }    // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="fatalMessage"> 
 

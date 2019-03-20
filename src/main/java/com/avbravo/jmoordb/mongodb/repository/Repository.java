@@ -18,8 +18,7 @@ import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.jmoordb.mongodb.internal.JavaToDocument;
 import com.avbravo.jmoordb.pojos.JmoordbResult;
 import com.avbravo.jmoordb.util.Analizador;
-import com.avbravo.jmoordb.util.JmoordbUtils;
-import com.avbravo.jmoordb.util.Util;
+import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
 import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
 import com.mongodb.Block;
@@ -97,7 +96,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
     List<FieldBeans> fieldBeansList = new ArrayList<>();
     Exception exception;
-    Util util = new Util();
+    JmoordbUtil util = new JmoordbUtil();
     // </editor-fold>
 //MongoDatabase db_;
 // <editor-fold defaultstate="collapsed" desc="get/set">
@@ -135,7 +134,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
-            JmoordbUtils.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
+         
            
         }
         return null;
@@ -444,6 +443,17 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return value;
     }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="fieldsOfBean()">
+    /**
+     * 
+     * @return 
+     */
+    public List<FieldBeans> fieldsOfBean(){
+        return fieldBeansList;
+    }
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Map<String,String> primaryKey(T t2) ">
 
     /**

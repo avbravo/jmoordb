@@ -5,8 +5,8 @@
  */
 package com.avbravo.jmoordb;
 
-import lombok.Getter;
-import lombok.Setter;
+ 
+ 
 
 /**
  *

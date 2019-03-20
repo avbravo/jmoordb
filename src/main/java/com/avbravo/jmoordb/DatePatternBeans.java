@@ -5,15 +5,15 @@
  */
 package com.avbravo.jmoordb;
 
-import lombok.Getter;
-import lombok.Setter;
+ 
+ 
 
 /**
  *
  * @author avbravo
  */
-@Getter
-@Setter
+ 
+ 
 public class DatePatternBeans {
 
     private String name;

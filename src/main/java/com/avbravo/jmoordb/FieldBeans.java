@@ -5,15 +5,15 @@
  */
 package com.avbravo.jmoordb;
 
-import lombok.Getter;
-import lombok.Setter;
+ 
+ 
 
 /**
  *
  * @author avbravo
  */
-@Getter
-@Setter
+ 
+ 
 public class FieldBeans {
     private String name;
     private String type;
@@ -22,6 +22,22 @@ public class FieldBeans {
     private Boolean isReferenced;
     private Boolean isSecondary;
 
+    public FieldBeans() {
+    }
+
+    public FieldBeans(String name, String type, Boolean isKey, Boolean isEmbedded, Boolean isReferenced, Boolean isSecondary) {
+        this.name = name;
+        this.type = type;
+        this.isKey = isKey;
+        this.isEmbedded = isEmbedded;
+        this.isReferenced = isReferenced;
+        this.isSecondary = isSecondary;
+    }
+
+    
+    
+    
+    
     public String getName() {
         return name;
     }

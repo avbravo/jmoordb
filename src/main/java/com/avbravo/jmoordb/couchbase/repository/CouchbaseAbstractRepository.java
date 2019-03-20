@@ -14,7 +14,7 @@ import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.couchbase.internal.DocumentToJavaCouchbase;
 import com.avbravo.jmoordb.couchbase.internal.JavaToDocumentCouchbase;
 import com.avbravo.jmoordb.util.Analizador;
-import com.avbravo.jmoordb.util.Util;
+import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.PersistTo;
@@ -63,7 +63,7 @@ public abstract class CouchbaseAbstractRepository<T> implements CouchbaseAbstrac
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
     List<FieldBeans> fieldBeansList = new ArrayList<>();
     Exception exception;
-    Util util = new Util();
+    JmoordbUtil util = new JmoordbUtil();
 
     Integer contador = 0;
 

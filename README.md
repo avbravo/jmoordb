@@ -34,9 +34,9 @@ Dependencias
 
 
 ###Entity
-@Getter
+ 
 
-@Setter
+ 
 
 public class Paises {
 
