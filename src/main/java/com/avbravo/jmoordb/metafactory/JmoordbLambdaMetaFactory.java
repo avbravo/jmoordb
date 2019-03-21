@@ -10,6 +10,7 @@ import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -51,5 +52,6 @@ public class JmoordbLambdaMetaFactory {
             throw new Error(e);
         }
     }
+  
 
 }

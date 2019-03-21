@@ -13,6 +13,7 @@ import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.SecondaryKey;
+import com.avbravo.jmoordb.metafactory.JmoordbLambdaMetaFactory;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.jmoordb.mongodb.internal.JavaToDocument;
@@ -43,6 +44,11 @@ import static com.mongodb.client.model.Indexes.descending;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -58,9 +64,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -138,8 +146,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
-         
-           
+
         }
         return null;
     }// </editor-fold>
@@ -447,19 +454,18 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return value;
     }// </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="fieldsOfBean()">
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public List<FieldBeans> fieldsOfBean(){
+    public List<FieldBeans> fieldsOfBean() {
         return fieldBeansList;
     }
     // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Map<String,String> primaryKey(T t2) ">
 
+    // <editor-fold defaultstate="collapsed" desc="Map<String,String> primaryKey(T t2) ">
     /**
      * Devuelve el valor del campo primario
      *
@@ -4840,9 +4846,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-    
-     // <editor-fold defaultstate="collapsed" desc="List<UserInfo> generateListUserinfo(String username, String description)">
-  
+    // <editor-fold defaultstate="collapsed" desc="List<UserInfo> generateListUserinfo(String username, String description)">
     public List<UserInfo> generateListUserinfo(String username, String description) {
         List<UserInfo> listUserinfo = new ArrayList<>();
         try {
@@ -4852,12 +4856,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             listUserinfo.add(new UserInfo(uuid.toString(), username, date2, description));
         } catch (Exception e) {
-            System.out.println("generateListUserinfo() " + e.getLocalizedMessage());
+            Logger.getLogger(Repository.class.getName() + "generateListUserinfo").log(Level.SEVERE, null, e);
+            exception = new Exception("generateListUserinfo() ", e);
         }
         return listUserinfo;
     }  // </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="UserInfo generateUserinfo(String username, String description)">
     /**
      *
@@ -4877,8 +4881,51 @@ public abstract class Repository<T> implements InterfaceRepository {
             userinfo.setDescription(description);
 
         } catch (Exception e) {
-            System.out.println("generateUserinfo() " + e.getLocalizedMessage());
+            Logger.getLogger(Repository.class.getName() + "generateUserinfo()").log(Level.SEVERE, null, e);
+            exception = new Exception("generateUserinfo() ", e);
         }
         return userinfo;
     }  // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="addUserInfoForSaveMethodo()">
+    /**
+     * Devuelve el entity con el UserInfo asigando la primera vez es un list
+     *
+     * @param t1
+     * @return
+     */
+    public T addUserInfoForSaveMethod(T t1, String username, String descripcion) {
+        try {
+            PropertyDescriptor userInfoProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            userInfoProperty = property.apply("userInfo");
+            Boolean found = false;
+            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
+                if (m.getMethod().getName().contains("setUserInfo")) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                final BiConsumer userInfoSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                        lookup.unreflect(userInfoProperty.getWriteMethod()));
+                userInfoSetter.accept(t1, generateListUserinfo(username, descripcion));
+            } else {
+                JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "insertUserInfoForSave").log(Level.SEVERE, null, e);
+            exception = new Exception("insertUserInfoForSave ", e);
+        }
+        return t1;
+    }
+    // </editor-fold>
 }

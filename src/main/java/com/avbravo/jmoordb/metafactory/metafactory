@@ -1,0 +1,13 @@
+URL
+https://stackoverflow.com/questions/30546552/how-to-resolve-abstractmethoderror-from-lambdametafactory
+
+Method m = Class.forName(className).getDeclaredMethod(methodName, Object.class);
+    MethodHandles.Lookup l = MethodHandles.lookup();
+    MethodHandle handle = l.unreflect(m);
+    CallSite cs = LambdaMetafactory.metafactory(l,
+                                                "makeList",
+                                                MethodType.methodType(ListMaker.class),
+                                                handle.type().generic(),
+                                                handle,
+                                                handle.type());
+    maker = (ListMaker)cs.getTarget().invoke();

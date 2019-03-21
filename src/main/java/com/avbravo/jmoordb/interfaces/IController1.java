@@ -236,6 +236,9 @@ public interface IController1<T> {
                 }
             }
 
+            //Agregar el UserInfo al entity
+              entity =repository.addUserInfoForSaveMethod(entity,username,"create");
+              
             if (!beforeSave()) {
                 return "";
             }
