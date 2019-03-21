@@ -54,18 +54,6 @@ public class JmoordbLambdaMetaFactoryTest {
             if (m.getMethod().getName().indexOf("set") != -1 || m.getMethod().getName().indexOf("get") != -1) {
                 System.out.println("metodo " + m.getMethod().getName());
                 System.out.println("getAnnotatedReturnType() " + m.getMethod().getAnnotatedReturnType().getType());
-
-                ParameterDescriptor[] p = m.getParameterDescriptors();
-                if (p != null) {
-                    System.out.println("PARAMETERDESCRIPTOR");
-
-                    for (ParameterDescriptor pd : p) {
-                        System.out.println(pd);
-                    }
-                } else {
-                    System.out.println("PARAMETERSDESCRIPTOR NULL");
-                }
-
                 System.out.println("attributesName " + m.attributeNames().toString());
                 System.out.println("---------------------------");
             }
