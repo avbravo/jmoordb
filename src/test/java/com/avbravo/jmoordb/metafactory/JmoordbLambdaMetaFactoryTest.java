@@ -70,6 +70,8 @@ public class JmoordbLambdaMetaFactoryTest {
         final JmoordbPersonEntity person = new JmoordbPersonEntity();
         person.setName("avbravo");
         person.setValue(42.0);
+        person.setUserInfo(generateListUserinfo("avbravo", "test Getter"));
+
         final MethodHandles.Lookup lookup = MethodHandles.lookup();
         final Function nameGetter = JmoordbLambdaMetaFactory.createGetter(lookup,
                 lookup.unreflect(nameProperty.getReadMethod()));
@@ -77,8 +79,21 @@ public class JmoordbLambdaMetaFactoryTest {
         final Function valueGetter = JmoordbLambdaMetaFactory.createGetter(lookup,
                 lookup.unreflect(valueProperty.getReadMethod()));
 
+        final Function userInfoGetter = JmoordbLambdaMetaFactory.createGetter(lookup,
+                lookup.unreflect(userInfoProperty.getReadMethod()));
+
         assertEquals("avbravo", nameGetter.apply(person));
         assertEquals(42.0, (double) valueGetter.apply(person), 0.1);
+        //Obtener el List de UserInfo
+        List<UserInfo> ps = (List<UserInfo>) userInfoGetter.apply(person);
+        System.out.println("==============GET DEL USERINFO====================");
+
+        for (UserInfo u : ps) {
+            System.out.println("{username----> " + u.getUsername());
+            System.out.println("{descripcion----> " + u.getDescription());
+            System.out.println("{datetime----> " + u.getDatetime());
+        }
+
     }
 
     @Test
@@ -97,13 +112,13 @@ public class JmoordbLambdaMetaFactoryTest {
 
         nameSetter.accept(person, "Answer");
         valueSetter.accept(person, 42.0);
-        userInfoSetter.accept(person, generateListUserinfo("avbravo","abo"));
-        // AQUI AGREGA un List<UserInfo> mediante LambdaMetaFactory
-        List<UserInfo> ux=person.getUserInfo();
-        ux.add(generateUserinfo("avbravo","actualizando"));
-        userInfoSetter.accept(person, ux);
-        Integer i=0;
        
+        userInfoSetter.accept(person, generateListUserinfo("avbravo", "abo"));
+        // AQUI AGREGA un List<UserInfo> mediante LambdaMetaFactory
+        List<UserInfo> ux = person.getUserInfo();
+        ux.add(generateUserinfo("avbravo", "actualizando"));
+        userInfoSetter.accept(person, ux);
+        Integer i = 0;
 
         assertEquals("Answer", person.getName());
         assertEquals(42.0, person.getValue(), 0.1);
@@ -129,8 +144,8 @@ public class JmoordbLambdaMetaFactoryTest {
         }
         return listUserinfo;
     }  // </editor-fold>
-    
-     public UserInfo generateUserinfo(String username, String description) {
+
+    public UserInfo generateUserinfo(String username, String description) {
         UserInfo userinfo = new UserInfo();
         try {
             LocalDateTime ahora = LocalDateTime.now();

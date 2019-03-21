@@ -4927,5 +4927,56 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return t1;
     }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T addUserInfoForEditMethod(T t1, String username, String descripcion)">
+    /**
+     * Devuelve el entity con el UserInfo asigando a la lista del entity
+     *
+     * @param t1
+     * @return
+     */
+    public T addUserInfoForEditMethod(T t1, String username, String descripcion) {
+        try {
+            PropertyDescriptor userInfoProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            userInfoProperty = property.apply("userInfo");
+            Boolean found = false;
+            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
+                if (m.getMethod().getName().contains("setUserInfo")) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                final BiConsumer userInfoSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                        lookup.unreflect(userInfoProperty.getWriteMethod()));
+                userInfoSetter.accept(t1, generateListUserinfo(username, descripcion));
+                final java.util.function.Function userInfoGetter = JmoordbLambdaMetaFactory.createGetter(lookup,
+                        lookup.unreflect(userInfoProperty.getReadMethod()));
+                //Obtener la lista de UserInfo
+                 List<UserInfo> list = (List<UserInfo>) userInfoGetter.apply(t1);
+                 //Agregamos el nuevo a la lista
+                 list.add(generateUserinfo( username,descripcion));
+                 //Asigamos al setUserInfo
+                 userInfoSetter.accept(t1, list);
+                 
+            } else {
+                JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "insertUserInfoForSave").log(Level.SEVERE, null, e);
+            exception = new Exception("insertUserInfoForSave ", e);
+        }
+        return t1;
+    }
     // </editor-fold>
 }

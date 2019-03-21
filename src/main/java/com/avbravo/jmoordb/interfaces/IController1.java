@@ -319,7 +319,9 @@ public interface IController1<T> {
                     return "";
                 }
             }
-
+ //Agregar el UserInfo al entity
+              entity =repository.addUserInfoForEditMethod(entity,username,"update");
+              
             if (!beforeEdit()) {
                 return "";
             }
@@ -394,8 +396,7 @@ public interface IController1<T> {
      *
      * @return
      */
-    default Boolean
-            beforeSave() {
+    default Boolean  beforeSave() {
         return true;
 
     }// </editor-fold>
@@ -408,9 +409,7 @@ public interface IController1<T> {
      * @return
      */
     @Aspect
-    default Boolean
-            afterSave(Boolean saved
-            ) {
+    default Boolean afterSave(Boolean saved ) {
         return true;
 
     }// </editor-fold>
@@ -421,8 +420,7 @@ public interface IController1<T> {
      *
      * @return
      */
-    default Boolean
-            beforeEdit() {
+    default Boolean beforeEdit() {
         return true;
 
     }// </editor-fold>
@@ -434,8 +432,7 @@ public interface IController1<T> {
      * @param edit
      * @return
      */
-    default Boolean
-            afterEdit(Boolean edited) {
+    default Boolean afterEdit(Boolean edited) {
         return true;
 
     }// </editor-fold>
@@ -446,8 +443,7 @@ public interface IController1<T> {
      *
      * @return
      */
-    default Boolean
-            beforeDelete() {
+    default Boolean  beforeDelete() {
         return true;
 
     }// </editor-fold>
@@ -459,9 +455,29 @@ public interface IController1<T> {
      * @param edit
      * @return
      */
-    default Boolean
-            afterDelete(Boolean edit
-            ) {
+    default Boolean  afterDelete(Boolean edit ) {
+        return true;
+    }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean beforePrint()">
+    /**
+     *
+     *
+     * @return
+     */
+    default Boolean  beforePrint() {
+        return true;
+
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean  afterPrint(Boolean printed )">
+    /**
+     * se invoca despues del metodo print()
+     *
+     * @param edit
+     * @return
+     */
+    default Boolean  afterPrint(Boolean printed ) {
         return true;
     }// </editor-fold>
 
