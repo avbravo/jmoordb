@@ -17,6 +17,7 @@ import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.jmoordb.mongodb.internal.JavaToDocument;
 import com.avbravo.jmoordb.pojos.JmoordbResult;
+import com.avbravo.jmoordb.pojos.UserInfo;
 import com.avbravo.jmoordb.util.Analizador;
 import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
@@ -44,6 +45,8 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -53,6 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -4836,4 +4840,45 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    
+     // <editor-fold defaultstate="collapsed" desc="List<UserInfo> generateListUserinfo(String username, String description)">
+  
+    public List<UserInfo> generateListUserinfo(String username, String description) {
+        List<UserInfo> listUserinfo = new ArrayList<>();
+        try {
+            LocalDateTime ahora = LocalDateTime.now();
+            Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+            UUID uuid = UUID.randomUUID();
+
+            listUserinfo.add(new UserInfo(uuid.toString(), username, date2, description));
+        } catch (Exception e) {
+            System.out.println("generateListUserinfo() " + e.getLocalizedMessage());
+        }
+        return listUserinfo;
+    }  // </editor-fold>
+
+    
+    // <editor-fold defaultstate="collapsed" desc="UserInfo generateUserinfo(String username, String description)">
+    /**
+     *
+     * @param username
+     * @param description
+     * @return
+     */
+    public UserInfo generateUserinfo(String username, String description) {
+        UserInfo userinfo = new UserInfo();
+        try {
+            LocalDateTime ahora = LocalDateTime.now();
+            Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+            UUID uuid = UUID.randomUUID();
+            userinfo.setIduserinfo(uuid.toString());
+            userinfo.setUsername(username);
+            userinfo.setDatetime(date2);
+            userinfo.setDescription(description);
+
+        } catch (Exception e) {
+            System.out.println("generateUserinfo() " + e.getLocalizedMessage());
+        }
+        return userinfo;
+    }  // </editor-fold>
 }
