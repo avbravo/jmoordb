@@ -399,7 +399,6 @@ public abstract class Repository<T> implements InterfaceRepository {
                 String name = "get" + util.letterToUpper(p.getName());
                 Method method;
                 try {
-
                     method = entityClass.getDeclaredMethod(name);
 
                     doc.put(p.getName(), method.invoke(t2));
@@ -577,20 +576,22 @@ public abstract class Repository<T> implements InterfaceRepository {
         Document doc = new Document();
         try {
             Object t = entityClass.newInstance();
-            for (SecondaryKey p : secondaryKeyList) {
-                String name = "get" + util.letterToUpper(p.getName());
-                Method method;
-                try {
+            if (!secondaryKeyList.isEmpty()) {
 
-                    method = entityClass.getDeclaredMethod(name);
-
-                    doc.put(p.getName(), method.invoke(t2));
-
-                    return find(doc);
-                } catch (Exception e) {
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("findBySecondaryKey ", e);
+                for (SecondaryKey p : secondaryKeyList) {
+                    String name = "get" + util.letterToUpper(p.getName());
+                    Method method;
+                    try {
+                        method = entityClass.getDeclaredMethod(name);
+                        doc.put(p.getName(), method.invoke(t2));
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                        exception = new Exception("findBySecondaryKey ", e);
+                    }
                 }
+                return find(doc);
+            } else {
+                return Optional.empty();
             }
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "findBySecondaryKey").log(Level.SEVERE, null, e);
@@ -637,6 +638,114 @@ public abstract class Repository<T> implements InterfaceRepository {
             exception = new Exception("findBySecondaryKey ", e);
         }
         return Optional.empty();
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean isFoundBySecondaryKey(Document doc)">
+    /**
+     * busca si existe o no por la
+     *
+     * @param doc
+     * @return
+     */
+    public Boolean isFound(Document doc) {
+
+        try {
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            T t_ = (T) find(doc);
+
+            if (t_ == null) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "fisFound()").log(Level.SEVERE, null, e);
+            exception = new Exception("isFound() ", e);
+        }
+        return false;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="isFoundBySecondaryKey(T t2)">
+    /**
+     * Busca por la llave secundaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean isFoundBySecondaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            if (!secondaryKeyList.isEmpty()) {
+
+                for (SecondaryKey p : secondaryKeyList) {
+                    String name = "get" + util.letterToUpper(p.getName());
+                    Method method;
+                    try {
+
+                        method = entityClass.getDeclaredMethod(name);
+
+                        doc.put(p.getName(), method.invoke(t2));
+
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                        exception = new Exception("findBySecondaryKey ", e);
+                    }
+                }
+                T t_ = (T) find(doc);
+                if (t_ == null) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                JmoordbUtil.warningMessage("No tiene llaves secundaria @Secondary no se puede buscar");
+                return false;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "isFoundBySecondaryKey()").log(Level.SEVERE, null, e);
+            exception = new Exception("isFoundBySecondaryKey() ", e);
+        }
+        return false;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Boolean isFoundByPrimaryKey(T t2)">
+
+    /**
+     * Busca por la llave secundaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean isFoundByPrimaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (PrimaryKey p : primaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                    T t_ = (T) find(doc);
+                    if (t_ == null) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("isFoundByPrimaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "isFoundByPrimaryKey()").log(Level.SEVERE, null, e);
+            exception = new Exception("isFoundByPrimaryKey() ", e);
+        }
+        return false;
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findById(String sql)">
@@ -4962,12 +5071,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                 final java.util.function.Function userInfoGetter = JmoordbLambdaMetaFactory.createGetter(lookup,
                         lookup.unreflect(userInfoProperty.getReadMethod()));
                 //Obtener la lista de UserInfo
-                 List<UserInfo> list = (List<UserInfo>) userInfoGetter.apply(t1);
-                 //Agregamos el nuevo a la lista
-                 list.add(generateUserinfo( username,descripcion));
-                 //Asigamos al setUserInfo
-                 userInfoSetter.accept(t1, list);
-                 
+                List<UserInfo> list = (List<UserInfo>) userInfoGetter.apply(t1);
+                //Agregamos el nuevo a la lista
+                list.add(generateUserinfo(username, descripcion));
+                //Asigamos al setUserInfo
+                userInfoSetter.accept(t1, list);
+
             } else {
                 JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
             }
