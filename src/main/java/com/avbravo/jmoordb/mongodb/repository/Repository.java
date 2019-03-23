@@ -453,6 +453,74 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return value;
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Boolean primaryKeyIsInteger(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean primaryKeyIsInteger(T t2) {
+
+        Boolean value = false;
+        try {
+            Object t = entityClass.newInstance();
+            for (PrimaryKey p : primaryKeyList) {
+           
+                    if (p.getType().equals("java.lang.String")) {
+                        value = false;
+                    } else {
+                        value = true;
+                    }
+
+                    //    doc.put(p.getName(), method.invoke(t2));
+           
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeyIsInteger()").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeyIsInteger() ", e);
+        }
+        return value;
+    }// </editor-fold>
+    
+    
+     // <editor-fold defaultstate="collapsed" desc="Integer primaryKeyValueInteger(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Integer primaryKeyValueInteger(T t2) {
+
+       Integer value = 0;
+        try {
+            Object t = entityClass.newInstance();
+            for (PrimaryKey p : primaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                       exception = new Exception("La llave primaria no es de tipo Integer ");
+                    } else {
+                        value = Integer.parseInt(String.valueOf(v));
+                    }
+
+                    //    doc.put(p.getName(), method.invoke(t2));
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("primaryKeyValueInteger", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeyValueInteger").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeyValueInteger ", e);
+        }
+        return value;
+    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="fieldsOfBean()">
     /**

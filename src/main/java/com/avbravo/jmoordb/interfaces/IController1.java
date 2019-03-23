@@ -6,12 +6,22 @@
 package com.avbravo.jmoordb.interfaces;
 
 import com.avbravo.jmoordb.anotations.Aspect;
+import com.avbravo.jmoordb.metafactory.JmoordbLambdaMetaFactory;
 import com.avbravo.jmoordb.mongodb.repository.Repository;
 import com.avbravo.jmoordb.services.RevisionHistoryServices;
 import com.avbravo.jmoordb.util.JmoordbUtil;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.lang.invoke.MethodHandles;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -216,6 +226,7 @@ public interface IController1<T> {
             //Los pasa el usuaario
             Repository repository = (Repository) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("repository");
             Object entity = (Object) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("entity");
+            Object controller = (Object) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("controller");
 //            String primarykeyvalue = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("primarykeyvalue");
             Boolean searchbyfieldsecond = (Boolean) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("searchbyfieldsecond");
 
@@ -254,6 +265,8 @@ public interface IController1<T> {
                     }
 
                 }
+                _Controller(controller, entity);
+                _show();
                    JmoordbUtil.successMessage(spanish ? "Guardado" : "Saved");
                 reset();
             } else {
@@ -480,5 +493,46 @@ public interface IController1<T> {
     default Boolean  afterPrint(Boolean printed ) {
         return true;
     }// </editor-fold>
+    
+    
+    
+   default  public void _Controller(Object lcontroller,Object entity ) {
+        try {
+            PropertyDescriptor userInfoProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(lcontroller.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+          //  userInfoProperty = property.apply("userInfo");
+            Boolean found = false;
+            System.out.println("--------------CONTROLLER----------------");
+            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
+                System.out.println("metodos "+m.getName());
+//                if (m.getMethod().getName().contains("setUserInfo")) {
+//                    found = true;
+//                    break;
+//                }
+            }
+//            if (found) {
+//                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+//                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+//                final BiConsumer userInfoSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+//                        lookup.unreflect(userInfoProperty.getWriteMethod()));
+//                userInfoSetter.accept(t1, generateListUserinfo(username, descripcion));
+//            } else {
+//                JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+//            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "_Controller").log(Level.SEVERE, null, e);
+           
+        }
+        return ;
+    }
+  default public void _show(){
+      
+  }
 
 }
