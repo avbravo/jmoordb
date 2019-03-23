@@ -583,7 +583,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             Object t = entityClass.newInstance();
             for (PrimaryKey p : primaryKeyList) {
-                name = "get" + util.letterToUpper(p.getName());
+                name =  util.letterToUpper(p.getName());
 
             }
         } catch (Exception e) {
