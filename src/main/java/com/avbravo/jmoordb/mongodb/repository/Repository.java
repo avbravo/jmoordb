@@ -583,7 +583,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             Object t = entityClass.newInstance();
             for (PrimaryKey p : primaryKeyList) {
-                name =  util.letterToUpper(p.getName());
+                name =  util.letterToLower(p.getName());
 
             }
         } catch (Exception e) {
@@ -605,7 +605,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             Object t = entityClass.newInstance();
             for (SecondaryKey p : secondaryKeyList) {
-                String name =  util.letterToUpper(p.getName());
+                String name =  util.letterToLower(p.getName());
                 Method method;
                 try {
 
