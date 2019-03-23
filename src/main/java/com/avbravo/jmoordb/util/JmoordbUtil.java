@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
  * @author avbravo
  */
 public class JmoordbUtil {
-      public  String letterToUpper(String texto) {
+      public static  String letterToUpper(String texto) {
         try {
 
             texto = texto.trim();
@@ -42,7 +42,7 @@ public class JmoordbUtil {
      * @param caracter
      * @return
      */
-    public  String letterToLower(String texto) {
+    public static    String letterToLower(String texto) {
 
         try {
 
@@ -60,7 +60,7 @@ public class JmoordbUtil {
         return texto;
     }
     
-    public String traductor(String texto, String idioma){
+    public static  String traductor(String texto, String idioma){
         String traduccion = "";
         try {
             
@@ -72,7 +72,7 @@ public class JmoordbUtil {
     }
     
     
-     public  Date getFechaHoraActual() {
+     public static  Date getFechaHoraActual() {
         LocalDateTime ahora = LocalDateTime.now();
         Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
         return date2;
