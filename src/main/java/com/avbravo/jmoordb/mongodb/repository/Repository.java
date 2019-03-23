@@ -605,7 +605,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             Object t = entityClass.newInstance();
             for (SecondaryKey p : secondaryKeyList) {
-                String name = "get" + util.letterToUpper(p.getName());
+                String name =  util.letterToUpper(p.getName());
                 Method method;
                 try {
 
@@ -622,12 +622,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 } catch (Exception e) {
                     Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("primaryKeyValue ", e);
+                    exception = new Exception("secondaryKey ", e);
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "primaryKeyValue").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeyValue ", e);
+            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKey ", e);
         }
         return map;
     }
