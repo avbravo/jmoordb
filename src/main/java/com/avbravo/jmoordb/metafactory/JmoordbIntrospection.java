@@ -39,6 +39,7 @@ public class JmoordbIntrospection {
             Object entitynew = entity.getClass().newInstance();
           nameOfEntity = JmoordbUtil.nombreEntity(entity.getClass().getName());
             nameOfEntity = JmoordbUtil.letterToLower(nameOfEntity);
+            nameOfEntity = nameOfEntity.trim();
           
            // FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("page" + nameOfEntity, page.toString());
 
@@ -271,6 +272,26 @@ public class JmoordbIntrospection {
     }
 // </editor-fold>
 
-   
+    // <editor-fold defaultstate="collapsed" desc="Object newEntity(Object entity)">
+    /**
+     * 
+     * Crea un objeto del mismo tipo invocando el new
+     * @param entity
+     * @return 
+     */
+    public static Object newEntity(Object entity){
+        Object entitynew = entity;
+        try {
+          entitynew = entity.getClass().newInstance();
+        } catch (Exception e) {
+            JmoordbUtil.errorMessage("newEntity() " + e.getLocalizedMessage());
+             Logger.getLogger(Repository.class.getName() + "callSet() ").log(Level.SEVERE, null, e);
+            System.out.println("newEntity() " + e.getLocalizedMessage());
+        }
+        return entitynew;
+}
+      
+    // </editor-fold>
+           
 
 }
