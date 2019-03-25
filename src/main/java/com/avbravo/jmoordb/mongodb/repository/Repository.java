@@ -13,6 +13,7 @@ import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.SecondaryKey;
+import com.avbravo.jmoordb.metafactory.JmoordbIntrospection;
 import com.avbravo.jmoordb.metafactory.JmoordbLambdaMetaFactory;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
@@ -453,6 +454,11 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return value;
     }// </editor-fold>
+    
+  
+    
+    
+    
     // <editor-fold defaultstate="collapsed" desc="Boolean primaryKeyIsInteger(T t2)">
     /**
      * Devuelve el valor del campo primario
@@ -5152,6 +5158,54 @@ public abstract class Repository<T> implements InterfaceRepository {
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "insertUserInfoForSave").log(Level.SEVERE, null, e);
             exception = new Exception("insertUserInfoForSave ", e);
+        }
+        return t1;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T addUserInfoForEditMethod(T t1, String username, String descripcion)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T primaryKeyValueToUpper(T t1) {
+        try {
+          
+            String nameOfPrimaryKey = primaryKeyName(t1);
+            String valueOfPrimaryKey = primaryKeyValue(t1);
+            
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfPrimaryKey);
+            Boolean found = false;
+            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
+                if (m.getMethod().getName().contains(nameOfPrimaryKey)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                        lookup.unreflect(pkProperty.getWriteMethod()));
+                pkSetter.accept(t1, valueOfPrimaryKey.toUpperCase());
+                
+               
+
+            } else {
+                JmoordbUtil.warningMessage("No contiene el metodo para el atributo"+nameOfPrimaryKey);
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeyValueToUpper").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeyValueToUpper ", e);
         }
         return t1;
     }
