@@ -44,7 +44,7 @@ public class JmoordbControllerEnvironment {
         sessionMap.put("entity", entity);
         sessionMap.put("controller", controller);
         sessionMap.put("nameFieldOfPage", nameFieldOfPage);
-        sessionMap.put("rownameFieldOfPage", nameFieldOfRowPage);
+        sessionMap.put("nameFieldOfRowPage", nameFieldOfRowPage);
         sessionMap.put("searchbysecondarykey", searchbysecondarykey);
     }
 
