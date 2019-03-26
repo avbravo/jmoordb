@@ -5217,6 +5217,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
 
             String nameOfPrimaryKey = primaryKeyName(t1);
+//            nameOfPrimaryKey = util.letterToUpper(nameOfPrimaryKey);
             String valueOfPrimaryKey = primaryKeyValue(t1);
 
             PropertyDescriptor pkProperty;
@@ -5227,24 +5228,14 @@ public abstract class Repository<T> implements InterfaceRepository {
                     .orElseThrow(() -> new IllegalStateException("Not found: " + name));
             //Si tiene el userInfo
             pkProperty = property.apply(nameOfPrimaryKey);
-            Boolean found = false;
-            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
-                String name=m.getMethod().getName();
-                if (name.contains(nameOfPrimaryKey)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
+          
                 //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
                 final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                         lookup.unreflect(pkProperty.getWriteMethod()));
                 pkSetter.accept(t1, valueOfPrimaryKey.toUpperCase());
 
-            } else {
-                JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfPrimaryKey);
-            }
+
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "primaryKeyValueToUpper").log(Level.SEVERE, null, e);
@@ -5274,23 +5265,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                     .orElseThrow(() -> new IllegalStateException("Not found: " + name));
             //Si tiene el userInfo
             pkProperty = property.apply(nameOfPrimaryKey);
-            Boolean found = false;
-            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
-                if (m.getMethod().getName().contains(nameOfPrimaryKey)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
+      
+
                 //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
                 final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                         lookup.unreflect(pkProperty.getWriteMethod()));
                 pkSetter.accept(t1, valueOfPrimaryKey);
 
-            } else {
-                JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfPrimaryKey);
-            }
+          
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
@@ -5328,23 +5311,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                             if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.String")) {
                                 String valueOfSecondKey = (String) mentry.getValue();
                                 pkProperty = property.apply(nameOfSecondaryKey);
-                                Boolean found = false;
-                                for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
-                                    if (m.getMethod().getName().contains(nameOfSecondaryKey)) {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                                if (found) {
+                              
+                                
                                     //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
                                     final MethodHandles.Lookup lookup = MethodHandles.lookup();
                                     final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                                             lookup.unreflect(pkProperty.getWriteMethod()));
                                     pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
 
-                                } else {
-                                    JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfSecondaryKey);
-                                }
+                              
 
                             }
                         }
@@ -5381,23 +5356,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                     .orElseThrow(() -> new IllegalStateException("Not found: " + name));
             //Si tiene el userInfo
             pkProperty = property.apply(nameOfSecondaryKey);
-            Boolean found = false;
-            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
-                if (m.getMethod().getName().contains(nameOfSecondaryKey)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
+        
+//           
                 //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
                 final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                         lookup.unreflect(pkProperty.getWriteMethod()));
                 pkSetter.accept(t1, nameOfSecondaryKey);
 
-            } else {
-                JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfSecondaryKey);
-            }
+           
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
