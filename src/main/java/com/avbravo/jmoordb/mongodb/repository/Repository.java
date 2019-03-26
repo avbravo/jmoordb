@@ -13,7 +13,6 @@ import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.SecondaryKey;
-import com.avbravo.jmoordb.metafactory.JmoordbIntrospection;
 import com.avbravo.jmoordb.metafactory.JmoordbLambdaMetaFactory;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
@@ -63,6 +62,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -130,6 +130,17 @@ public abstract class Repository<T> implements InterfaceRepository {
         this.database = database;
     }
 
+    public List<SecondaryKey> getSecondaryKeyList() {
+        return secondaryKeyList;
+    }
+
+    public void setSecondaryKeyList(List<SecondaryKey> secondaryKeyList) {
+        this.secondaryKeyList = secondaryKeyList;
+    }
+
+    
+    
+    
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
     @Override
@@ -454,11 +465,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return value;
     }// </editor-fold>
-    
-  
-    
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="Boolean primaryKeyIsInteger(T t2)">
     /**
      * Devuelve el valor del campo primario
@@ -472,15 +479,14 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             Object t = entityClass.newInstance();
             for (PrimaryKey p : primaryKeyList) {
-           
-                    if (p.getType().equals("java.lang.String")) {
-                        value = false;
-                    } else {
-                        value = true;
-                    }
 
-                    //    doc.put(p.getName(), method.invoke(t2));
-           
+                if (p.getType().equals("java.lang.String")) {
+                    value = false;
+                } else {
+                    value = true;
+                }
+
+                //    doc.put(p.getName(), method.invoke(t2));
             }
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "primaryKeyIsInteger()").log(Level.SEVERE, null, e);
@@ -488,9 +494,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return value;
     }// </editor-fold>
-    
-    
-     // <editor-fold defaultstate="collapsed" desc="Integer primaryKeyValueInteger(T t2)">
+
+    // <editor-fold defaultstate="collapsed" desc="Integer primaryKeyValueInteger(T t2)">
     /**
      * Devuelve el valor del campo primario
      *
@@ -499,7 +504,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public Integer primaryKeyValueInteger(T t2) {
 
-       Integer value = 0;
+        Integer value = 0;
         try {
             Object t = entityClass.newInstance();
             for (PrimaryKey p : primaryKeyList) {
@@ -510,7 +515,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                     method = entityClass.getDeclaredMethod(name);
                     Object v = method.invoke(t2);
                     if (p.getType().equals("java.lang.String")) {
-                       exception = new Exception("La llave primaria no es de tipo Integer ");
+                        exception = new Exception("La llave primaria no es de tipo Integer ");
                     } else {
                         value = Integer.parseInt(String.valueOf(v));
                     }
@@ -589,7 +594,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             Object t = entityClass.newInstance();
             for (PrimaryKey p : primaryKeyList) {
-                name =  util.letterToLower(p.getName());
+                name = util.letterToLower(p.getName());
 
             }
         } catch (Exception e) {
@@ -611,7 +616,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             Object t = entityClass.newInstance();
             for (SecondaryKey p : secondaryKeyList) {
-                String name =  util.letterToLower(p.getName());
+                String name = util.letterToLower(p.getName());
                 Method method;
                 try {
 
@@ -624,7 +629,45 @@ public abstract class Repository<T> implements InterfaceRepository {
                         value = String.valueOf(v);
                     }
                     map.put(name, value);
-                    //    doc.put(p.getName(), method.invoke(t2));
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("secondaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKey ", e);
+        }
+        return map;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="HashMap<String, Object> secondaryKeyValueObject(T t2)">
+    /**
+     * devuelve la lista de SecondaryKey con las llaves secundarias,name, value
+     *
+     * @return
+     */
+    public HashMap<String, Object> secondaryKeyValueObject(T t2) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = util.letterToLower(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
+                    map.put(name, value);
 
                 } catch (Exception e) {
                     Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
@@ -5162,7 +5205,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         return t1;
     }
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="T addUserInfoForEditMethod(T t1, String username, String descripcion)">
+
+    // <editor-fold defaultstate="collapsed" desc="T primaryKeyValueToUpper(T t1)">
     /**
      * Devuelve el entity con la llave primaria en Mayuscula
      *
@@ -5171,10 +5215,10 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public T primaryKeyValueToUpper(T t1) {
         try {
-          
+
             String nameOfPrimaryKey = primaryKeyName(t1);
             String valueOfPrimaryKey = primaryKeyValue(t1);
-            
+
             PropertyDescriptor pkProperty;
             final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
             final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
@@ -5195,10 +5239,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
                 final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                         lookup.unreflect(pkProperty.getWriteMethod()));
-                pkSetter.accept(t1, valueOfPrimaryKey.toUpperCase());                               
+                pkSetter.accept(t1, valueOfPrimaryKey.toUpperCase());
 
             } else {
-                JmoordbUtil.warningMessage("No contiene el metodo para el atributo"+nameOfPrimaryKey);
+                JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfPrimaryKey);
             }
 
         } catch (Exception e) {
@@ -5207,8 +5251,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return t1;
     }
+
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="T addUserInfoForEditMethod(T t1, String username, String descripcion)">
+    // <editor-fold defaultstate="collapsed" desc="T primaryKeySetValue(T t1, String valueOfPrimaryKey)">
     /**
      * Devuelve el entity con la llave primaria en Mayuscula
      *
@@ -5217,10 +5262,9 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public T primaryKeySetValue(T t1, String valueOfPrimaryKey) {
         try {
-          
+
             String nameOfPrimaryKey = primaryKeyName(t1);
-           
-            
+
             PropertyDescriptor pkProperty;
             final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
             final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
@@ -5241,10 +5285,117 @@ public abstract class Repository<T> implements InterfaceRepository {
                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
                 final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                         lookup.unreflect(pkProperty.getWriteMethod()));
-                pkSetter.accept(t1, valueOfPrimaryKey);                               
+                pkSetter.accept(t1, valueOfPrimaryKey);
 
             } else {
-                JmoordbUtil.warningMessage("No contiene el metodo para el atributo"+nameOfPrimaryKey);
+                JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfPrimaryKey);
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeySetValue ", e);
+        }
+        return t1;
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToUpper(T t1)">
+    /**
+     * Devuelve el entity con las llaves secundarias en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T secondaryKeyValueToUpper(T t1) {
+        try {
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            for (SecondaryKey s : secondaryKeyList) {
+                if (s.getType().equals("java.lang.String")) {
+
+                    String nameOfSecondaryKey = s.getName();
+
+                    Set set = secondaryKeyValueObject(t1).entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry mentry = (Map.Entry) iterator.next();
+                        for (SecondaryKey s1 : secondaryKeyList) {
+                            if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.String")) {
+                                String valueOfSecondKey = (String) mentry.getValue();
+                                pkProperty = property.apply(nameOfSecondaryKey);
+                                Boolean found = false;
+                                for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
+                                    if (m.getMethod().getName().contains(nameOfSecondaryKey)) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (found) {
+                                    //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                                    final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                                    final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                                            lookup.unreflect(pkProperty.getWriteMethod()));
+                                    pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
+
+                                } else {
+                                    JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfSecondaryKey);
+                                }
+
+                            }
+                        }
+                       
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToUpper").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyValueToUpper ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T secondaryKeySetValue(T t1, String nameOfSecondaryKey, String valueOfSeconddaryKey)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T secondaryKeySetValue(T t1, String nameOfSecondaryKey, Object valueOfSeconddaryKey) {
+        try {
+
+            
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfSecondaryKey);
+            Boolean found = false;
+            for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
+                if (m.getMethod().getName().contains(nameOfSecondaryKey)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                        lookup.unreflect(pkProperty.getWriteMethod()));
+                pkSetter.accept(t1, nameOfSecondaryKey);
+
+            } else {
+                JmoordbUtil.warningMessage("No contiene el metodo para el atributo" + nameOfSecondaryKey);
             }
 
         } catch (Exception e) {
