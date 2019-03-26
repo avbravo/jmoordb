@@ -5229,7 +5229,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             pkProperty = property.apply(nameOfPrimaryKey);
             Boolean found = false;
             for (MethodDescriptor m : beanInfo.getMethodDescriptors()) {
-                if (m.getMethod().getName().contains(nameOfPrimaryKey)) {
+                String name=m.getMethod().getName();
+                if (name.contains(nameOfPrimaryKey)) {
                     found = true;
                     break;
                 }
