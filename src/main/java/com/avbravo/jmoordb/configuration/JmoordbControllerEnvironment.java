@@ -6,7 +6,7 @@
 package com.avbravo.jmoordb.configuration;
 
 import com.avbravo.jmoordb.mongodb.repository.Repository;
-import com.avbravo.jmoordb.services.RevisionHistoryServices;
+import java.util.HashMap;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -24,13 +24,17 @@ public class JmoordbControllerEnvironment {
     Object service;
     Object controller;
     Boolean searchbysecondarykey;
+    String pathReportDetail;
+    String pathReportAll;
+    HashMap parameters = new HashMap();
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     Map<String, Object> sessionMap = externalContext.getSessionMap();
 
     public JmoordbControllerEnvironment() {
     }
 
-    public JmoordbControllerEnvironment(Object controller, Repository repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, Boolean searchbysecondarykey) {
+    public JmoordbControllerEnvironment(Object controller, Repository repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, Boolean searchbysecondarykey,
+            String pathReportDetail, String pathReportAll, HashMap parameters) {
         this.repository = repository;
         this.nameFieldOfPage = nameFieldOfPage;
         this.nameFieldOfRowPage = nameFieldOfRowPage;
@@ -38,6 +42,10 @@ public class JmoordbControllerEnvironment {
         this.service = service;
         this.controller = controller;
         this.searchbysecondarykey = searchbysecondarykey;
+        this.pathReportDetail = pathReportDetail;
+        this.pathReportAll = pathReportAll;
+        this.parameters = parameters;
+
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         sessionMap.put("repository", repository);
         sessionMap.put("service", service);
@@ -46,6 +54,30 @@ public class JmoordbControllerEnvironment {
         sessionMap.put("nameFieldOfPage", nameFieldOfPage);
         sessionMap.put("nameFieldOfRowPage", nameFieldOfRowPage);
         sessionMap.put("searchbysecondarykey", searchbysecondarykey);
+        sessionMap.put("pathReportDetail", pathReportDetail);
+        sessionMap.put("pathReportAll", pathReportAll);
+        sessionMap.put("parameters", parameters);
+    }
+
+    public HashMap getParameters() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        HashMap parameters = (HashMap) sessionMap.get("parameters");
+        return parameters;
+    }
+
+    public String getPathReportAll() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        String pathReportAll = (String) sessionMap.get("pathReportAll");
+        return pathReportAll;
+    }
+
+    public String getPathReportDetail() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        String pathReportDetail = (String) sessionMap.get("pathReportDetail");
+        return pathReportDetail;
     }
 
     public Repository getRepository() {
@@ -100,17 +132,29 @@ public class JmoordbControllerEnvironment {
     }
 
     public String getNameFieldOfRowPage() {
-         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         String nameFieldOfRowPage = (String) sessionMap.get("nameFieldOfRowPage");
         return nameFieldOfRowPage;
     }
 
     public Boolean getSearchbysecondarykey() {
-          ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         Boolean searchbysecondarykey = (Boolean) sessionMap.get("searchbysecondarykey");
         return searchbysecondarykey;
+    }
+
+    public void setPathReportDetail(String pathReportDetail) {
+        this.pathReportDetail = pathReportDetail;
+    }
+
+    public void setPathReportAll(String pathReportAll) {
+        this.pathReportAll = pathReportAll;
+    }
+
+    public void setParameters(HashMap parameters) {
+        this.parameters = parameters;
     }
 
     public void setSearchbysecondarykey(Boolean searchbysecondarykey) {
@@ -174,7 +218,24 @@ public class JmoordbControllerEnvironment {
         Object service;
         Object controller;
         Boolean searchbysecondarykey;
+        String pathReportDetail;
+        String pathReportAll;
+        HashMap parameters = new HashMap();
 
+        
+          public Builder withPathReportDetail(String pathReportDetail) {
+            this.pathReportDetail = pathReportDetail;
+            return this;
+        }
+          public Builder withPathReportAll(String pathReportAll) {
+            this.pathReportAll = pathReportAll;
+            return this;
+        }
+          public Builder withparameters(HashMap parameters ) {
+            this.parameters = parameters;
+            return this;
+        }
+          
         public Builder withRepository(Repository repository) {
             this.repository = repository;
             return this;
@@ -211,7 +272,7 @@ public class JmoordbControllerEnvironment {
         }
 
         public JmoordbControllerEnvironment build() {
-            return new JmoordbControllerEnvironment(controller, repository, entity, service, nameFieldOfPage, nameFieldOfRowPage, searchbysecondarykey);
+            return new JmoordbControllerEnvironment(controller, repository, entity, service, nameFieldOfPage, nameFieldOfRowPage, searchbysecondarykey, pathReportDetail,  pathReportAll,  parameters);
         }
 
     }
