@@ -1,0 +1,138 @@
+1. Se elimina del LoginController
+   -->  public void put(String key, String value)
+   -->  public String get(String key)
+   -->  private HashMap<String, String> parameters = new HashMap<>();
+2. Eliminar LookupServices
+
+3. Controller eliminar
+   -->Eliminar
+      @Inject LookupServices
+      @Inject LoginController
+      @Inject   RevisionHistoryServices revisionHistoryServices;
+      @Inject RevisionHistoryStoreejbRepository revisionHistoryStoreejbRepository;
+
+
+ --> en el init()
+
+
+      
+   -->Ajustar
+      Entity entity = new Entity();
+   -->crear
+      EntitySearch entitySearch = new EntitySearch();
+
+
+-->init()
+@PostConstruct
+    public void init() {
+        try {
+
+            /*
+            configurar el ambiente del controller
+             */
+            HashMap parameters = new HashMap();
+            Usuario _userLogged = (Usuario) JmoordbContext.get("_userLogged");
+            parameters.put("P_EMPRESA", _userLogged.getEmpresa().getDescripcion());
+
+            JmoordbControllerEnvironment jmc = new JmoordbControllerEnvironment.Builder()
+                    .withController(this)
+                    .withRepository(rolRepository)
+                    .withEntity(rol)
+                    .withService(rolServices)
+                    .withNameFieldOfPage("page")
+                    .withNameFieldOfRowPage("rowPage")
+                    .withSearchbysecondarykey(false)
+                    .withPathReportDetail("/resources/reportes/rol/details.jasper")
+                    .withPathReportAll("/resources/reportes/rol/all.jasper")
+                    .withparameters(parameters)
+                    .build();
+
+            start();
+
+        } catch (Exception e) {
+            errorServices.errorMessage(nameOfClass(), nameOfMethod(), e.getLocalizedMessage());
+        }
+    }// </editor-fold>
+
+--> reset()
+ @Override
+    public void reset() {
+RequestContext.getCurrentInstance().reset(":form:content");
+        prepareNew();
+    }
+
+--> handleSelect(SelectEvent event)
+// <editor-fold defaultstate="collapsed" desc="handleSelect">
+    public void handleSelect(SelectEvent event) {
+        try {
+        } catch (Exception e) {
+            errorServices.errorMessage(nameOfClass(), nameOfMethod(), e.getLocalizedMessage());
+        }
+    }// </editor-fold>
+
+
+-->handleAutocompleteOfListXhtml
+// <editor-fold defaultstate="collapsed" desc="handleAutocompleteOfListXhtml(SelectEvent event)">
+    public void handleAutocompleteOfListXhtml(SelectEvent event) {
+        try {
+
+            aspectHandleAutocompleteOfListXhtml();
+        } catch (Exception e) {
+            errorServices.errorMessage(nameOfClass(), nameOfMethod(), e.getLocalizedMessage());
+
+        }
+    }// </editor-fold>
+
+-->move
+// <editor-fold defaultstate="collapsed" desc="move">
+    @Override
+    public void move(Integer page) {
+        try {
+            this.page = page;
+            rolDataModel = new RolDataModel(rolList);
+            Document doc;
+
+            switch ((String) JmoordbContext.get("searchrol")) {
+                case "_init":
+                case "_autocomplete":
+                    rolList = rolRepository.findPagination(page, rowPage);
+
+                    break;
+
+                case "idrol":
+                    if (JmoordbContext.get("_fieldsearchrol") != null) {
+                        doc = new Document("idrol", JmoordbContext.get("_fieldsearchrol").toString());
+                        rolList = rolRepository.findPagination(doc, page, rowPage, new Document("idrol", -1));
+                        rolSearch.setIdrol(JmoordbContext.get("_fieldsearchrol").toString());
+                    } else {
+                        rolList = rolRepository.findPagination(page, rowPage);
+
+                    }
+
+                    break;
+                case "activo":
+                    if (JmoordbContext.get("_fieldsearchrol") != null) {
+                        rolSearch.setActivo(JmoordbContext.get("_fieldsearchrol").toString());
+                        doc = new Document("activo", rolSearch.getActivo());
+                        rolList = rolRepository.findPagination(doc, page, rowPage, new Document("idrol", -1));
+
+                    } else {
+                        rolList = rolRepository.findPagination(page, rowPage);
+
+                    }
+                    break;
+
+                default:
+
+                    rolList = rolRepository.findPagination(page, rowPage);
+                    break;
+
+            }
+
+            rolDataModel = new RolDataModel(rolList);
+
+        } catch (Exception e) {
+            errorServices.errorMessage(nameOfClass(), nameOfMethod(), e.getLocalizedMessage());
+
+        }
+    }// </editor-fold>

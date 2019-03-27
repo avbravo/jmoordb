@@ -1,0 +1,117 @@
+
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition template="/layout/template.xhtml"
+
+                xmlns:jmoordbjsf="http://jmoordbjsf.com/taglib" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+
+                xmlns:extensions="http://xmlns.jcp.org/jsf/composite/extensions">
+    <ui:define name="content">
+        <!--<h:outputStylesheet library="bsf" name="css/thumbnails.css"/>-->
+
+        <style>
+            .thumbnail { max-width: 100%; }
+            img.thumbnail:hover, img.thumbnail:focus {
+                border: 1px solid;
+                border-color: #428BCA;
+            } 
+        </style>
+
+        <b:form id="form"  prependId="false"  rendered="#{loginController.loggedIn and applicationMenu.rol.list}" onkeypress="if (event.keyCode == 13) {
+                    return false;
+                }">
+
+            <b:growl id="msgs"/>
+            <b:panel title="#{msg['titlelist.rol']}" id="content"   look="primary" > 
+                <!--<b:panelGrid colSpans="2,10" size="xs">--> 
+                <b:panelGrid colSpans="1,4,1,6"  columns="4" size="xs"> 
+
+
+
+                    <p:outputLabel value="#{msg['field.idrol']}"/>
+                    <jmoordbjsf:autocomplete converter="#{rolConverter}"
+
+                                             completeMethod="#{rolController.rolServices.complete}"
+
+                                             labeltip1="#{msg['field.idrol']} #{p.idrol}"
+                                             labeltip2="#{msg['field.rol']} #{p.rol}"
+                                             listener="#{rolController.handleAutocompleteOfListXhtml}"
+                                             value="#{rolController.rolSearch}"
+                                             itemLabel="#{p.idrol}"
+                                             field="idrol"
+
+                                             update=":form:dataTable"/>
+
+                    <p:outputLabel value="#{msg['field.rol']}"/>
+                    <jmoordbjsf:autocomplete converter="#{rolConverter}"
+
+                                             completeMethod="#{rolController.rolServices.complete}"
+
+                                             labeltip1="#{msg['field.idrol']} #{p.idrol}"
+
+                                             labeltip2="#{msg['field.rol']} #{p.rol}"
+                                             listener="#{rolController.handleAutocompleteOfListXhtml}"
+                                             value="#{rolController.rolSearch}"
+                                             itemLabel=" #{p.rol}"
+                                             field="rol"
+
+                                             update=":form:dataTable"/>
+
+                </b:panelGrid>
+                 <b:row>
+                    <b:column medium-screen="4">
+                        <jmoordbjsf:search label="#{msg['field.activo']}"
+                                           value="#{rolController.rolSearch.activo}"
+                                           renderedList="#{applicationMenu.rol.list}"  
+                                           search="#{rolController.searchBy('activo',rolController.rolSearch.activo)}"
+                                           />
+                    </b:column>
+                 </b:row>
+            </b:panel>
+            <b:panel id="dataTable" look="primary">
+                <jmoordbjsf:paginator
+                    controller="#{rolController}"                        
+                    rowPage="#{rolController.rowPage}"                   
+                    page="#{rolController.page}"
+                    pages="#{rolController.pages}"
+                    skip="ajax:rolController.skip()" 
+                    url = "/pages/rol/new.xhtml"
+
+                    />
+
+                <b:dataTable value="#{rolController.rolDataModel}"
+                             var="item"
+                             id="dataTable2"
+                             paginated="false"
+                             onpage="console.log('page');">
+
+                    <b:dataTableColumn value="#{item.idrol}" label="#{msg['field.idrol']}"/>
+                    <b:dataTableColumn value="#{item.rol}" label="#{msg['field.rol']}" />
+                    <b:dataTableColumn value="#{item.activo}" label="#{msg['field.activo']}" />
+
+                    <b:dataTableColumn label="">
+
+                        <jmoordbjsf:column
+
+                            renderedEdit="#{applicationMenu.rol.edit}"
+                            renderedDelete="#{applicationMenu.rol.delete}"
+                            controller="#{rolController}"
+                            url="/pages/rol/view.xhtml"
+                            item="#{item}"
+                            
+                            />
+                    </b:dataTableColumn>
+
+                </b:dataTable>
+            </b:panel>
+
+
+        </b:form>
+
+        <jmoordbjsf:denegado renderedcondition="#{!loginController.loggedIn or !applicationMenu.rol.list}" />
+    </ui:define>
+</ui:composition>

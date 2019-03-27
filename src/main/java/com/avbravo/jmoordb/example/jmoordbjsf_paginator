@@ -1,0 +1,10 @@
+
+<jmoordbjsf:paginator
+                    controller="#{rolController}"                        
+                    rowPage="#{rolController.rowPage}"                   
+                    page="#{rolController.page}"
+                    pages="#{rolController.pages}"
+                    skip="ajax:rolController.skip()" 
+                    url = "/pages/rol/new.xhtml"
+
+                    />

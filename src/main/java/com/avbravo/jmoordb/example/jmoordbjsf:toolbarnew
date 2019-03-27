@@ -1,0 +1,10 @@
+ <jmoordbjsf:toolbarnew label="#{msg['field.idrol']}"
+                                       title="#{msg['titleview.rol']}"
+                                       value="#{rolController.rol.idrol}"
+                                       disabled="#{rolController.writable}"
+                                    
+                                       rendererList="#{applicationMenu.rol.list}"
+                                       controller="#{rolController}"
+                                     url  = "/pages/rol/list.xhtml"
+
+                                       />

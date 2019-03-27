@@ -579,3 +579,4 @@ public class RolController implements Serializable, IController {
         return rolRepository.findAll().size();
     }
 }
+

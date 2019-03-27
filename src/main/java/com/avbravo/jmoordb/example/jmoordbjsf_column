@@ -1,0 +1,9 @@
+<jmoordbjsf:column
+
+                            renderedEdit="#{applicationMenu.rol.edit}"
+                            renderedDelete="#{applicationMenu.rol.delete}"
+                            controller="#{rolController}"
+                            url="/pages/rol/view.xhtml"
+                            item="#{item}"
+                            
+                            />

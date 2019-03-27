@@ -1,0 +1,8 @@
+ <jmoordbjsf:toolbarview 
+                        renderedDelete="#{applicationMenu.rol.delete and rolController.writable }"
+                        renderedEdit="#{applicationMenu.rol.edit and rolController.writable}" 
+                        renderedList="#{applicationMenu.rol.list and rolController.writable}"                    
+                        controller="#{rolController}"
+                       
+                        url  = "/pages/rol/list.xhtml"
+                        />

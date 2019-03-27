@@ -1,0 +1,5 @@
+ <jmoordbjsf:search label="#{msg['field.activo']}"
+                                           value="#{rolController.rolSearch.activo}"
+                                           renderedList="#{applicationMenu.rol.list}"  
+                                           search="#{rolController.searchBy('activo',rolController.rolSearch.activo)}"
+                                           />
