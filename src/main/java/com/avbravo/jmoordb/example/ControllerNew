@@ -49,8 +49,7 @@ public class RolController implements Serializable, IController {
 // <editor-fold defaultstate="collapsed" desc="fields">  
     private static final long serialVersionUID = 1L;
 
-//    @Inject
-//private transient ExternalContext externalContext;
+
     private Boolean writable = false;
     //DataModel
     private RolDataModel rolDataModel;
@@ -75,15 +74,15 @@ public class RolController implements Serializable, IController {
     @Inject
     RolRepository rolRepository;
 
-    @Inject
-    RevisionHistoryStoreejbRepository revisionHistoryStoreejbRepository;
+    //@Inject
+    //RevisionHistoryStoreejbRepository revisionHistoryStoreejbRepository;
 
     //Services
-    @Inject
-    ErrorInfoStoreejbServices errorServices;
+  //  @Inject
+  //  ErrorInfoStoreejbServices errorServices;
 
-    @Inject
-    RevisionHistoryServices revisionHistoryServices;
+ //   @Inject
+  //  RevisionHistoryServices revisionHistoryServices;
 
 //    @Inject
 //   UserInfoServices userInfoServices;
