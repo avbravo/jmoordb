@@ -22,7 +22,7 @@ public class JmoordbConnection {
     String username;
     String password;
     String host;
-    String port;
+    Integer port;
     Boolean security;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     Map<String, Object> sessionMap = externalContext.getSessionMap();
@@ -35,7 +35,7 @@ public class JmoordbConnection {
             String username,
             String password,
             String host,
-            String port,
+            Integer port,
             Boolean security) {
 
         this.database = database;
@@ -85,10 +85,10 @@ public class JmoordbConnection {
         return host;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();
-        String port = (String) sessionMap.get("port");
+        Integer port = (Integer) sessionMap.get("port");
         return port;
     }
 
@@ -115,7 +115,7 @@ public class JmoordbConnection {
         this.host = host;
     }
 
-    public void setPort(String port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 
@@ -145,7 +145,7 @@ public class JmoordbConnection {
         String username;
         String password;
         String host;
-        String port;
+        Integer port;
         Boolean security;
 
         public Builder withUsername(String username) {
@@ -158,7 +158,7 @@ public class JmoordbConnection {
             return this;
         }
 
-        public Builder withPort(String port) {
+        public Builder withPort(Integer port) {
             this.port = port;
             return this;
         }
@@ -169,7 +169,7 @@ public class JmoordbConnection {
         }
 
         public Builder withDatabase(String database) {
-            this.port = database;
+            this.database = database;
             return this;
         }
 
