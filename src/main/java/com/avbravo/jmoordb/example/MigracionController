@@ -136,3 +136,11 @@ RequestContext.getCurrentInstance().reset(":form:content");
 
         }
     }// </editor-fold>
+
+
+
+----------------eliminar
+import com.avbravo.jmoordb.services.UserInfoServices;
+
+@Inject
+ UserInfoServices userInfoServices;
