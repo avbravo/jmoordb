@@ -225,21 +225,91 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param lazy
      */
     public Repository(Class<T> entityClass, Boolean... lazy) {
-        String database ="";
-        if(FacesContext.getCurrentInstance() !=null){
-             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        Map<String, Object> sessionMap = externalContext.getSessionMap();
-        database = (String) sessionMap.get("database");
-         if(database == null){
-             database="";
-         }
+        String database = "";
+        if (FacesContext.getCurrentInstance() != null) {
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            Map<String, Object> sessionMap = externalContext.getSessionMap();
+            database = (String) sessionMap.get("database");
+            if (database == null) {
+                database = "";
+            }
         }
-               
+
         this.entityClass = entityClass;
 
-       
-        String collection =this.entityClass.getName().toLowerCase().trim();
-collection =JmoordbUtil.nombreEntity(collection);
+        String collection = this.entityClass.getName().toLowerCase().trim();
+        collection = JmoordbUtil.nombreEntity(collection);
+        this.database = database;
+        this.collection = collection;
+        Boolean l = false;
+        if (lazy.length != 0) {
+            l = lazy[0];
+
+        }
+        this.lazy = l;
+
+        primaryKeyList = new ArrayList<>();
+        secondaryKeyList = new ArrayList<>();
+        embeddedBeansList = new ArrayList<>();
+        referencedBeansList = new ArrayList<>();
+        datePatternBeansList = new ArrayList<>();
+        fieldBeansList = new ArrayList<>();
+
+        /**
+         * lee las anotaciones @Id para obtener los PrimaryKey del documento
+         */
+        final Field[] fields = entityClass.getDeclaredFields();
+        Analizador analizador = new Analizador();
+        analizador.analizar(fields);
+        primaryKeyList = analizador.getPrimaryKeyList();
+        secondaryKeyList = analizador.getSecondaryKeyList();
+        embeddedBeansList = analizador.getEmbeddedBeansList();
+        referencedBeansList = analizador.getReferencedBeansList();
+        datePatternBeansList = analizador.getDatePatternBeansList();
+        fieldBeansList = analizador.getFieldBeansList();
+
+        //Llave primary
+        if (primaryKeyList.isEmpty()) {
+            exception = new Exception("No have primaryKey ");
+
+        } else {
+
+            if (primaryKeyList.size() > 1) {
+                exception = new Exception("the entity has more than one primary key @ID ");
+
+            }
+        }
+        if (fieldBeansList.isEmpty()) {
+            exception = new Exception("No have fields ");
+        }
+
+    }// </editor-fold>
+
+   /**
+    * .
+    * @param entityClass
+    * @param internalDatabaseHistoryAcronimo : se invocainternamente generalmente se le pasa el valor de _history
+    */
+    public Repository(Class<T> entityClass, String internalDatabaseHistoryAcronimo,Boolean... lazy) {
+        String database = "";
+        if(internalDatabaseHistoryAcronimo== null || internalDatabaseHistoryAcronimo.equals("")){
+            internalDatabaseHistoryAcronimo="_history";
+        }
+        if (FacesContext.getCurrentInstance() != null) {
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            Map<String, Object> sessionMap = externalContext.getSessionMap();
+            database = (String) sessionMap.get("database");
+            if (database == null) {
+                database = "";
+            }else{
+                database = database+internalDatabaseHistoryAcronimo;
+            }
+        }
+
+        this.entityClass = entityClass;
+
+        String collection = this.entityClass.getName().toLowerCase().trim();
+        collection = JmoordbUtil.nombreEntity(collection);
         this.database = database;
         this.collection = collection;
         Boolean l = false;
