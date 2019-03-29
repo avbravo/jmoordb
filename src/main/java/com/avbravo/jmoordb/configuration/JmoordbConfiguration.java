@@ -6,6 +6,7 @@
 package com.avbravo.jmoordb.configuration;
 
 import com.avbravo.jmoordb.mongodb.repository.Repository;
+import com.avbravo.jmoordb.mongodb.repository.Repository1;
 import com.avbravo.jmoordb.services.RevisionHistoryServices;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
@@ -18,7 +19,7 @@ import javax.faces.context.FacesContext;
 public class JmoordbConfiguration {
 
     RevisionHistoryServices revisionHistoryServices;
-    Repository repositoryRevisionHistory;
+    Repository1 repositoryRevisionHistory;
     Boolean revisionSave;
     String username;
     Boolean spanish;
@@ -30,7 +31,7 @@ public class JmoordbConfiguration {
 
     
     
-    public JmoordbConfiguration(RevisionHistoryServices revisionHistoryServices, Repository repositoryRevisionHistory, Boolean revisionSave, String username, Boolean spanish) {
+    public JmoordbConfiguration(RevisionHistoryServices revisionHistoryServices, Repository1 repositoryRevisionHistory, Boolean revisionSave, String username, Boolean spanish) {
         this.revisionHistoryServices = revisionHistoryServices;
         this.repositoryRevisionHistory = repositoryRevisionHistory;
         this.revisionSave = revisionSave;
@@ -84,7 +85,7 @@ public class JmoordbConfiguration {
     }
     
     
-      public void setRepositoryRevisionHistory(Repository repositoryRevisionHistory) {
+      public void setRepositoryRevisionHistory(Repository1 repositoryRevisionHistory) {
         this.repositoryRevisionHistory = repositoryRevisionHistory;
     }
 
@@ -123,7 +124,7 @@ public class JmoordbConfiguration {
     public static class Builder {
 
         RevisionHistoryServices revisionHistoryServices;
-        Repository repositoryRevisionHistory;
+        Repository1 repositoryRevisionHistory;
         Boolean revisionSave;
         String username;
         Boolean spanish;
@@ -133,7 +134,7 @@ public class JmoordbConfiguration {
             return this;
         }
 
-        public Builder withRepositoryRevisionHistory(Repository repositoryRevisionHistory) {
+        public Builder withRepositoryRevisionHistory(Repository1 repositoryRevisionHistory) {
             this.repositoryRevisionHistory = repositoryRevisionHistory;
             return this;
         }
