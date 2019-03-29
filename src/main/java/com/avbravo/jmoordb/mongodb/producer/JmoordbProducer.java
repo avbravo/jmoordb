@@ -6,11 +6,14 @@
 package com.avbravo.jmoordb.mongodb.producer;
 
 import com.avbravo.jmoordb.configuration.JmoordbContext;
+import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
@@ -20,6 +23,7 @@ import javax.inject.Singleton;
  * @author avbravo
  */
 @Singleton
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class JmoordbProducer {
 
     @Produces
@@ -50,6 +54,7 @@ public class JmoordbProducer {
             }
 
         } catch (Exception e) {
+            JmoordbUtil.errorMessage("coneecction() "+e.getLocalizedMessage());
         }
 
         return mongo;

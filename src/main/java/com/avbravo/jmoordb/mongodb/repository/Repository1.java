@@ -160,7 +160,7 @@ public abstract class Repository1<T> implements InterfaceRepository {
             Logger.getLogger(Repository1.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
-
+JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
         }
         return null;
     }// </editor-fold>
