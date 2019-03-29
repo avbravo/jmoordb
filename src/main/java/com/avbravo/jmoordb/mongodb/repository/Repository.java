@@ -13,6 +13,7 @@ import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.SecondaryKey;
+import com.avbravo.jmoordb.configuration.JmoordbContext;
 import com.avbravo.jmoordb.metafactory.JmoordbLambdaMetaFactory;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
@@ -74,6 +75,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -89,7 +91,8 @@ import org.bson.conversions.Bson;
 public abstract class Repository<T> implements InterfaceRepository {
 // <editor-fold defaultstate="collapsed" desc="field">
 //invoca el @JmoordbProducer que tiene un metodo MongoClient mongoClient
-     @Inject
+
+    @Inject
     MongoClient mongoClient;
 
     Integer contador = 0;
@@ -140,9 +143,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         this.secondaryKeyList = secondaryKeyList;
     }
 
-    
-    
-    
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
     @Override
@@ -160,7 +160,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
-JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
+            JmoordbUtil.errorMessage("getMongoDatabase() " + ex.getLocalizedMessage());
         }
         return null;
     }// </editor-fold>
@@ -169,6 +169,77 @@ JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
     public Repository(Class<T> entityClass, String database, String collection, Boolean... lazy) {
 
         this.entityClass = entityClass;
+
+        this.database = database;
+        this.collection = collection;
+        Boolean l = false;
+        if (lazy.length != 0) {
+            l = lazy[0];
+
+        }
+        this.lazy = l;
+
+        primaryKeyList = new ArrayList<>();
+        secondaryKeyList = new ArrayList<>();
+        embeddedBeansList = new ArrayList<>();
+        referencedBeansList = new ArrayList<>();
+        datePatternBeansList = new ArrayList<>();
+        fieldBeansList = new ArrayList<>();
+
+        /**
+         * lee las anotaciones @Id para obtener los PrimaryKey del documento
+         */
+        final Field[] fields = entityClass.getDeclaredFields();
+        Analizador analizador = new Analizador();
+        analizador.analizar(fields);
+        primaryKeyList = analizador.getPrimaryKeyList();
+        secondaryKeyList = analizador.getSecondaryKeyList();
+        embeddedBeansList = analizador.getEmbeddedBeansList();
+        referencedBeansList = analizador.getReferencedBeansList();
+        datePatternBeansList = analizador.getDatePatternBeansList();
+        fieldBeansList = analizador.getFieldBeansList();
+
+        //Llave primary
+        if (primaryKeyList.isEmpty()) {
+            exception = new Exception("No have primaryKey ");
+
+        } else {
+
+            if (primaryKeyList.size() > 1) {
+                exception = new Exception("the entity has more than one primary key @ID ");
+
+            }
+        }
+        if (fieldBeansList.isEmpty()) {
+            exception = new Exception("No have fields ");
+        }
+
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Repository(Class<T> entityClass, Boolean.. lazy)">
+
+    /**
+     * toma el nombre de la base de datos de la configuracion inicial toma el
+     * nombre de la coleccion en base al nombre del entity
+     *
+     * @param entityClass
+     * @param lazy
+     */
+    public Repository(Class<T> entityClass, Boolean... lazy) {
+        String database ="";
+        if(FacesContext.getCurrentInstance() !=null){
+             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        database = (String) sessionMap.get("database");
+         if(database == null){
+             database="";
+         }
+        }
+               
+        this.entityClass = entityClass;
+
+       
+        String collection =this.entityClass.getName().toLowerCase().trim();
+collection =JmoordbUtil.nombreEntity(collection);
         this.database = database;
         this.collection = collection;
         Boolean l = false;
@@ -5230,14 +5301,12 @@ JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
                     .orElseThrow(() -> new IllegalStateException("Not found: " + name));
             //Si tiene el userInfo
             pkProperty = property.apply(nameOfPrimaryKey);
-          
-                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
-                final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
-                        lookup.unreflect(pkProperty.getWriteMethod()));
-                pkSetter.accept(t1, valueOfPrimaryKey.toUpperCase());
 
-
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfPrimaryKey.toUpperCase());
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "primaryKeyValueToUpper").log(Level.SEVERE, null, e);
@@ -5267,15 +5336,12 @@ JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
                     .orElseThrow(() -> new IllegalStateException("Not found: " + name));
             //Si tiene el userInfo
             pkProperty = property.apply(nameOfPrimaryKey);
-      
 
-                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
-                final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
-                        lookup.unreflect(pkProperty.getWriteMethod()));
-                pkSetter.accept(t1, valueOfPrimaryKey);
-
-          
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfPrimaryKey);
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
@@ -5313,19 +5379,16 @@ JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
                             if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.String")) {
                                 String valueOfSecondKey = (String) mentry.getValue();
                                 pkProperty = property.apply(nameOfSecondaryKey);
-                              
-                                
-                                    //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
-                                    final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                                    final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
-                                            lookup.unreflect(pkProperty.getWriteMethod()));
-                                    pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
 
-                              
+                                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                                        lookup.unreflect(pkProperty.getWriteMethod()));
+                                pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
 
                             }
                         }
-                       
+
                     }
 
                 }
@@ -5348,8 +5411,6 @@ JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
     public T secondaryKeySetValue(T t1, String nameOfSecondaryKey, Object valueOfSeconddaryKey) {
         try {
 
-            
-
             PropertyDescriptor pkProperty;
             final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
             final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
@@ -5358,15 +5419,13 @@ JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
                     .orElseThrow(() -> new IllegalStateException("Not found: " + name));
             //Si tiene el userInfo
             pkProperty = property.apply(nameOfSecondaryKey);
-        
-//           
-                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
-                final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
-                        lookup.unreflect(pkProperty.getWriteMethod()));
-                pkSetter.accept(t1, nameOfSecondaryKey);
 
-           
+//           
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, nameOfSecondaryKey);
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
