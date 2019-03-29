@@ -1221,7 +1221,7 @@ public interface IController1<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1242,10 +1242,11 @@ public interface IController1<T> {
             // 2.Invocar al metodo getPage() del Controller
             JmoordbContext.put("page" + nameOfEntity, page.toString());
             JmoordbContext.put(nameOfEntity, "new");
+          Object entitynew = JmoordbIntrospection.newEntity(entity);
 
 //           
-            JmoordbIntrospection.callSet(controller, nameOfEntity, entity);
-            JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entity);
+            JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
+            JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
             JmoordbIntrospection.callSet(controller, "writable", false);
 
             if (beforePrepareNew()) {
