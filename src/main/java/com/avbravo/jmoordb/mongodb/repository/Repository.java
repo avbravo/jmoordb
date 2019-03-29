@@ -75,6 +75,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -87,8 +88,9 @@ import org.bson.conversions.Bson;
  */
 public abstract class Repository<T> implements InterfaceRepository {
 // <editor-fold defaultstate="collapsed" desc="field">
-
-    protected abstract MongoClient getMongoClient();
+//invoca el @JmoordbProducer que tiene un metodo MongoClient mongoClient
+     @Inject
+    MongoClient mongoClient;
 
     Integer contador = 0;
     private JavaToDocument javaToDocument = new JavaToDocument();
@@ -147,7 +149,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public MongoDatabase getMongoDatabase() {
         try {
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             if (db == null) {
                 //Test.msg("+++AbstractFacade.getMonogDatabase() == null");
             } else {
@@ -158,7 +160,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
-
+JmoordbUtil.errorMessage("getMongoDatabase() "+ex.getLocalizedMessage());
         }
         return null;
     }// </editor-fold>
@@ -902,7 +904,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
 
             //   Object t = entityClass.newInstance();
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
 
             FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
 
@@ -945,7 +947,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Optional<T> find(Document document) {
         try {
             //   Object t = entityClass.newInstance();
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(document);
             tlocal = (T) iterableSimple(iterable);
             return Optional.of(tlocal);
@@ -970,7 +972,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Optional<T> find(Bson filter) {
         try {
             //   Object t = entityClass.newInstance();
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(filter);
             tlocal = (T) iterableSimple(iterable);
             return Optional.of(tlocal);
@@ -989,7 +991,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public T search(String key, Object value) {
         try {
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
 
             if (db == null) {
                 return null;
@@ -1030,7 +1032,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public T search(String key, Integer value) {
         try {
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
 
             if (db == null) {
                 return null;
@@ -1071,7 +1073,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public T search(String key, String value) {
         try {
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
 
             if (db == null) {
                 return null;
@@ -1119,7 +1121,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Optional<T> findFirst(Document... doc) {
         try {
             Document document = new Document();
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             if (doc.length != 0) {
                 document = doc[0];
 
@@ -1162,7 +1164,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             if (sql.toLowerCase().indexOf("order by") != -1) {
                 sortQuery = mongoDBQueryHolder.getSort();
             }
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
 
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).limit(1);
             tlocal = (T) iterableSimple(iterable);
@@ -1182,7 +1184,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     private T findInternal(Document document) {
         try {
             //   Object t = entityClass.newInstance();
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(document);
             tlocal = (T) iterableSimple(iterable);
             return tlocal;
@@ -1392,7 +1394,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Document documento = new Document();
             if (doc.length != 0) {
                 documento = doc[0];
-                MongoDatabase db = getMongoClient().getDatabase(database);
+                MongoDatabase db = mongoClient.getDatabase(database);
                 FindIterable<Document> iterable = db.getCollection(collection).find(documento);
 
                 iterable.forEach(new Block<Document>() {
@@ -1409,7 +1411,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             } else {
                 // no tiene parametros
-                contador = (int) getMongoClient().getDatabase(database).getCollection(collection).count();
+                contador = (int) mongoClient.getDatabase(database).getCollection(collection).count();
 
             }
 
@@ -1430,7 +1432,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             contador = 0;
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(filter);
 
             iterable.forEach(new Block<Document>() {
@@ -1467,7 +1469,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find().sort(sortQuery);
             list = iterableList(iterable);
 
@@ -1496,7 +1498,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).
                     find().skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage).sort(sortQuery);
@@ -1527,7 +1529,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).
                     find(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage).sort(sortQuery);
@@ -1565,7 +1567,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = mongoDBQueryHolder.getSort();
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).
                     find(doc).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage).sort(sortQuery);
@@ -1606,7 +1608,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             Object t = entityClass.newInstance();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             Document iterable = db.getCollection(collection).findOneAndUpdate(doc, inc, findOneAndUpdateOptions);
 
             try {
@@ -1653,7 +1655,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             Document iterable = db.getCollection(collection).findOneAndUpdate(doc, inc, findOneAndUpdateOptions);
 
             try {
@@ -1692,7 +1694,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             Document iterable = db.getCollection(collection).findOneAndUpdate(doc, inc, findOneAndUpdateOptions);
 
             try {
@@ -1727,7 +1729,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
             list = iterableList(iterable);
 
@@ -1755,7 +1757,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(builder).sort(sortQuery);
             list = iterableList(iterable);
 
@@ -1789,7 +1791,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = mongoDBQueryHolder.getSort();
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
             list = iterableList(iterable);
 
@@ -1813,7 +1815,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
 
             list = processAggregateIterable(iterable);
@@ -1839,7 +1841,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
             list = processAggregateIterableJmoordbResult(iterable);
 
@@ -1864,7 +1866,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(builder);
             list = processAggregateIterableJmoordbResult(iterable);
 
@@ -1886,7 +1888,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             list = new ArrayList<>();
             Document doc = new Document(key, value);
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
             list = iterableList(iterable);
         } catch (Exception e) {
@@ -1913,7 +1915,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
 
             FindIterable<Document> iterable = db.getCollection(collection).find(filter).sort(sortQuery);
             list = iterableList(iterable);
@@ -1941,7 +1943,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
 
             FindIterable<Document> iterable = db.getCollection(collection).find(filter).sort(sortQuery);
             list = iterableList(iterable);
@@ -2081,7 +2083,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = getIterable();
             switch (predicate) {
                 case "ascending":
@@ -2109,7 +2111,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = getIterable();
             switch (predicate) {
                 case "ascending":
@@ -2151,7 +2153,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = getIterable();
             switch (predicate) {
                 case "eq":
@@ -2193,7 +2195,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             list = new ArrayList<>();
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = getIterable();
             switch (predicate) {
                 case "eq":
@@ -3753,7 +3755,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
             Object t = entityClass.newInstance();
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection)
                     .find(new Document("$text", new Document("$search", value)
                             .append("$caseSensitive", caseSensitive)
@@ -3792,7 +3794,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
             Object t = entityClass.newInstance();
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection)
                     .find(new Document("$text", new Document("$search", value)
                             .append("$caseSensitive", caseSensitive)
@@ -3829,7 +3831,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).sort(sortQuery);
@@ -3871,7 +3873,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, valueSecond)).sort(sortQuery);
@@ -3913,7 +3915,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 switch (typeOfObject(valueSecond)) {
@@ -3991,7 +3993,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, valueSecond).append(keyThree, valueTree)).sort(sortQuery);
@@ -4034,7 +4036,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 //            Object t = entityClass.newInstance();
 //            Pattern regex = Pattern.compile(value);
 //
-//            MongoDatabase db = getMongoClient().getDatabase(database);
+//            MongoDatabase db = mongoClient.getDatabase(database);
 //            FindIterable<Document> iterable;
 //            if (!caseSensitive) {
 //                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).sort(sortQuery);
@@ -4075,7 +4077,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).sort(sortQuery);
@@ -4115,7 +4117,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond)).sort(sortQuery);
@@ -4156,7 +4158,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond).append(keyThree, valueThree)).sort(sortQuery);
@@ -4197,7 +4199,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
@@ -4241,7 +4243,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, valueSecond)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
@@ -4285,7 +4287,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value)).append(keySecond, valueSecond).append(keyThree, valueThree)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
@@ -4329,7 +4331,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 //            Object t = entityClass.newInstance();
 //            Pattern regex = Pattern.compile(value);
 //
-//            MongoDatabase db = getMongoClient().getDatabase(database);
+//            MongoDatabase db = mongoClient.getDatabase(database);
 //            FindIterable<Document> iterable;
 //            if (!caseSensitive) {
 //                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
@@ -4373,7 +4375,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value))).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
@@ -4416,7 +4418,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
@@ -4459,7 +4461,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Object t = entityClass.newInstance();
             Pattern regex = Pattern.compile(value);
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable;
             if (!caseSensitive) {
                 iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", value)).append(keySecond, valueSecond).append(keyThree, valueThree)).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
@@ -4573,7 +4575,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(docQuery);
 
             list = processUnknownIterableJmoordbResult(iterable);
@@ -4602,7 +4604,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
 
             list = processUnknownIterableJmoordbResult(iterable);
@@ -4631,7 +4633,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(filter).sort(sortQuery);
 
             list = processUnknownIterableJmoordbResult(iterable);
@@ -4661,7 +4663,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).
                     find(sortQuery).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage);
@@ -4692,7 +4694,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).
                     find(doc).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage).sort(sortQuery);
@@ -4757,7 +4759,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Boolean unknownSave(String database, String collection, Document doc) {
         try {
 
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             db.getCollection(collection).insertOne(doc);
             return true;
 
@@ -4774,7 +4776,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         Integer documentosModificados = 0;
 
         try {
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             UpdateResult updateResult = db.getCollection(collection).replaceOne(builder, docUpdate);
             return (int) updateResult.getModifiedCount();
 
@@ -4794,7 +4796,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public Boolean unknownDelete(String database, String collection, Document doc) {
         try {
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteOne(doc);
             if (dr.getDeletedCount() >= 0) {
                 return true;
@@ -4816,7 +4818,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public Boolean unknownDelete(String database, String collection, Bson builder) {
         try {
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteOne(builder);
             if (dr.getDeletedCount() >= 0) {
                 return true;
@@ -4839,7 +4841,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Boolean unknownDeleteAll(String database, String collection) {
         Integer cont = 0;
         try {
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteMany(new Document());
             if (dr.getDeletedCount() >= 0) {
                 return true;
@@ -4862,7 +4864,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Boolean unknownDeleteMany(String database, String collection, Document doc) {
         Integer cont = 0;
         try {
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteMany(doc);
             if (dr.getDeletedCount() >= 0) {
                 return true;
@@ -4885,7 +4887,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Boolean unknownDeleteMany(String database, String collection, Bson builder) {
         Integer cont = 0;
         try {
-            MongoDatabase db = getMongoClient().getDatabase(database);
+            MongoDatabase db = mongoClient.getDatabase(database);
             DeleteResult dr = db.getCollection(collection).deleteMany(builder);
             if (dr.getDeletedCount() >= 0) {
                 return true;

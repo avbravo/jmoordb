@@ -1,0 +1,36 @@
+
+public class MongoProducer {
+      private MongoClient mongoClient = null;
+     @Produces
+    private MongoClient createConnection() {
+         mongoClient = new MongoClient();
+        return mongoClient;
+    }
+    private void closeConnection(@Disposes Connection conn) {
+        mongoClient.close();
+    }
+}
+
+
+----------------------------------
+
+@Named(value = "mongoServices")
+@ApplicationScoped
+public class MyServices {
+
+    /**
+     * Creates a new instance of MongoServices
+     */
+    public MyServices() {
+    }
+    
+    @Inject
+    private MongoClient mongoClient;
+
+    public void ping() {
+       MongoDatabase database = mongoClient.getDatabase("my");
+       database.createCollection("my_collection");
+      
+    }
+    
+}

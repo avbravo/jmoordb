@@ -6,7 +6,7 @@
 package com.avbravo.jmoordb.configuration;
 
 import com.avbravo.jmoordb.mongodb.repository.Repository;
-import com.avbravo.jmoordb.mongodb.repository.Repository1;
+import com.avbravo.jmoordb.mongodb.repository.Repository;
 import java.util.HashMap;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
  */
 public class JmoordbControllerEnvironment {
 
-    Repository1 repository;
+    Repository repository;
     String nameFieldOfPage;
     String nameFieldOfRowPage;
     Object entity;
@@ -34,7 +34,7 @@ public class JmoordbControllerEnvironment {
     public JmoordbControllerEnvironment() {
     }
 
-    public JmoordbControllerEnvironment(Object controller, Repository1 repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, Boolean searchbysecondarykey,
+    public JmoordbControllerEnvironment(Object controller, Repository repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, Boolean searchbysecondarykey,
             String pathReportDetail, String pathReportAll, HashMap parameters) {
         this.repository = repository;
         this.nameFieldOfPage = nameFieldOfPage;
@@ -190,7 +190,7 @@ public class JmoordbControllerEnvironment {
         this.nameFieldOfPage = nameFieldOfPage;
     }
 
-    public void setRepository(Repository1 repository) {
+    public void setRepository(Repository repository) {
         this.repository = repository;
     }
 
@@ -212,7 +212,7 @@ public class JmoordbControllerEnvironment {
 
     public static class Builder {
 
-        Repository1 repository;
+        Repository repository;
         String nameFieldOfPage;
         String nameFieldOfRowPage;
         Object entity;
@@ -237,7 +237,7 @@ public class JmoordbControllerEnvironment {
             return this;
         }
           
-        public Builder withRepository(Repository1 repository) {
+        public Builder withRepository(Repository repository) {
             this.repository = repository;
             return this;
         }
