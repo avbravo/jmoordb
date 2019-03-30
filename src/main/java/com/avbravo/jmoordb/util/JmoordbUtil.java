@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -246,5 +247,18 @@ public class JmoordbUtil {
      */
     public static Boolean isNegativo(Integer numero) {
         return numero == null || numero.equals("") || numero <0;
+    }// </editor-fold>
+    
+     // <editor-fold defaultstate="collapsed" desc="getUUID"> 
+    /**
+     * genera id
+     *
+     * @return returna un randomUUID automatico
+     */
+    public static String getUUID() {
+
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+
     }// </editor-fold>
 }
