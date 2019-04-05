@@ -28,6 +28,7 @@ import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import org.bson.Document;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -1780,7 +1781,9 @@ public interface IController<T> {
      * lo invoca para imprimir
      * @return 
      */
-    default public String aspectHandleAutocompleteOfListXhtml() {
+    
+   default public String  handleAutocompleteOfListXhtml(SelectEvent event){
+//    default public String aspectHandleAutocompleteOfListXhtml() {
         Boolean edited = false;
         try {
             JmoordbConfiguration jmc = new JmoordbConfiguration();
