@@ -37,7 +37,7 @@ import org.primefaces.event.SelectEvent;
  */
 public interface IController<T> {
 
-    public String preRenderView(String action);
+
 
     default public String refresh() {
         return "";
@@ -1267,7 +1267,6 @@ public interface IController<T> {
     } // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="reset">
-    //  public void reset() ;
     default public void reset() {
         PrimeFaces.current().resetInputs(":form:content");
         prepareNew();

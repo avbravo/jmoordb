@@ -3,9 +3,10 @@
 * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.avbravo.jmoordb.mongodb.history;
+package com.avbravo.jmoordb.mongodb.history.services;
 
 
+import com.avbravo.jmoordb.mongodb.history.repository.AutoincrementablebRepository;
 import com.avbravo.jmoordb.pojos.Autoincrementable;
 import com.avbravo.jmoordb.util.JmoordbUtil;
 import java.util.Optional;

@@ -5,7 +5,7 @@
  */
 package com.avbravo.jmoordb.services;
 
-import com.avbravo.jmoordb.pojos.AccessInfo;
+import com.avbravo.jmoordb.mongodb.history.entity.AccessInfo;
 import com.avbravo.jmoordb.pojos.UserInfo;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

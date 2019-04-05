@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.avbravo.jmoordb.pojos;
+package com.avbravo.jmoordb.mongodb.history.entity;
 
 import com.avbravo.jmoordb.anotations.Embedded;
 import com.avbravo.jmoordb.anotations.Id;
+import com.avbravo.jmoordb.pojos.UserInfo;
 
 /**
  *
