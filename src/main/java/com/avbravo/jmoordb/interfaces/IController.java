@@ -28,6 +28,7 @@ import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import org.bson.Document;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -41,8 +42,6 @@ public interface IController<T> {
     default public String refresh() {
         return "";
     }
-
-
 
     default public Integer sizeOfPage() {
         Integer size = 0;
@@ -89,7 +88,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -130,7 +129,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -237,7 +236,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -333,7 +332,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -528,7 +527,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -638,7 +637,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -778,7 +777,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -906,7 +905,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1035,7 +1034,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1130,7 +1129,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1243,7 +1242,7 @@ public interface IController<T> {
             // 2.Invocar al metodo getPage() del Controller
             JmoordbContext.put("page" + nameOfEntity, page.toString());
             JmoordbContext.put(nameOfEntity, "new");
-          Object entitynew = JmoordbIntrospection.newEntity(entity);
+            Object entitynew = JmoordbIntrospection.newEntity(entity);
 
 //           
             JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
@@ -1268,8 +1267,11 @@ public interface IController<T> {
     } // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="reset">
-     public void reset() ;
-       
+    //  public void reset() ;
+    default public void reset() {
+        PrimeFaces.current().resetInputs(":form:content");
+        prepareNew();
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="String clear() ">
@@ -1311,7 +1313,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1383,7 +1385,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1555,7 +1557,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1599,7 +1601,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1641,7 +1643,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
-              String pathReportDetail = jme.getPathReportDetail();
+            String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
@@ -1663,7 +1665,8 @@ public interface IController<T> {
     /**
      * <jmoodbjsf:toolbarview>
      * lo invoca para imprimir
-     * @return 
+     *
+     * @return
      */
     default public String print() {
         Boolean edited = false;
@@ -1707,8 +1710,8 @@ public interface IController<T> {
 
             List<Object> list = new ArrayList<Object>();
             list.add(entity);
-          
-             JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
+
+            JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
         } catch (Exception ex) {
 
             JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
@@ -1718,10 +1721,12 @@ public interface IController<T> {
 
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="printAll()">
+
     /**
      * <jmoodbjsf:toolbarview>
      * lo invoca para imprimir
-     * @return 
+     *
+     * @return
      */
     default public String printAll() {
         Boolean edited = false;
@@ -1763,10 +1768,10 @@ public interface IController<T> {
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             //------------------------------------
 //Crea una ordenacion en base al nombre de la llave primaria
-            Document doc = new Document(repository.primaryKeyName(entity),1);
+            Document doc = new Document(repository.primaryKeyName(entity), 1);
             List<Object> list = repository.findAll(doc);
-                     
-             JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
+
+            JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
         } catch (Exception ex) {
 
             JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
@@ -1776,13 +1781,15 @@ public interface IController<T> {
 
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="String aspectHandleAutocompleteOfListXhtml()">
+
     /**
      * <jmoodbjsf:toolbarview>
      * lo invoca para imprimir
-     * @return 
+     *
+     * @return
      */
-    
-   default public String  handleAutocompleteOfListXhtml(SelectEvent event){
+
+    default public String handleAutocompleteOfListXhtml(SelectEvent event) {
 //    default public String aspectHandleAutocompleteOfListXhtml() {
         Boolean edited = false;
         try {
@@ -1820,23 +1827,21 @@ public interface IController<T> {
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
-            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);            
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             //------------------------------------
-/**
- * invoca el valor del entitySearch
- * Crea una lista del entity vacia
- * asigna el entitySearch
- * invoca el metodo setEntityList para asignarlo
- * invoca al ser pasandole la llave primaria como parametro y el valor de la misma
- */
-            Object entitySearch = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity+"Search");            
+            /**
+             * invoca el valor del entitySearch Crea una lista del entity vacia
+             * asigna el entitySearch invoca el metodo setEntityList para
+             * asignarlo invoca al ser pasandole la llave primaria como
+             * parametro y el valor de la misma
+             */
+            Object entitySearch = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity + "Search");
             List<Object> list = new ArrayList<>();
             list.add(entitySearch);
-            JmoordbIntrospection.callSet(controller, nameOfEntity+"List", list);
+            JmoordbIntrospection.callSet(controller, nameOfEntity + "List", list);
             //
-             searchBy(repository.primaryKeyName(entitySearch), repository.primaryKeyValue(entitySearch));
-                     
-            
+            searchBy(repository.primaryKeyName(entitySearch), repository.primaryKeyValue(entitySearch));
+
         } catch (Exception ex) {
 
             JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
