@@ -25,6 +25,7 @@ public class JmoordbControllerEnvironment {
     Object service;
     Object controller;
     Boolean searchbysecondarykey;
+    Boolean searchLowerCase =false;
     String pathReportDetail;
     String pathReportAll;
     HashMap parameters = new HashMap();
@@ -34,7 +35,8 @@ public class JmoordbControllerEnvironment {
     public JmoordbControllerEnvironment() {
     }
 
-    public JmoordbControllerEnvironment(Object controller, Repository repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, Boolean searchbysecondarykey,
+    public JmoordbControllerEnvironment(Object controller, Repository repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, 
+            Boolean searchbysecondarykey,Boolean searchLowerCase,
             String pathReportDetail, String pathReportAll, HashMap parameters) {
         this.repository = repository;
         this.nameFieldOfPage = nameFieldOfPage;
@@ -43,6 +45,7 @@ public class JmoordbControllerEnvironment {
         this.service = service;
         this.controller = controller;
         this.searchbysecondarykey = searchbysecondarykey;
+           this.searchLowerCase =searchLowerCase;
         this.pathReportDetail = pathReportDetail;
         this.pathReportAll = pathReportAll;
         this.parameters = parameters;
@@ -55,6 +58,7 @@ public class JmoordbControllerEnvironment {
         sessionMap.put("nameFieldOfPage", nameFieldOfPage);
         sessionMap.put("nameFieldOfRowPage", nameFieldOfRowPage);
         sessionMap.put("searchbysecondarykey", searchbysecondarykey);
+        sessionMap.put("searchLowerCase", searchLowerCase);
         sessionMap.put("pathReportDetail", pathReportDetail);
         sessionMap.put("pathReportAll", pathReportAll);
         sessionMap.put("parameters", parameters);
@@ -145,7 +149,20 @@ public class JmoordbControllerEnvironment {
         Boolean searchbysecondarykey = (Boolean) sessionMap.get("searchbysecondarykey");
         return searchbysecondarykey;
     }
+    public Boolean getSearchLowerCase() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        Boolean searchLowerCase = (Boolean) sessionMap.get("searchLowerCase");
+        return searchLowerCase;
+    }
 
+    public void setSearchLowerCase(Boolean searchLowerCase) {
+        this.searchLowerCase = searchLowerCase;
+    }
+
+    
+    
+    
     public void setPathReportDetail(String pathReportDetail) {
         this.pathReportDetail = pathReportDetail;
     }
@@ -219,6 +236,7 @@ public class JmoordbControllerEnvironment {
         Object service;
         Object controller;
         Boolean searchbysecondarykey;
+       Boolean searchLowerCase =false;
         String pathReportDetail;
         String pathReportAll;
         HashMap parameters = new HashMap();
@@ -271,9 +289,13 @@ public class JmoordbControllerEnvironment {
             this.searchbysecondarykey = searchbysecondarykey;
             return this;
         }
+        public Builder withSearchLowerCase(Boolean searchLowerCase) {
+            this.searchLowerCase = searchLowerCase;
+            return this;
+        }
 
         public JmoordbControllerEnvironment build() {
-            return new JmoordbControllerEnvironment(controller, repository, entity, service, nameFieldOfPage, nameFieldOfRowPage, searchbysecondarykey, pathReportDetail,  pathReportAll,  parameters);
+            return new JmoordbControllerEnvironment(controller, repository, entity, service, nameFieldOfPage, nameFieldOfRowPage, searchbysecondarykey,searchLowerCase, pathReportDetail,  pathReportAll,  parameters);
         }
 
     }

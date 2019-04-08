@@ -59,6 +59,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -90,6 +91,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -131,6 +133,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -163,6 +166,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -239,6 +243,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -335,6 +340,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -530,6 +536,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -642,6 +649,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -782,6 +790,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -910,6 +919,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1039,6 +1049,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1134,6 +1145,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1226,6 +1238,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1317,6 +1330,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1389,6 +1403,8 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1431,7 +1447,12 @@ public interface IController<T> {
                 }
 
                 //Convierte a mayusculas la llave primaria y la devuelve en el entity
-                entity = repository.secondaryKeyValueToUpper(entity);
+                   if(!searchLowerCase){
+                       entity = repository.secondaryKeyValueToUpper(entity);
+                   }else{
+                       entity = repository.secondaryKeyValueToLower(entity);
+                   }
+                
 
                 Optional<Object> optional = repository.findBySecondaryKey(entity);
 
@@ -1478,7 +1499,12 @@ public interface IController<T> {
                 }
 
                 //Convierte a mayusculas la llave primaria y la devuelve en el entity
-                entity = repository.primaryKeyValueToUpper(entity);
+                if(!searchLowerCase){
+                       entity = repository.primaryKeyValueToUpper(entity);
+                }else{
+                       entity = repository.primaryKeyValueToLower(entity);
+                }
+             
 
                 Optional<Object> optional = repository.findById(entity);
 
@@ -1561,6 +1587,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1605,6 +1632,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1647,6 +1675,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1705,6 +1734,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1765,6 +1795,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1827,6 +1858,7 @@ public interface IController<T> {
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
