@@ -253,6 +253,11 @@ public interface IController<T> {
             //Los pasa el usuaario
 //            String primarykeyvalue = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("primarykeyvalue");
             if (searchbysecondary) {
+                if(!searchLowerCase){
+                       entity = repository.secondaryKeyValueToUpper(entity);
+                   }else{
+                       entity = repository.secondaryKeyValueToLower(entity);
+                   }
                 //Busca por llave secundaria
                 Optional<Object> optional = repository.findBySecondaryKey(entity);
                 if (optional.isPresent()) {
@@ -261,6 +266,12 @@ public interface IController<T> {
                 }
 
             } else {
+                //convierte la llave primaria a minuscula
+             if(!searchLowerCase){
+                       entity = repository.primaryKeyValueToUpper(entity);
+                }else{
+                       entity = repository.primaryKeyValueToLower(entity);
+                }
                 //Busca por llave primaria
                 Optional<Object> optional = repository.findById(entity);
                 if (optional.isPresent()) {
