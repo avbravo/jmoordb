@@ -43,6 +43,8 @@ public interface IController<T> {
         return "";
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Integer sizeOfPage()">
+    
     default public Integer sizeOfPage() {
         Integer size = 0;
         try {
@@ -73,7 +75,7 @@ public interface IController<T> {
         return size;
 
     }
-
+// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="last">
     default public String last() {
         try {
@@ -181,6 +183,7 @@ public interface IController<T> {
     }// </editor-fold>
 
     public void move(Integer page);
+    
 
 // <editor-fold defaultstate="collapsed" desc="nameOfClassAndMethod())">
     public default String nameOfClassAndMethod() {
@@ -539,6 +542,8 @@ public interface IController<T> {
             if (!beforeDelete()) {
                 return "";
             }
+            
+          
             String nameOfPrimaryKey = repository.primaryKeyName(entity);
 
             if (repository.primaryKeyIsInteger(entity)) {

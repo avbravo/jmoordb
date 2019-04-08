@@ -5386,6 +5386,43 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T primaryKeyValueToLower(T t1)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T primaryKeyValueToLower(T t1) {
+        try {
+
+            String nameOfPrimaryKey = primaryKeyName(t1);
+//            nameOfPrimaryKey = util.letterToUpper(nameOfPrimaryKey);
+            String valueOfPrimaryKey = primaryKeyValue(t1);
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfPrimaryKey);
+
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfPrimaryKey.toLowerCase());
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeyValueToLower").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeyValueToLower ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="T primaryKeySetValue(T t1, String valueOfPrimaryKey)">
     /**
      * Devuelve el entity con la llave primaria en Mayuscula
@@ -5455,6 +5492,56 @@ public abstract class Repository<T> implements InterfaceRepository {
                                 final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                                         lookup.unreflect(pkProperty.getWriteMethod()));
                                 pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
+
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToUpper").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyValueToUpper ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToLower(T t1)">
+    /**
+     * Devuelve el entity con las llaves secundarias en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T secondaryKeyValueToLower(T t1) {
+        try {
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            for (SecondaryKey s : secondaryKeyList) {
+                if (s.getType().equals("java.lang.String")) {
+
+                    String nameOfSecondaryKey = s.getName();
+
+                    Set set = secondaryKeyValueObject(t1).entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry mentry = (Map.Entry) iterator.next();
+                        for (SecondaryKey s1 : secondaryKeyList) {
+                            if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.String")) {
+                                String valueOfSecondKey = (String) mentry.getValue();
+                                pkProperty = property.apply(nameOfSecondaryKey);
+
+                                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                                        lookup.unreflect(pkProperty.getWriteMethod()));
+                                pkSetter.accept(t1, valueOfSecondKey.toLowerCase());
 
                             }
                         }
