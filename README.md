@@ -13,7 +13,7 @@ Sintaxis similiar a JPA
 
   Documentos relacionados mediante la anotación @Referenced
   
- ##Documentación y Libro <https://www.gitbook.com/book/avbravo/jmoordb/details>
+ ##Documentación y Libro <https://app.gitbook.com/@avbravo-2/s/jmoordb/>
   
 Dependencias
  
@@ -21,7 +21,7 @@ Dependencias
           <dependency>
 	    <groupId>com.github.avbravo</groupId>
 	    <artifactId>jmoordb</artifactId>
-	    <version>0.23</version>
+	    <version>0.27</version>
 	 </dependency>
      </dependencies>
 
@@ -56,8 +56,26 @@ public class Paises {
   
 }
 
-<h2>Facade</h2>
-Las operaciones CRUD se implementan atraves de un Facade.
+<h2>Repository</h2>
+Las operaciones CRUD se implementan atraves de un Repository
+
+import com.avbravo.jmoordb.mongodb.repository.Repository;
+import com.avbravo.transporteejb.entity.Rol;
+import javax.ejb.Stateless;
+
+/**
+ *
+ * @author avbravo
+ */
+@Stateless
+public class PaisRepository extends Repository<Pais> {
+
+    public PaisRepository(){
+        super(Pais.class);
+    }
+   
+}
+
 
   <h3>save()</h3>
   
