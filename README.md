@@ -57,22 +57,28 @@ public class Paises {
 }
 
 <h2>Repository</h2>
+
 Las operaciones CRUD se implementan atraves de un Repository
 
+
 import com.avbravo.jmoordb.mongodb.repository.Repository;
+
 import com.avbravo.transporteejb.entity.Rol;
+
 import javax.ejb.Stateless;
 
-/**
- *
- * @author avbravo
- */
+
 @Stateless
+
 public class PaisRepository extends Repository<Pais> {
+	
 
     public PaisRepository(){
+    
         super(Pais.class);
+	
     }
+    
    
 }
 
