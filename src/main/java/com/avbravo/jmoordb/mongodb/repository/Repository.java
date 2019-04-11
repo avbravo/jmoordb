@@ -6,6 +6,7 @@
 package com.avbravo.jmoordb.mongodb.repository;
 // <editor-fold defaultstate="collapsed" desc="import">
 
+import com.avbravo.jmoordb.CompositeKey;
 import com.avbravo.jmoordb.DatePatternBeans;
 import com.avbravo.jmoordb.EmbeddedBeans;
 import com.avbravo.jmoordb.FieldBeans;
@@ -13,7 +14,7 @@ import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.SecondaryKey;
-import com.avbravo.jmoordb.configuration.JmoordbContext;
+import com.avbravo.jmoordb.TertiaryKey;
 import com.avbravo.jmoordb.metafactory.JmoordbLambdaMetaFactory;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaJmoordbResult;
 import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
@@ -45,6 +46,7 @@ import static com.mongodb.client.model.Indexes.descending;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.MethodDescriptor;
@@ -109,6 +111,9 @@ public abstract class Repository<T> implements InterfaceRepository {
     List<T> list = new ArrayList<>();
     List<PrimaryKey> primaryKeyList = new ArrayList<>();
     List<SecondaryKey> secondaryKeyList = new ArrayList<>();
+    List<TertiaryKey> tertiaryKeyList = new ArrayList<>();
+    List<CompositeKey> compositeKeyList = new ArrayList<>();
+    
     List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
     List<ReferencedBeans> referencedBeansList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
@@ -127,6 +132,27 @@ public abstract class Repository<T> implements InterfaceRepository {
         this.exception = exception;
     }
 
+    public List<TertiaryKey> getTertiaryKeyList() {
+        return tertiaryKeyList;
+    }
+
+    public void setTertiaryKeyList(List<TertiaryKey> tertiaryKeyList) {
+        this.tertiaryKeyList = tertiaryKeyList;
+    }
+
+    public List<CompositeKey> getCompositeKeyList() {
+        return compositeKeyList;
+    }
+
+    public void setCompositeKeyList(List<CompositeKey> compositeKeyList) {
+        this.compositeKeyList = compositeKeyList;
+    }
+
+    
+    
+    
+    
+    
     public String getDatabase() {
         return database;
     }
@@ -181,6 +207,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         primaryKeyList = new ArrayList<>();
         secondaryKeyList = new ArrayList<>();
+        tertiaryKeyList = new ArrayList<>();
+        compositeKeyList = new ArrayList<>();
         embeddedBeansList = new ArrayList<>();
         referencedBeansList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
@@ -194,6 +222,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         analizador.analizar(fields);
         primaryKeyList = analizador.getPrimaryKeyList();
         secondaryKeyList = analizador.getSecondaryKeyList();
+        tertiaryKeyList = analizador.getTertiaryKeyList();
+        compositeKeyList = analizador.getCompositeKeyList();
         embeddedBeansList = analizador.getEmbeddedBeansList();
         referencedBeansList = analizador.getReferencedBeansList();
         datePatternBeansList = analizador.getDatePatternBeansList();
@@ -250,6 +280,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         primaryKeyList = new ArrayList<>();
         secondaryKeyList = new ArrayList<>();
+        tertiaryKeyList = new ArrayList<>();
+        compositeKeyList = new ArrayList<>();
         embeddedBeansList = new ArrayList<>();
         referencedBeansList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
@@ -263,6 +295,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         analizador.analizar(fields);
         primaryKeyList = analizador.getPrimaryKeyList();
         secondaryKeyList = analizador.getSecondaryKeyList();
+         tertiaryKeyList = analizador.getTertiaryKeyList();
+        compositeKeyList = analizador.getCompositeKeyList();
         embeddedBeansList = analizador.getEmbeddedBeansList();
         referencedBeansList = analizador.getReferencedBeansList();
         datePatternBeansList = analizador.getDatePatternBeansList();
@@ -321,6 +355,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         primaryKeyList = new ArrayList<>();
         secondaryKeyList = new ArrayList<>();
+        tertiaryKeyList = new ArrayList<>();
+        compositeKeyList = new ArrayList<>();
         embeddedBeansList = new ArrayList<>();
         referencedBeansList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
@@ -334,6 +370,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         analizador.analizar(fields);
         primaryKeyList = analizador.getPrimaryKeyList();
         secondaryKeyList = analizador.getSecondaryKeyList();
+         tertiaryKeyList = analizador.getTertiaryKeyList();
+        compositeKeyList = analizador.getCompositeKeyList();
         embeddedBeansList = analizador.getEmbeddedBeansList();
         referencedBeansList = analizador.getReferencedBeansList();
         datePatternBeansList = analizador.getDatePatternBeansList();
@@ -514,6 +552,49 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return doc;
     }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Document getIndexTertiaryKey()">
+
+    /**
+     * Crea un Index en base a las llaves tertiary
+     *
+     * @return
+     */
+    private Document getIndexTertiaryKey() {
+        Document doc = new Document();
+        try {
+            tertiaryKeyList.forEach((p) -> {
+                doc.put(p.getName(), 1);
+            });
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "getIndexTertiaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("getIndexTertiaryKey ", e);
+        }
+        return doc;
+    }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Document getIndexCompositeKey()">
+
+    /**
+     * Crea un Index en base a las llaves tertiary
+     *
+     * @return
+     */
+    private Document getIndexCompositeKey() {
+        Document doc = new Document();
+        try {
+            compositeKeyList.forEach((p) -> {
+                doc.put(p.getName(), 1);
+            });
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "getIndexCompositeKey").log(Level.SEVERE, null, e);
+            exception = new Exception("getIndexCompositeKey ", e);
+        }
+        return doc;
+    }// </editor-fold>
+    
+    
+    
 
     // <editor-fold defaultstate="collapsed" desc="createIndex(Document... doc)">
     /**
@@ -747,18 +828,20 @@ public abstract class Repository<T> implements InterfaceRepository {
         return name;
     }// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Map<String, String> secondaryKey(T t2)">
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="Map<String, String> compositeKey(T t2) ">
     /**
-     * devuelve la lista de SecondaryKey con las llaves secundarias,name, value
+     * devuelve la lista de compositeKey con las llaves compuestas,name, value
      *
      * @return
      */
-    public Map<String, String> secondaryKey(T t2) {
+    public Map<String, String> compositeKey(T t2) {
         HashMap<String, String> map = new HashMap<String, String>();
         String value = "";
         try {
             Object t = entityClass.newInstance();
-            for (SecondaryKey p : secondaryKeyList) {
+            for (CompositeKey p : compositeKeyList) {
                 String name = util.letterToLower(p.getName());
                 Method method;
                 try {
@@ -775,90 +858,19 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 } catch (Exception e) {
                     Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("secondaryKey ", e);
+                    exception = new Exception("compositeKey ", e);
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKey ", e);
+            Logger.getLogger(Repository.class.getName() + "compositeKey").log(Level.SEVERE, null, e);
+            exception = new Exception("compositeKey ", e);
         }
         return map;
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="HashMap<String, Object> secondaryKeyValueObject(T t2)">
-    /**
-     * devuelve la lista de SecondaryKey con las llaves secundarias,name, value
-     *
-     * @return
-     */
-    public HashMap<String, Object> secondaryKeyValueObject(T t2) {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        String value = "";
-        try {
-            Object t = entityClass.newInstance();
-            for (SecondaryKey p : secondaryKeyList) {
-                String name = util.letterToLower(p.getName());
-                Method method;
-                try {
-
-                    method = entityClass.getDeclaredMethod(name);
-
-                    Object v = method.invoke(t2);
-                    if (p.getType().equals("java.lang.String")) {
-                        value = v.toString();
-                    } else {
-                        value = String.valueOf(v);
-                    }
-                    map.put(name, value);
-
-                } catch (Exception e) {
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("secondaryKey ", e);
-                }
-            }
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKey ", e);
-        }
-        return map;
-    }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Optional<T> findBySecondaryKey(T t2)">
-
-    /**
-     * Busca por la llave secundaria del documento
-     *
-     * @param t2
-     * @return
-     */
-    public Optional<T> findBySecondaryKey(T t2) {
-        Document doc = new Document();
-        try {
-            Object t = entityClass.newInstance();
-            if (!secondaryKeyList.isEmpty()) {
-
-                for (SecondaryKey p : secondaryKeyList) {
-                    String name = "get" + util.letterToUpper(p.getName());
-                    Method method;
-                    try {
-                        method = entityClass.getDeclaredMethod(name);
-                        doc.put(p.getName(), method.invoke(t2));
-                    } catch (Exception e) {
-                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                        exception = new Exception("findBySecondaryKey ", e);
-                    }
-                }
-                return find(doc);
-            } else {
-                return Optional.empty();
-            }
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "findBySecondaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("findBySecondaryKey ", e);
-        }
-        return Optional.empty();
-    }// </editor-fold>
+    
+   
 
     // <editor-fold defaultstate="collapsed" desc="findById(Document doc)">
     public Optional<T> findById(Document doc) {
@@ -879,28 +891,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Optional<T> findBySecondaryKey(Document doc)">
-
-    public Optional<T> findBySecondaryKey(Document doc) {
-
-        try {
-            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
-            T t_ = (T) find(doc);
-
-            if (t_ == null) {
-                // no lo encontro
-            } else {
-                return Optional.of(t_);
-            }
-
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "findBySecondaryKey)").log(Level.SEVERE, null, e);
-            exception = new Exception("findBySecondaryKey ", e);
-        }
-        return Optional.empty();
-    }// </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Boolean isFoundBySecondaryKey(Document doc)">
+   
+    // <editor-fold defaultstate="collapsed" desc="Boolean isFound(Document doc)">
     /**
      * busca si existe o no por la
      *
@@ -926,49 +918,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return false;
     }// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="isFoundBySecondaryKey(T t2)">
-    /**
-     * Busca por la llave secundaria del documento
-     *
-     * @param t2
-     * @return
-     */
-    public Boolean isFoundBySecondaryKey(T t2) {
-        Document doc = new Document();
-        try {
-            Object t = entityClass.newInstance();
-            if (!secondaryKeyList.isEmpty()) {
-
-                for (SecondaryKey p : secondaryKeyList) {
-                    String name = "get" + util.letterToUpper(p.getName());
-                    Method method;
-                    try {
-
-                        method = entityClass.getDeclaredMethod(name);
-
-                        doc.put(p.getName(), method.invoke(t2));
-
-                    } catch (Exception e) {
-                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                        exception = new Exception("findBySecondaryKey ", e);
-                    }
-                }
-                T t_ = (T) find(doc);
-                if (t_ == null) {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
-                JmoordbUtil.warningMessage("No tiene llaves secundaria @Secondary no se puede buscar");
-                return false;
-            }
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "isFoundBySecondaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("isFoundBySecondaryKey() ", e);
-        }
-        return false;
-    }// </editor-fold>
+   
     // <editor-fold defaultstate="collapsed" desc="Boolean isFoundByPrimaryKey(T t2)">
 
     /**
@@ -5458,14 +5408,14 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToUpper(T t1)">
+    // <editor-fold defaultstate="collapsed" desc="T compositeKeyValueToLower(T t1)">
     /**
      * Devuelve el entity con las llaves secundarias en Mayuscula
      *
      * @param t1
      * @return
      */
-    public T secondaryKeyValueToUpper(T t1) {
+    public T compositeKeyValueToLower(T t1) {
         try {
             PropertyDescriptor pkProperty;
             final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
@@ -5473,69 +5423,19 @@ public abstract class Repository<T> implements InterfaceRepository {
                     .filter(p -> name.equals(p.getName()))
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("Not found: " + name));
-            for (SecondaryKey s : secondaryKeyList) {
+            for (CompositeKey s : compositeKeyList) {
                 if (s.getType().equals("java.lang.String")) {
 
-                    String nameOfSecondaryKey = s.getName();
+                    String nameOfCompositeKey = s.getName();
 
-                    Set set = secondaryKeyValueObject(t1).entrySet();
+                    Set set = compositeKeyValueObject(t1).entrySet();
                     Iterator iterator = set.iterator();
                     while (iterator.hasNext()) {
                         Map.Entry mentry = (Map.Entry) iterator.next();
-                        for (SecondaryKey s1 : secondaryKeyList) {
+                        for (CompositeKey s1 : compositeKeyList) {
                             if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.String")) {
                                 String valueOfSecondKey = (String) mentry.getValue();
-                                pkProperty = property.apply(nameOfSecondaryKey);
-
-                                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
-                                final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
-                                        lookup.unreflect(pkProperty.getWriteMethod()));
-                                pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
-
-                            }
-                        }
-
-                    }
-
-                }
-            }
-        } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToUpper").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyValueToUpper ", e);
-        }
-        return t1;
-    }
-
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToLower(T t1)">
-    /**
-     * Devuelve el entity con las llaves secundarias en Mayuscula
-     *
-     * @param t1
-     * @return
-     */
-    public T secondaryKeyValueToLower(T t1) {
-        try {
-            PropertyDescriptor pkProperty;
-            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
-            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
-                    .filter(p -> name.equals(p.getName()))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
-            for (SecondaryKey s : secondaryKeyList) {
-                if (s.getType().equals("java.lang.String")) {
-
-                    String nameOfSecondaryKey = s.getName();
-
-                    Set set = secondaryKeyValueObject(t1).entrySet();
-                    Iterator iterator = set.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry mentry = (Map.Entry) iterator.next();
-                        for (SecondaryKey s1 : secondaryKeyList) {
-                            if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.String")) {
-                                String valueOfSecondKey = (String) mentry.getValue();
-                                pkProperty = property.apply(nameOfSecondaryKey);
+                                pkProperty = property.apply(nameOfCompositeKey);
 
                                 //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
                                 final MethodHandles.Lookup lookup = MethodHandles.lookup();
@@ -5551,22 +5451,557 @@ public abstract class Repository<T> implements InterfaceRepository {
                 }
             }
         } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToUpper").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyValueToUpper ", e);
+            Logger.getLogger(Repository.class.getName() + "compositeKeyValueToUpper").log(Level.SEVERE, null, e);
+            exception = new Exception("compositeKeyValueToUpper ", e);
         }
         return t1;
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="T secondaryKeySetValue(T t1, String nameOfSecondaryKey, String valueOfSeconddaryKey)">
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="T compositeKeySetValue(T t1, String nameOfCompositeKey, String valueOfSeconddaryKey)">
     /**
      * Devuelve el entity con la llave primaria en Mayuscula
      *
      * @param t1
      * @return
      */
-    public T secondaryKeySetValue(T t1, String nameOfSecondaryKey, Object valueOfSeconddaryKey) {
+    public T compositeKeySetValue(T t1, String nameOfCompositeKey, Object valueOfSeconddaryKey) {
         try {
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfCompositeKey);
+
+//           
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, nameOfCompositeKey);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
+            exception = new Exception("primaryKeySetValue ", e);
+        }
+        return t1;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="T compositeKeyValueToUpper(T t1)">
+     /**
+     * Devuelve el entity con las llaves secundarias en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T compositeKeyValueToUpper(T t1) {
+        try {
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            for (CompositeKey s : compositeKeyList) {
+                if (s.getType().equals("java.lang.String")) {
+
+                    String nameOfCompositeKey = s.getName();
+
+                    Set set = compositeKeyValueObject(t1).entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry mentry = (Map.Entry) iterator.next();
+                        for (CompositeKey s1 : compositeKeyList) {
+                            if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.String")) {
+                                String valueOfSecondKey = (String) mentry.getValue();
+                                pkProperty = property.apply(nameOfCompositeKey);
+
+                                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                                        lookup.unreflect(pkProperty.getWriteMethod()));
+                                pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
+
+                            }
+                        }
+
+                    }
+
+                }else{
+                    
+                    if (s.getType().equals("java.lang.Integer")) {
+
+                    String nameOfCompositeKey = s.getName();
+
+                    Set set = compositeKeyValueObject(t1).entrySet();
+                    Iterator iterator = set.iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry mentry = (Map.Entry) iterator.next();
+                        for (CompositeKey s1 : compositeKeyList) {
+                            if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.Integer")) {
+                                String valueOfSecondKey = (String) mentry.getValue();
+                                pkProperty = property.apply(nameOfCompositeKey);
+
+                                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                                        lookup.unreflect(pkProperty.getWriteMethod()));
+                                pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
+
+                            }
+                        }
+
+                    }
+
+                }
+                    
+                    
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "compositeKeyValueToUpper").log(Level.SEVERE, null, e);
+            exception = new Exception("compositeKeyValueToUpper ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
+    
+    
+    
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="HashMap<String, Object> compositeValueObject(T t2)">
+    /**
+     * devuelve la lista de CompositeKey con las llaves secundarias,name, value
+     *
+     * @return
+     */
+    public HashMap<String, Object> compositeKeyValueObject(T t2) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (CompositeKey p :compositeKeyList) {
+                String name = util.letterToLower(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
+                    map.put(name, value);
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("compositeKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "compositeKey").log(Level.SEVERE, null, e);
+            exception = new Exception("compositeKey ", e);
+        }
+        return map;
+    }
+    // </editor-fold>
+    
+    
+     // <editor-fold defaultstate="collapsed" desc="isFoundByCompositeKey(T t2)">
+    /**
+     * Busca por la llave secundaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean isFoundByCompositeKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            if (!compositeKeyList.isEmpty()) {
+
+                for (CompositeKey p : compositeKeyList) {
+                    String name = "get" + util.letterToUpper(p.getName());
+                    Method method;
+                    try {
+
+                        method = entityClass.getDeclaredMethod(name);
+
+                        doc.put(p.getName(), method.invoke(t2));
+
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                        exception = new Exception("isFoundByCompositeKey ", e);
+                    }
+                }
+                T t_ = (T) find(doc);
+                if (t_ == null) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                JmoordbUtil.warningMessage("No tiene llaves secundaria @Composite no se puede buscar");
+                return false;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "isFoundByCompositeKey()").log(Level.SEVERE, null, e);
+            exception = new Exception("isFoundByCompositeKey() ", e);
+        }
+        return false;
+    }// </editor-fold>
+   
+    
+    // <editor-fold defaultstate="collapsed" desc="Optional<T> findByCompositeKey(T t2)">
+
+    /**
+     * Busca por la llave secundaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Optional<T> findByCompositeKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            if (!compositeKeyList.isEmpty()) {
+
+                for (CompositeKey p : compositeKeyList) {
+                    String name = "get" + util.letterToUpper(p.getName());
+                    Method method;
+                    try {
+                        method = entityClass.getDeclaredMethod(name);
+                        doc.put(p.getName(), method.invoke(t2));
+                    } catch (Exception e) {
+                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                        exception = new Exception("findByCompositeKey ", e);
+                    }
+                }
+                return find(doc);
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "findByCompositeKey").log(Level.SEVERE, null, e);
+            exception = new Exception("findByCompositeKey ", e);
+        }
+        return Optional.empty();
+    }// </editor-fold>
+    
+     // <editor-fold defaultstate="collapsed" desc="Optional<T> findByCompositeKey(Document doc)">
+
+    public Optional<T> findByCompositeKey(Document doc) {
+
+        try {
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            T t_ = (T) find(doc);
+
+            if (t_ == null) {
+                // no lo encontro
+            } else {
+                return Optional.of(t_);
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "findByCompositeKey)").log(Level.SEVERE, null, e);
+            exception = new Exception("findByCompositeKey ", e);
+        }
+        return Optional.empty();
+    }// </editor-fold>
+    
+          // <editor-fold defaultstate="collapsed" desc="Document findDocSecondaryKey(T t2)">
+    /**
+     *
+     * @return Document() correspondiente a la llave primaria
+     */
+    private Document findDocSecondaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("getDocumentSecondaryKey() ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "getDocumentSecondaryKey()").log(Level.SEVERE, null, e);
+            exception = new Exception("getDocumentSecondaryKey() ", e);
+        }
+        return doc;
+    }// </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="findById(T t2)">
+    /**
+     * Busca por la llave primaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Optional<T> findBySecondaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                    return find(doc);
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("findById() ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
+            exception = new Exception("findById() ", e);
+        }
+        return Optional.empty();
+    }// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="String secondaryKeyValue(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public String secondaryKeyValue(T t2) {
+
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
+
+                    //    doc.put(p.getName(), method.invoke(t2));
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("secondaryKeyValue ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyValue").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyValue ", e);
+        }
+        return value;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean secondaryKeyIsInteger(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean secondaryKeyIsInteger(T t2) {
+
+        Boolean value = false;
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+
+                if (p.getType().equals("java.lang.String")) {
+                    value = false;
+                } else {
+                    value = true;
+                }
+
+                //    doc.put(p.getName(), method.invoke(t2));
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyIsInteger()").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyIsInteger() ", e);
+        }
+        return value;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Integer secondaryKeyValueInteger(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Integer secondaryKeyValueInteger(T t2) {
+
+        Integer value = 0;
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        exception = new Exception("La llave primaria no es de tipo Integer ");
+                    } else {
+                        value = Integer.parseInt(String.valueOf(v));
+                    }
+
+                    //    doc.put(p.getName(), method.invoke(t2));
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("secondaryKeyValueInteger", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueInteger").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyValueInteger ", e);
+        }
+        return value;
+    }// </editor-fold>
+
+    
+    // <editor-fold defaultstate="collapsed" desc="Map<String,String> secondaryKey(T t2) ">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Map<String, String> secondaryKey(T t2) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
+                    map.put(p.getName(), value);
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("secondaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKey ", e);
+        }
+        return map;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String secondaryKeyName(T t2)">
+
+    /**
+     * Devuelve el nombre del campo @ID llave primaria
+     *
+     * @param t2
+     * @return
+     */
+    public String secondaryKeyName(T t2) {
+
+        String name = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                name = util.letterToLower(p.getName());
+
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyValue").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyValue ", e);
+        }
+        return name;
+    }// </editor-fold>
+
+      // <editor-fold defaultstate="collapsed" desc="Boolean isFoundBySecondaryKey(T t2)">
+
+    /**
+     * Busca por la llave secundaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean isFoundBySecondaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p : secondaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                    T t_ = (T) find(doc);
+                    if (t_ == null) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("isFoundBySecondaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "isFoundBySecondaryKey()").log(Level.SEVERE, null, e);
+            exception = new Exception("isFoundBySecondaryKey() ", e);
+        }
+        return false;
+    }// </editor-fold>
+
+    
+      // <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToUpper(T t1)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T secondaryKeyValueToUpper(T t1) {
+        try {
+
+            String nameOfSecondaryKey = secondaryKeyName(t1);
+//            nameOfSecondaryKey = util.letterToUpper(nameOfSecondaryKey);
+            String valueOfSecondaryKey = secondaryKeyValue(t1);
 
             PropertyDescriptor pkProperty;
             final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
@@ -5577,18 +6012,515 @@ public abstract class Repository<T> implements InterfaceRepository {
             //Si tiene el userInfo
             pkProperty = property.apply(nameOfSecondaryKey);
 
-//           
             //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
             final MethodHandles.Lookup lookup = MethodHandles.lookup();
             final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
                     lookup.unreflect(pkProperty.getWriteMethod()));
-            pkSetter.accept(t1, nameOfSecondaryKey);
+            pkSetter.accept(t1, valueOfSecondaryKey.toUpperCase());
 
         } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeySetValue ", e);
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToUpper").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyValueToUpper ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToLower(T t1)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T secondaryKeyValueToLower(T t1) {
+        try {
+
+            String nameOfSecondaryKey = secondaryKeyName(t1);
+//            nameOfSecondaryKey = util.letterToUpper(nameOfSecondaryKey);
+            String valueOfSecondaryKey = secondaryKeyValue(t1);
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfSecondaryKey);
+
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfSecondaryKey.toLowerCase());
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToLower").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeyValueToLower ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
+   
+    
+    
+    
+      // <editor-fold defaultstate="collapsed" desc="Document findDocTertiaryKey(T t2)">
+    /**
+     *
+     * @return Document() correspondiente a la llave primaria
+     */
+    private Document findDocTertiaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("getDocumentTertiaryKey() ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "getDocumentTertiaryKey()").log(Level.SEVERE, null, e);
+            exception = new Exception("getDocumentTertiaryKey() ", e);
+        }
+        return doc;
+    }// </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="findById(T t2)">
+    /**
+     * Busca por la llave primaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Optional<T> findByTertiaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                    return find(doc);
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("findById() ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
+            exception = new Exception("findById() ", e);
+        }
+        return Optional.empty();
+    }// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="String tertiaryKeyValue(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public String tertiaryKeyValue(T t2) {
+
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
+
+                    //    doc.put(p.getName(), method.invoke(t2));
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("tertiaryKeyValue ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValue").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKeyValue ", e);
+        }
+        return value;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean tertiaryKeyIsInteger(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean tertiaryKeyIsInteger(T t2) {
+
+        Boolean value = false;
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+
+                if (p.getType().equals("java.lang.String")) {
+                    value = false;
+                } else {
+                    value = true;
+                }
+
+                //    doc.put(p.getName(), method.invoke(t2));
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKeyIsInteger()").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKeyIsInteger() ", e);
+        }
+        return value;
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Integer tertiaryKeyValueInteger(T t2)">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Integer tertiaryKeyValueInteger(T t2) {
+
+        Integer value = 0;
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        exception = new Exception("La llave primaria no es de tipo Integer ");
+                    } else {
+                        value = Integer.parseInt(String.valueOf(v));
+                    }
+
+                    //    doc.put(p.getName(), method.invoke(t2));
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("tertiaryKeyValueInteger", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValueInteger").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKeyValueInteger ", e);
+        }
+        return value;
+    }// </editor-fold>
+
+    
+    // <editor-fold defaultstate="collapsed" desc="Map<String,String> tertiaryKey(T t2) ">
+    /**
+     * Devuelve el valor del campo primario
+     *
+     * @param t2
+     * @return
+     */
+    public Map<String, String> tertiaryKey(T t2) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
+                    map.put(p.getName(), value);
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("tertiaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKey ", e);
+        }
+        return map;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String tertiaryKeyName(T t2)">
+
+    /**
+     * Devuelve el nombre del campo @ID llave primaria
+     *
+     * @param t2
+     * @return
+     */
+    public String tertiaryKeyName(T t2) {
+
+        String name = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+                name = util.letterToLower(p.getName());
+
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValue").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKeyValue ", e);
+        }
+        return name;
+    }// </editor-fold>
+
+      // <editor-fold defaultstate="collapsed" desc="Boolean isFoundByTertiaryKey(T t2)">
+
+    /**
+     * Busca por la llave secundaria del documento
+     *
+     * @param t2
+     * @return
+     */
+    public Boolean isFoundByTertiaryKey(T t2) {
+        Document doc = new Document();
+        try {
+            Object t = entityClass.newInstance();
+            for (TertiaryKey p : tertiaryKeyList) {
+                String name = "get" + util.letterToUpper(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    doc.put(p.getName(), method.invoke(t2));
+
+                    T t_ = (T) find(doc);
+                    if (t_ == null) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("isFoundByTertiaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "isFoundByTertiaryKey()").log(Level.SEVERE, null, e);
+            exception = new Exception("isFoundByTertiaryKey() ", e);
+        }
+        return false;
+    }// </editor-fold>
+
+    
+      // <editor-fold defaultstate="collapsed" desc="T tertiaryKeyValueToUpper(T t1)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T tertiaryKeyValueToUpper(T t1) {
+        try {
+
+            String nameOfTertiaryKey = tertiaryKeyName(t1);
+//            nameOfTertiaryKey = util.letterToUpper(nameOfTertiaryKey);
+            String valueOfTertiaryKey = tertiaryKeyValue(t1);
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfTertiaryKey);
+
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfTertiaryKey.toUpperCase());
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValueToUpper").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKeyValueToUpper ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="T tertiaryKeyValueToLower(T t1)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T tertiaryKeyValueToLower(T t1) {
+        try {
+
+            String nameOfTertiaryKey = tertiaryKeyName(t1);
+//            nameOfTertiaryKey = util.letterToUpper(nameOfTertiaryKey);
+            String valueOfTertiaryKey = tertiaryKeyValue(t1);
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfTertiaryKey);
+
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfTertiaryKey.toLowerCase());
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValueToLower").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKeyValueToLower ", e);
+        }
+        return t1;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="T tertiaryKeySetValue(T t1, String valueOfTertiaryKey)">
+    /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T tertiaryKeySetValue(T t1, String valueOfTertiaryKey) {
+        try {
+
+            String nameOfTertiaryKey = tertiaryKeyName(t1);
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfTertiaryKey);
+
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfTertiaryKey);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "tertiaryKeySetValue").log(Level.SEVERE, null, e);
+            exception = new Exception("tertiaryKeySetValue ", e);
         }
         return t1;
     }
     // </editor-fold>
+    
+    
+      // <editor-fold defaultstate="collapsed" desc="HashMap<String, Object> secondaryValueObject(T t2)">
+    /**
+     * devuelve la lista de SecondaryKey con las llaves secundarias,name, value
+     *
+     * @return
+     */
+    public HashMap<String, Object> secondaryKeyValueObject(T t2) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        String value = "";
+        try {
+            Object t = entityClass.newInstance();
+            for (SecondaryKey p :secondaryKeyList) {
+                String name = util.letterToLower(p.getName());
+                Method method;
+                try {
+
+                    method = entityClass.getDeclaredMethod(name);
+
+                    Object v = method.invoke(t2);
+                    if (p.getType().equals("java.lang.String")) {
+                        value = v.toString();
+                    } else {
+                        value = String.valueOf(v);
+                    }
+                    map.put(name, value);
+
+                } catch (Exception e) {
+                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+                    exception = new Exception("secondaryKey ", e);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKey ", e);
+        }
+        return map;
+    }
+    // </editor-fold>
+    
+       // <editor-fold defaultstate="collapsed" desc="T secondaryKeySetValue(T t1, String valueOfSecondaryKey)">
+ /**
+     * Devuelve el entity con la llave primaria en Mayuscula
+     *
+     * @param t1
+     * @return
+     */
+    public T secondaryKeySetValue(T t1, String valueOfSecondaryKey) {
+        try {
+
+            String nameOfSecondaryKey = secondaryKeyName(t1);
+
+            PropertyDescriptor pkProperty;
+            final BeanInfo beanInfo = Introspector.getBeanInfo(t1.getClass());
+            final java.util.function.Function<String, PropertyDescriptor> property = name -> Stream.of(beanInfo.getPropertyDescriptors())
+                    .filter(p -> name.equals(p.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Not found: " + name));
+            //Si tiene el userInfo
+            pkProperty = property.apply(nameOfSecondaryKey);
+
+            //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                    lookup.unreflect(pkProperty.getWriteMethod()));
+            pkSetter.accept(t1, valueOfSecondaryKey);
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "secondaryKeySetValue").log(Level.SEVERE, null, e);
+            exception = new Exception("secondaryKeySetValue ", e);
+        }
+        return t1;
+    }
+    // </editor-fold>
+    
+    
+    
+  
 }

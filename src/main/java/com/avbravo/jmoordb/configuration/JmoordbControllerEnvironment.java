@@ -24,7 +24,7 @@ public class JmoordbControllerEnvironment {
     Object entity;
     Object service;
     Object controller;
-    Boolean searchbysecondarykey;
+    String typeKey;
     Boolean searchLowerCase =false;
     String pathReportDetail;
     String pathReportAll;
@@ -36,7 +36,7 @@ public class JmoordbControllerEnvironment {
     }
 
     public JmoordbControllerEnvironment(Object controller, Repository repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, 
-            Boolean searchbysecondarykey,Boolean searchLowerCase,
+            String typeKey,Boolean searchLowerCase,
             String pathReportDetail, String pathReportAll, HashMap parameters) {
         this.repository = repository;
         this.nameFieldOfPage = nameFieldOfPage;
@@ -44,7 +44,7 @@ public class JmoordbControllerEnvironment {
         this.entity = entity;
         this.service = service;
         this.controller = controller;
-        this.searchbysecondarykey = searchbysecondarykey;
+        this.typeKey = typeKey;
            this.searchLowerCase =searchLowerCase;
         this.pathReportDetail = pathReportDetail;
         this.pathReportAll = pathReportAll;
@@ -57,7 +57,7 @@ public class JmoordbControllerEnvironment {
         sessionMap.put("controller", controller);
         sessionMap.put("nameFieldOfPage", nameFieldOfPage);
         sessionMap.put("nameFieldOfRowPage", nameFieldOfRowPage);
-        sessionMap.put("searchbysecondarykey", searchbysecondarykey);
+        sessionMap.put("typeKey", typeKey);
         sessionMap.put("searchLowerCase", searchLowerCase);
         sessionMap.put("pathReportDetail", pathReportDetail);
         sessionMap.put("pathReportAll", pathReportAll);
@@ -143,11 +143,11 @@ public class JmoordbControllerEnvironment {
         return nameFieldOfRowPage;
     }
 
-    public Boolean getSearchbysecondarykey() {
+    public String getTypeKey() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();
-        Boolean searchbysecondarykey = (Boolean) sessionMap.get("searchbysecondarykey");
-        return searchbysecondarykey;
+        String typeKey = (String) sessionMap.get("typeKey");
+        return typeKey;
     }
     public Boolean getSearchLowerCase() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -175,8 +175,8 @@ public class JmoordbControllerEnvironment {
         this.parameters = parameters;
     }
 
-    public void setSearchbysecondarykey(Boolean searchbysecondarykey) {
-        this.searchbysecondarykey = searchbysecondarykey;
+    public void setSearchbysecondarykey(String typeKey) {
+        this.typeKey = typeKey;
     }
 
     public void setNameFieldOfRowPage(String nameFieldOfRowPage) {
@@ -235,7 +235,7 @@ public class JmoordbControllerEnvironment {
         Object entity;
         Object service;
         Object controller;
-        Boolean searchbysecondarykey;
+        String typeKey;
        Boolean searchLowerCase =false;
         String pathReportDetail;
         String pathReportAll;
@@ -285,8 +285,8 @@ public class JmoordbControllerEnvironment {
             return this;
         }
 
-        public Builder withSearchbysecondarykey(Boolean searchbysecondarykey) {
-            this.searchbysecondarykey = searchbysecondarykey;
+        public Builder withTypeKey(String typeKey) {
+            this.typeKey = typeKey;
             return this;
         }
         public Builder withSearchLowerCase(Boolean searchLowerCase) {
@@ -295,7 +295,7 @@ public class JmoordbControllerEnvironment {
         }
 
         public JmoordbControllerEnvironment build() {
-            return new JmoordbControllerEnvironment(controller, repository, entity, service, nameFieldOfPage, nameFieldOfRowPage, searchbysecondarykey,searchLowerCase, pathReportDetail,  pathReportAll,  parameters);
+            return new JmoordbControllerEnvironment(controller, repository, entity, service, nameFieldOfPage, nameFieldOfRowPage, typeKey,searchLowerCase, pathReportDetail,  pathReportAll,  parameters);
         }
 
     }

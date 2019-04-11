@@ -6,6 +6,7 @@
 package com.avbravo.jmoordb.interfaces;
 
 import com.avbravo.jmoordb.SecondaryKey;
+import com.avbravo.jmoordb.TertiaryKey;
 import com.avbravo.jmoordb.configuration.JmoordbConfiguration;
 import com.avbravo.jmoordb.anotations.Aspect;
 import com.avbravo.jmoordb.configuration.JmoordbContext;
@@ -19,12 +20,9 @@ import com.avbravo.jmoordb.util.JmoordbUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import java.util.Optional;
-import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import org.bson.Document;
@@ -37,14 +35,11 @@ import org.primefaces.event.SelectEvent;
  */
 public interface IController<T> {
 
-
-
     default public String refresh() {
         return "";
     }
 
     // <editor-fold defaultstate="collapsed" desc="Integer sizeOfPage()">
-    
     default public Integer sizeOfPage() {
         Integer size = 0;
         try {
@@ -58,7 +53,8 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
+
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -78,6 +74,7 @@ public interface IController<T> {
     }
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="last">
+
     default public String last() {
         try {
             JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
@@ -90,7 +87,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -132,7 +129,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -165,7 +162,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -187,7 +184,6 @@ public interface IController<T> {
     }// </editor-fold>
 
     public void move(Integer page);
-    
 
 // <editor-fold defaultstate="collapsed" desc="nameOfClassAndMethod())">
     public default String nameOfClassAndMethod() {
@@ -242,48 +238,87 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
-            //------------------------------------
-            //Los pasa el usuaario
-//            String primarykeyvalue = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("primarykeyvalue");
-            if (searchbysecondary) {
-                if(!searchLowerCase){
-                       entity = repository.secondaryKeyValueToUpper(entity);
-                   }else{
-                       entity = repository.secondaryKeyValueToLower(entity);
-                   }
-                //Busca por llave secundaria
-                Optional<Object> optional = repository.findBySecondaryKey(entity);
-                if (optional.isPresent()) {
-                    JmoordbUtil.warningMessage(spanish ? "Existe un documento con esos datos" : "There is a document with this data");
-                    return "";
-                }
+            typeKey = typeKey.toLowerCase().trim();
+            switch (typeKey) {
+                case "primary":
+                    //convierte la llave primaria a minuscula
+                    String primaryValue = repository.primaryKeyValue(entity);
+                    if (primaryValue == null || primaryValue.isEmpty() || primaryValue.equals("null")) {
+                        JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
+                        return "";
+                    }
+                    if (!searchLowerCase) {
+                        entity = repository.primaryKeyValueToUpper(entity);
+                    } else {
+                        entity = repository.primaryKeyValueToLower(entity);
+                    }
+                    //Busca por llave primaria
+                    Optional<Object> optional = repository.findById(entity);
+                    if (optional.isPresent()) {
+                        JmoordbUtil.warningMessage(spanish ? "Existe un documento con esos datos" : "There is a document with this data");
+                        return "";
+                    }
+                    break;
+                case "secondary":
+                    String secondaryValue = repository.secondaryKeyValue(entity);
+                    if (secondaryValue == null || secondaryValue.isEmpty() || secondaryValue.equals("null")) {
+                        JmoordbUtil.warningMessage(spanish ? "La llave secundaria esta vacia" : "the secondary key is empty");
+                        return "";
+                    }
+                    if (!searchLowerCase) {
+                        entity = repository.secondaryKeyValueToUpper(entity);
+                    } else {
+                        entity = repository.secondaryKeyValueToLower(entity);
+                    }
+                    //Busca por llave secundaria
+                    Optional<Object> optionalSecondary = repository.findBySecondaryKey(entity);
+                    if (optionalSecondary.isPresent()) {
+                        JmoordbUtil.warningMessage(spanish ? "Existe un documento con esos datos" : "There is a document with this data");
+                        return "";
+                    }
+                    break;
+                case "tertiary":
+                      String tertiaryValue = repository.tertiaryKeyValue(entity);
+                    if (tertiaryValue == null || tertiaryValue.isEmpty() || tertiaryValue.equals("null")) {
+                        JmoordbUtil.warningMessage(spanish ? "La llave @Tertiary esta vacia" : "the @Tertiary key is empty");
+                        return "";
+                    }
+                    if (!searchLowerCase) {
+                        entity = repository.tertiaryKeyValueToUpper(entity);
+                    } else {
+                        entity = repository.tertiaryKeyValueToLower(entity);
+                    }
+                    //Busca por llave secundaria
+                    Optional<Object> optionalTertiary = repository.findByTertiaryKey(entity);
+                    if (optionalTertiary.isPresent()) {
+                        JmoordbUtil.warningMessage(spanish ? "Existe un documento con esos datos" : "There is a document with this data");
+                        return "";
+                    }
+                    break;
+                case "composite":
+                    break;
 
-            } else {
-                //convierte la llave primaria a minuscula
-             if(!searchLowerCase){
-                       entity = repository.primaryKeyValueToUpper(entity);
-                }else{
-                       entity = repository.primaryKeyValueToLower(entity);
-                }
-                //Busca por llave primaria
-                Optional<Object> optional = repository.findById(entity);
-                if (optional.isPresent()) {
-                    JmoordbUtil.warningMessage(spanish ? "Existe un documento con esos datos" : "There is a document with this data");
-                    return "";
-                }
+                default:
+                    JmoordbUtil.warningMessage(spanish ? "typeKey debe ser(primary,secondary,tertiary,composite) " : "typeKey could by(primary,secondary,tertiary,composite)");
+
             }
 
             //Agregar el UserInfo al entity
             entity = repository.addUserInfoForSaveMethod(entity, username, "create");
 
             if (!beforeSave()) {
+                return "";
+            }
+            String primaryValue = repository.primaryKeyValue(entity);
+            if (primaryValue == null || primaryValue.isEmpty() || primaryValue.equals("null")) {
+                JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
                 return "";
             }
             if (repository.save(entity)) {
@@ -350,34 +385,74 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
-            //------------------------------------
-            if (searchbysecondary) {
-                //Busca por llave secundaria
-                Optional<Object> optional = repository.findBySecondaryKey(entity);
-                if (!optional.isPresent()) {
-                    JmoordbUtil.warningMessage(spanish ? "No existe un documento con esos datos" : "there is no document with this data");
-                    return "";
-                }
 
-            } else {
-                //Busca por llave primaria
-                Optional<Object> optional = repository.findById(entity);
-                if (!optional.isPresent()) {
-                    JmoordbUtil.warningMessage(spanish ? "No existe un documento con esos datos" : "There is nodocument with this data");
-                    return "";
-                }
+            typeKey = typeKey.toLowerCase().trim();
+            switch (typeKey) {
+                case "primary":
+                    //Busca por llave primaria
+                    String primaryValue = repository.primaryKeyValue(entity);
+                    if (primaryValue == null || primaryValue.isEmpty() || primaryValue.equals("null")) {
+                        JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
+                        return "";
+                    }
+                    Optional<Object> optional = repository.findById(entity);
+                    if (!optional.isPresent()) {
+                        JmoordbUtil.warningMessage(spanish ? "No existe un documento con esos datos" : "There is nodocument with this data");
+                        return "";
+                    }
+                    break;
+                case "secondary":
+                    //Busca por llave secundaria
+                    String secondaryValue = repository.secondaryKeyValue(entity);
+                    if (secondaryValue == null || secondaryValue.isEmpty() || secondaryValue.equals("null")) {
+                        JmoordbUtil.warningMessage(spanish ? "La llave Secundaria esta vacia" : "The Secondary key is empty");
+                        return "";
+                    }
+                    Optional<Object> optionalSecondary = repository.findBySecondaryKey(entity);
+                    if (!optionalSecondary.isPresent()) {
+                        JmoordbUtil.warningMessage(spanish ? "No existe un documento con esos datos" : "there is no document with this data");
+                        return "";
+                    }
+                    break;
+                case "tertiary":
+                    //Busca por llave secundaria
+                    String tertiaryValue = repository.tertiaryKeyValue(entity);
+                    if (tertiaryValue == null || tertiaryValue.isEmpty() || tertiaryValue.equals("null")) {
+                        JmoordbUtil.warningMessage(spanish ? "La llave @Tertiary esta vacia" : "The @Tertiary key is empty");
+                        return "";
+                    }
+                    Optional<Object> optionalTertiary = repository.findBySecondaryKey(entity);
+                    if (!optionalTertiary.isPresent()) {
+                        JmoordbUtil.warningMessage(spanish ? "No existe un documento con esos datos" : "there is no document with this data");
+                        return "";
+                    }
+                    break;
+                case "composite":
+                      //Busca por llave secundaria
+                   
+                    break;
+
+                default:
+                    JmoordbUtil.warningMessage(spanish ? "typeKey debe ser(primary,secondary,tertiary,composite) " : "typeKey could by(primary,secondary,tertiary,composite)");
+
             }
+
             //Agregar el UserInfo al entity
             entity = repository.addUserInfoForEditMethod(entity, username, "update");
 
             if (!beforeEdit()) {
+                return "";
+            }
+            String primaryValue = repository.primaryKeyValue(entity);
+            if (primaryValue == null || primaryValue.isEmpty() || primaryValue.equals("null")) {
+                JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
                 return "";
             }
             if (repository.update(entity)) {
@@ -546,7 +621,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -560,8 +635,7 @@ public interface IController<T> {
             if (!beforeDelete()) {
                 return "";
             }
-            
-          
+
             String nameOfPrimaryKey = repository.primaryKeyName(entity);
 
             if (repository.primaryKeyIsInteger(entity)) {
@@ -659,7 +733,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -800,7 +874,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -929,7 +1003,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1059,7 +1133,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1155,7 +1229,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1248,7 +1322,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1340,7 +1414,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1413,8 +1487,8 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
-            
+            String typeKey = jme.getTypeKey();
+
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1423,122 +1497,161 @@ public interface IController<T> {
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             //------------------------------------
             JmoordbIntrospection.callSet(controller, "writable", true);
+            typeKey = typeKey.toLowerCase().trim();
+            switch (typeKey) {
+                case "primary":
+                    //----------------------------------
+                    //Busca por llave primaria
+                    //----------------------------------
+                    if (JmoordbUtil.isVacio(repository.primaryKeyValue(entity))) {
+                        JmoordbIntrospection.callSet(controller, "writable", false);
+                        afterValidateNew(false);
+                        return "";
+                    }
 
-            if (searchbysecondary) {
-                //Busca por llave secundaria
-                List<SecondaryKey> ls = repository.getSecondaryKeyList();
+                    //Convierte a mayusculas la llave primaria y la devuelve en el entity
+                    if (!searchLowerCase) {
+                        entity = repository.primaryKeyValueToUpper(entity);
+                    } else {
+                        entity = repository.primaryKeyValueToLower(entity);
+                    }
 
-                HashMap<String, Object> map = repository.secondaryKeyValueObject(entity);
-                Set set = map.entrySet();
-                Iterator iterator = set.iterator();
-                while (iterator.hasNext()) {
-                    Map.Entry mentry = (Map.Entry) iterator.next();
-                    for (SecondaryKey s : ls) {
-                        if (s.getName().equals(mentry.getKey())) {
-                            switch (s.getType()) {
-                                case "java.lang.String":
-                                    if (JmoordbUtil.isVacio(mentry.getValue().toString())) {
-                                        JmoordbIntrospection.callSet(controller, "writable", false);
-                                        afterValidateNew(false);
-                                        return "";
-                                    }
-                                    break;
-                                case "java.lang.Integer":
-                                    if (JmoordbUtil.isVacio((Integer) mentry.getValue())) {
-                                        JmoordbIntrospection.callSet(controller, "writable", false);
-                                        afterValidateNew(false);
-                                        return "";
-                                    }
-                                    break;
+                    Optional<Object> optional = repository.findById(entity);
 
-                            }
+                    if (optional.isPresent()) {
+                        JmoordbIntrospection.callSet(controller, "writable", false);
+                        JmoordbUtil.warningMessage(spanish ? "Ya existe un documento con esos datos" : "A document with this data already exists");
+                        afterValidateNew(false);
+                        return "";
+                    } else {
+                        String id = repository.primaryKeyValue(entity);
+
+                        Object entitynew = JmoordbIntrospection.newEntity(entity);
+                        entitynew = repository.primaryKeySetValue(entity, id);
+
+                        /**
+                         * crea un entity nuevo le asigna la llave primaria
+                         * asigna al selected el entity
+                         */
+                        JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
+                        JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
+
+                    }
+                    break;
+                case "secondary":
+                    //----------------------------------
+                    //Busca por llave secundaria
+                    //----------------------------------
+                    List<SecondaryKey> ls = repository.getSecondaryKeyList();
+
+                    if (ls == null || ls.isEmpty()) {
+                        JmoordbUtil.warningMessage(spanish ? "El entity no contiene llave @Secondary" : "The entity have not @Secondary");
+
+                    } else {
+
+                        if (JmoordbUtil.isVacio(repository.secondaryKeyValue(entity))) {
+                            JmoordbIntrospection.callSet(controller, "writable", false);
+                            afterValidateNew(false);
+                            return "";
                         }
 
+                        //Convierte a mayusculas la llave primaria y la devuelve en el entity
+                        if (!searchLowerCase) {
+                            entity = repository.secondaryKeyValueToUpper(entity);
+                        } else {
+                            entity = repository.secondaryKeyValueToLower(entity);
+                        }
+
+                        Optional<Object> optionalSecondary = repository.findBySecondaryKey(entity);
+
+                        if (optionalSecondary.isPresent()) {
+                            JmoordbIntrospection.callSet(controller, "writable", false);
+                            JmoordbUtil.warningMessage(spanish ? "Ya existe un documento con esos datos" : "A document with this data already exists");
+                            afterValidateNew(false);
+                            return "";
+                        } else {
+
+                            String id = repository.secondaryKeyValue(entity);
+
+                            Object entitynew = JmoordbIntrospection.newEntity(entity);
+                            entitynew = repository.secondaryKeySetValue(entity, id);
+
+                            /**
+                             * crea un entity nuevo le asigna la llave primaria
+                             * asigna al selected el entity
+                             */
+                            JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
+                            JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
+
+                            /**
+                             * crea un entity nuevo le asigna la llave primaria
+                             * asigna al selected el entity
+                             */
+                            JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
+                            JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
+
+                        }
                     }
-                }
+                    break;
+                case "tertiary":
+                     //----------------------------------
+                    //Busca por llave secundaria
+                    //----------------------------------
+                    List<TertiaryKey> lsTertiary = repository.getTertiaryKeyList();
 
-                //Convierte a mayusculas la llave primaria y la devuelve en el entity
-                   if(!searchLowerCase){
-                       entity = repository.secondaryKeyValueToUpper(entity);
-                   }else{
-                       entity = repository.secondaryKeyValueToLower(entity);
-                   }
-                
+                    if (lsTertiary == null || lsTertiary.isEmpty()) {
+                        JmoordbUtil.warningMessage(spanish ? "El entity no contiene llave @Secondary" : "The entity have not @Secondary");
 
-                Optional<Object> optional = repository.findBySecondaryKey(entity);
+                    } else {
 
-                if (optional.isPresent()) {
-                    JmoordbIntrospection.callSet(controller, "writable", false);
-                    JmoordbUtil.warningMessage(spanish ? "Ya existe un documento con esos datos" : "A document with this data already exists");
-                    afterValidateNew(false);
-                    return "";
-                } else {
-                    /*
-                    Obtienes las llaves secundarias
-                    creas un entity nuevo con new
-                    asignas las llaves secundarias.
-                     */
+                        if (JmoordbUtil.isVacio(repository.tertiaryKeyValue(entity))) {
+                            JmoordbIntrospection.callSet(controller, "writable", false);
+                            afterValidateNew(false);
+                            return "";
+                        }
 
-                    HashMap<String, Object> secondary = repository.secondaryKeyValueObject(entity);
+                        //Convierte a mayusculas la llave primaria y la devuelve en el entity
+                        if (!searchLowerCase) {
+                            entity = repository.tertiaryKeyValueToUpper(entity);
+                        } else {
+                            entity = repository.tertiaryKeyValueToLower(entity);
+                        }
 
-                    Object entitynew = JmoordbIntrospection.newEntity(entity);
+                        Optional<Object> optionalTertiary = repository.findByTertiaryKey(entity);
 
-                    Set set1 = map.entrySet();
-                    Iterator iterator1 = set1.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry mentry = (Map.Entry) iterator.next();
-                        entitynew = repository.secondaryKeySetValue(entity, mentry.getKey().toString(), mentry.getValue());
+                        if (optionalTertiary.isPresent()) {
+                            JmoordbIntrospection.callSet(controller, "writable", false);
+                            JmoordbUtil.warningMessage(spanish ? "Ya existe un documento con esos datos" : "A document with this data already exists");
+                            afterValidateNew(false);
+                            return "";
+                        } else {
+
+                            String id = repository.tertiaryKeyValue(entity);
+
+                            Object entitynew = JmoordbIntrospection.newEntity(entity);
+                            entitynew = repository.tertiaryKeySetValue(entity, id);
+
+                            /**
+                             * crea un entity nuevo le asigna la llave primaria
+                             * asigna al selected el entity
+                             */
+                            JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
+                            JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
+
+                            /**
+                             * crea un entity nuevo le asigna la llave primaria
+                             * asigna al selected el entity
+                             */
+                            JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
+                            JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
+
+                        }
                     }
-
-                    /**
-                     * crea un entity nuevo le asigna la llave primaria asigna
-                     * al selected el entity
-                     */
-                    JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
-                    JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
-
-                }
-
-            } else {
-                //----------------------------------
-                //Busca por llave primaria
-                //----------------------------------
-                if (JmoordbUtil.isVacio(repository.primaryKeyValue(entity))) {
-                    JmoordbIntrospection.callSet(controller, "writable", false);
-                    afterValidateNew(false);
-                    return "";
-                }
-
-                //Convierte a mayusculas la llave primaria y la devuelve en el entity
-                if(!searchLowerCase){
-                       entity = repository.primaryKeyValueToUpper(entity);
-                }else{
-                       entity = repository.primaryKeyValueToLower(entity);
-                }
-             
-
-                Optional<Object> optional = repository.findById(entity);
-
-                if (optional.isPresent()) {
-                    JmoordbIntrospection.callSet(controller, "writable", false);
-                    JmoordbUtil.warningMessage(spanish ? "Ya existe un documento con esos datos" : "A document with this data already exists");
-                    afterValidateNew(false);
-                    return "";
-                } else {
-                    String id = repository.primaryKeyValue(entity);
-
-                    Object entitynew = JmoordbIntrospection.newEntity(entity);
-                    entitynew = repository.primaryKeySetValue(entity, id);
-
-                    /**
-                     * crea un entity nuevo le asigna la llave primaria asigna
-                     * al selected el entity
-                     */
-                    JmoordbIntrospection.callSet(controller, nameOfEntity, entitynew);
-                    JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entitynew);
-
-                }
-//            
+                    break;
+                case "composite":
+                    break;
+                default:
+                    JmoordbUtil.warningMessage(spanish ? "typeKey debe ser(primary,secondary,tertiary,composite) " : "typeKey could by(primary,secondary,tertiary,composite)");
 
             }
 
@@ -1597,8 +1710,8 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
-             Boolean searchLowerCase = jme.getSearchLowerCase();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1642,8 +1755,8 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
-             Boolean searchLowerCase = jme.getSearchLowerCase();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1685,8 +1798,8 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
-             Boolean searchLowerCase = jme.getSearchLowerCase();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1744,7 +1857,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1805,7 +1918,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
@@ -1834,7 +1947,6 @@ public interface IController<T> {
      *
      * @return
      */
-
     default public String handleAutocompleteOfListXhtml(SelectEvent event) {
 //    default public String aspectHandleAutocompleteOfListXhtml() {
         Boolean edited = false;
@@ -1868,7 +1980,7 @@ public interface IController<T> {
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
-            Boolean searchbysecondary = jme.getSearchbysecondarykey();
+            String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();

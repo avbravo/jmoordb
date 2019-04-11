@@ -21,17 +21,43 @@ public class FieldBeans {
     private Boolean isEmbedded;
     private Boolean isReferenced;
     private Boolean isSecondary;
+    private Boolean isTertiary;
+    private Boolean isComposite;
 
     public FieldBeans() {
     }
 
-    public FieldBeans(String name, String type, Boolean isKey, Boolean isEmbedded, Boolean isReferenced, Boolean isSecondary) {
+   
+
+    public FieldBeans(String name, String type, Boolean isKey, Boolean isEmbedded, Boolean isReferenced, Boolean isSecondary, Boolean isTertiary, Boolean isComposite) {
         this.name = name;
         this.type = type;
         this.isKey = isKey;
         this.isEmbedded = isEmbedded;
         this.isReferenced = isReferenced;
         this.isSecondary = isSecondary;
+        this.isTertiary = isTertiary;
+        this.isComposite = isComposite;
+    }
+
+    
+    
+    
+    
+    public Boolean getIsTertiary() {
+        return isTertiary;
+    }
+
+    public void setIsTertiary(Boolean isTertiary) {
+        this.isTertiary = isTertiary;
+    }
+
+    public Boolean getIsComposite() {
+        return isComposite;
+    }
+
+    public void setIsComposite(Boolean isComposite) {
+        this.isComposite = isComposite;
     }
 
     

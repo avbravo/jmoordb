@@ -5,17 +5,21 @@
  */
 package com.avbravo.jmoordb.util;
 
+import com.avbravo.jmoordb.CompositeKey;
 import com.avbravo.jmoordb.DatePatternBeans;
 import com.avbravo.jmoordb.EmbeddedBeans;
 import com.avbravo.jmoordb.FieldBeans;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.SecondaryKey;
+import com.avbravo.jmoordb.TertiaryKey;
+import com.avbravo.jmoordb.anotations.Composite;
 import com.avbravo.jmoordb.anotations.DatePattern;
 import com.avbravo.jmoordb.anotations.Embedded;
 import com.avbravo.jmoordb.anotations.Id;
 import com.avbravo.jmoordb.anotations.Referenced;
 import com.avbravo.jmoordb.anotations.Secondary;
+import com.avbravo.jmoordb.anotations.Tertiary;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,6 +33,9 @@ public class Analizador {
 
     List<PrimaryKey> primaryKeyList = new ArrayList<>();
     List<SecondaryKey> secondaryKeyList = new ArrayList<>();
+    List<TertiaryKey> tertiaryKeyList = new ArrayList<>();
+    List<CompositeKey> compositeKeyList = new ArrayList<>();
+    
     List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
     List<FieldBeans> fieldBeansList = new ArrayList<>();
@@ -36,6 +43,25 @@ public class Analizador {
 
     Exception exception;
 
+    public List<TertiaryKey> getTertiaryKeyList() {
+        return tertiaryKeyList;
+    }
+
+    public void setTertiaryKeyList(List<TertiaryKey> tertiaryKeyList) {
+        this.tertiaryKeyList = tertiaryKeyList;
+    }
+
+    public List<CompositeKey> getCompositeKeyList() {
+        return compositeKeyList;
+    }
+
+    public void setCompositeKeyList(List<CompositeKey> compositeKeyList) {
+        this.compositeKeyList = compositeKeyList;
+    }
+
+    
+    
+    
     public List<PrimaryKey> getPrimaryKeyList() {
         return primaryKeyList;
     }
@@ -95,6 +121,8 @@ public class Analizador {
     public Analizador() {
         primaryKeyList = new ArrayList<>();
         secondaryKeyList = new ArrayList<>();
+        tertiaryKeyList = new ArrayList<>();
+        compositeKeyList = new ArrayList<>();
         embeddedBeansList = new ArrayList<>();
         referencedBeansList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
@@ -113,6 +141,8 @@ public class Analizador {
             for (final Field field : fields) {
                 Annotation anotacion = field.getAnnotation(Id.class);
                 Annotation anotacionSecondary = field.getAnnotation(Secondary.class);
+                Annotation anotacionTertiary = field.getAnnotation(Tertiary.class);
+                Annotation anotacionComposite = field.getAnnotation(Composite.class);
                 Annotation anotacionEmbedded = field.getAnnotation(Embedded.class);
                 Annotation anotacionReferenced = field.getAnnotation(Referenced.class);
                 Annotation anotacionDateFormat = field.getAnnotation(DatePattern.class);
@@ -127,6 +157,8 @@ public class Analizador {
                 fieldBeans.setIsEmbedded(false);
                 fieldBeans.setIsReferenced(false);
                 fieldBeans.setIsSecondary(false);
+                fieldBeans.setIsTertiary(false);
+                fieldBeans.setIsComposite(false);
                 fieldBeans.setName(field.getName());
                 fieldBeans.setType(field.getType().getName());
 
@@ -142,6 +174,20 @@ public class Analizador {
                     fieldBeans.setIsSecondary(true);
 
                 }
+//TertiaryKey
+                if (anotacionTertiary != null) {
+                    verifyTertiaryKey(field, anotacionTertiary);
+                    fieldBeans.setIsTertiary(true);
+
+                }
+//CombinedKey
+                if (anotacionComposite  != null) {
+                    verifyCompositeKey(field, anotacionComposite);
+                    fieldBeans.setIsComposite(true);
+
+                }
+                
+                
 
                 if (anotacionEmbedded != null) {
 
@@ -181,6 +227,9 @@ public class Analizador {
         return false;
     }    // </editor-fold>
 
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean verifyPrimaryKey(Field variable, Annotation anotacion)">
+ 
     /**
      *
      * @param variable
@@ -212,6 +261,77 @@ public class Analizador {
         }
         return false;
     }
+       // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean verifyTertiaryKey(Field variable, Annotation anotacion)">
+ 
+    /**
+     *
+     * @param variable
+     * @param anotacion
+     * @return
+     */
+    private Boolean verifyTertiaryKey(Field variable, Annotation anotacion) {
+        try {
+            final Tertiary anotacionTertiary = (Tertiary) anotacion;
+            TertiaryKey tertiaryKey = new TertiaryKey();
+
+            Boolean found = false;
+            for (TertiaryKey tk : tertiaryKeyList) {
+                if (tk.getName().equals(tertiaryKey.getName())) {
+                    found = true;
+                }
+            }
+
+          tertiaryKey.setName(variable.getName());
+           tertiaryKey.setType(variable.getType().getName());
+
+            // obtengo el valor del atributo
+            if (!found) {
+                tertiaryKeyList.add(tertiaryKey);
+            }
+            return true;
+        } catch (Exception e) {
+            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
+        }
+        return false;
+    }
+       // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean verifyCompositeKey(Field variable, Annotation anotacion)">
+ 
+    /**
+     *
+     * @param variable
+     * @param anotacion
+     * @return
+     */
+    private Boolean verifyCompositeKey(Field variable, Annotation anotacion) {
+        try {
+            final Composite anotacionComposite= (Composite) anotacion;
+            CompositeKey compositeKey = new CompositeKey();
+
+            Boolean found = false;
+            for (CompositeKey ck : compositeKeyList) {
+                if (ck.getName().equals(compositeKey.getName())) {
+                    found = true;
+                }
+            }
+
+        compositeKey.setName(variable.getName());
+        compositeKey.setType(variable.getType().getName());
+
+            // obtengo el valor del atributo
+            if (!found) {
+                compositeKeyList.add(compositeKey);
+            }
+            return true;
+        } catch (Exception e) {
+            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
+        }
+        return false;
+    }
+       // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="verifySecondaryKey(Field variable, Annotation anotacion)">
   
