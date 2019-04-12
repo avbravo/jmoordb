@@ -98,6 +98,12 @@ public abstract class Repository<T> implements InterfaceRepository {
     MongoClient mongoClient;
 
     Integer contador = 0;
+    /*
+    limite de documentos que puede traer un findAll()
+    para evitar la sobrecarga
+    */
+    Integer limitOfDocumentInFindAllMethod =4000;
+    
     private JavaToDocument javaToDocument = new JavaToDocument();
     private DocumentToJavaMongoDB documentToJava = new DocumentToJavaMongoDB();
     private DocumentToJavaJmoordbResult documentToJavaJmoordbResult = new DocumentToJavaJmoordbResult();
@@ -113,7 +119,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     List<SecondaryKey> secondaryKeyList = new ArrayList<>();
     List<TertiaryKey> tertiaryKeyList = new ArrayList<>();
     List<CompositeKey> compositeKeyList = new ArrayList<>();
-    
+
     List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
     List<ReferencedBeans> referencedBeansList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
@@ -132,6 +138,18 @@ public abstract class Repository<T> implements InterfaceRepository {
         this.exception = exception;
     }
 
+    public Integer getLimitOfDocumentInFindAllMethod() {
+        return limitOfDocumentInFindAllMethod;
+    }
+
+    public void setLimitOfDocumentInFindAllMethod(Integer limitOfDocumentInFindAllMethod) {
+        this.limitOfDocumentInFindAllMethod = limitOfDocumentInFindAllMethod;
+    }
+
+  
+
+    
+    
     public List<TertiaryKey> getTertiaryKeyList() {
         return tertiaryKeyList;
     }
@@ -148,11 +166,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         this.compositeKeyList = compositeKeyList;
     }
 
-    
-    
-    
-    
-    
     public String getDatabase() {
         return database;
     }
@@ -295,7 +308,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         analizador.analizar(fields);
         primaryKeyList = analizador.getPrimaryKeyList();
         secondaryKeyList = analizador.getSecondaryKeyList();
-         tertiaryKeyList = analizador.getTertiaryKeyList();
+        tertiaryKeyList = analizador.getTertiaryKeyList();
         compositeKeyList = analizador.getCompositeKeyList();
         embeddedBeansList = analizador.getEmbeddedBeansList();
         referencedBeansList = analizador.getReferencedBeansList();
@@ -319,15 +332,16 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     }// </editor-fold>
 
-   /**
-    * .
-    * @param entityClass
-    * @param internalDatabaseHistoryAcronimo : se invocainternamente generalmente se le pasa el valor de _history
-    */
-    public Repository(Class<T> entityClass, String internalDatabaseHistoryAcronimo,Boolean... lazy) {
+    /**
+     * .
+     * @param entityClass
+     * @param internalDatabaseHistoryAcronimo : se invocainternamente
+     * generalmente se le pasa el valor de _history
+     */
+    public Repository(Class<T> entityClass, String internalDatabaseHistoryAcronimo, Boolean... lazy) {
         String database = "";
-        if(internalDatabaseHistoryAcronimo== null || internalDatabaseHistoryAcronimo.equals("")){
-            internalDatabaseHistoryAcronimo="_history";
+        if (internalDatabaseHistoryAcronimo == null || internalDatabaseHistoryAcronimo.equals("")) {
+            internalDatabaseHistoryAcronimo = "_history";
         }
         if (FacesContext.getCurrentInstance() != null) {
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -335,8 +349,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             database = (String) sessionMap.get("database");
             if (database == null) {
                 database = "";
-            }else{
-                database = database+internalDatabaseHistoryAcronimo;
+            } else {
+                database = database + internalDatabaseHistoryAcronimo;
             }
         }
 
@@ -370,7 +384,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         analizador.analizar(fields);
         primaryKeyList = analizador.getPrimaryKeyList();
         secondaryKeyList = analizador.getSecondaryKeyList();
-         tertiaryKeyList = analizador.getTertiaryKeyList();
+        tertiaryKeyList = analizador.getTertiaryKeyList();
         compositeKeyList = analizador.getCompositeKeyList();
         embeddedBeansList = analizador.getEmbeddedBeansList();
         referencedBeansList = analizador.getReferencedBeansList();
@@ -552,9 +566,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return doc;
     }// </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Document getIndexTertiaryKey()">
 
+    // <editor-fold defaultstate="collapsed" desc="Document getIndexTertiaryKey()">
     /**
      * Crea un Index en base a las llaves tertiary
      *
@@ -572,9 +585,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return doc;
     }// </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Document getIndexCompositeKey()">
 
+    // <editor-fold defaultstate="collapsed" desc="Document getIndexCompositeKey()">
     /**
      * Crea un Index en base a las llaves tertiary
      *
@@ -592,9 +604,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return doc;
     }// </editor-fold>
-    
-    
-    
 
     // <editor-fold defaultstate="collapsed" desc="createIndex(Document... doc)">
     /**
@@ -828,8 +837,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         return name;
     }// </editor-fold>
 
-    
-    
     // <editor-fold defaultstate="collapsed" desc="Map<String, String> compositeKey(T t2) ">
     /**
      * devuelve la lista de compositeKey con las llaves compuestas,name, value
@@ -869,9 +876,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-    
-   
-
     // <editor-fold defaultstate="collapsed" desc="findById(Document doc)">
     public Optional<T> findById(Document doc) {
 
@@ -891,7 +895,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
-   
+
     // <editor-fold defaultstate="collapsed" desc="Boolean isFound(Document doc)">
     /**
      * busca si existe o no por la
@@ -918,9 +922,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return false;
     }// </editor-fold>
 
-   
     // <editor-fold defaultstate="collapsed" desc="Boolean isFoundByPrimaryKey(T t2)">
-
     /**
      * Busca por la llave secundaria del documento
      *
@@ -1558,6 +1560,12 @@ public abstract class Repository<T> implements InterfaceRepository {
             if (docSort.length != 0) {
                 sortQuery = docSort[0];
 
+            }
+            Integer size= count();
+            if (size > limitOfDocumentInFindAllMethod) {
+                JmoordbUtil.warningDialog("findAll()","Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros "+limitOfDocumentInFindAllMethod);
+               list = findPagination(1, limitOfDocumentInFindAllMethod,  sortQuery);
+                return list;
             }
 
             MongoDatabase db = mongoClient.getDatabase(database);
@@ -5458,8 +5466,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-    
-    
     // <editor-fold defaultstate="collapsed" desc="T compositeKeySetValue(T t1, String nameOfCompositeKey, String valueOfSeconddaryKey)">
     /**
      * Devuelve el entity con la llave primaria en Mayuscula
@@ -5493,9 +5499,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         return t1;
     }
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="T compositeKeyValueToUpper(T t1)">
-     /**
+    /**
      * Devuelve el entity con las llaves secundarias en Mayuscula
      *
      * @param t1
@@ -5534,35 +5540,34 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                     }
 
-                }else{
-                    
+                } else {
+
                     if (s.getType().equals("java.lang.Integer")) {
 
-                    String nameOfCompositeKey = s.getName();
+                        String nameOfCompositeKey = s.getName();
 
-                    Set set = compositeKeyValueObject(t1).entrySet();
-                    Iterator iterator = set.iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry mentry = (Map.Entry) iterator.next();
-                        for (CompositeKey s1 : compositeKeyList) {
-                            if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.Integer")) {
-                                String valueOfSecondKey = (String) mentry.getValue();
-                                pkProperty = property.apply(nameOfCompositeKey);
+                        Set set = compositeKeyValueObject(t1).entrySet();
+                        Iterator iterator = set.iterator();
+                        while (iterator.hasNext()) {
+                            Map.Entry mentry = (Map.Entry) iterator.next();
+                            for (CompositeKey s1 : compositeKeyList) {
+                                if (mentry.getKey().equals(s.getName()) && s.getType().equals("java.lang.Integer")) {
+                                    String valueOfSecondKey = (String) mentry.getValue();
+                                    pkProperty = property.apply(nameOfCompositeKey);
 
-                                //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
-                                final MethodHandles.Lookup lookup = MethodHandles.lookup();
-                                final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
-                                        lookup.unreflect(pkProperty.getWriteMethod()));
-                                pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
+                                    //Definimos el metodo setUserInfo(List<UserInfo> userInfo)
+                                    final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                                    final BiConsumer pkSetter = JmoordbLambdaMetaFactory.createSetter(lookup,
+                                            lookup.unreflect(pkProperty.getWriteMethod()));
+                                    pkSetter.accept(t1, valueOfSecondKey.toUpperCase());
 
+                                }
                             }
+
                         }
 
                     }
 
-                }
-                    
-                    
                 }
             }
         } catch (Exception e) {
@@ -5573,11 +5578,6 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-    
-    
-    
-    
-    
     // <editor-fold defaultstate="collapsed" desc="HashMap<String, Object> compositeValueObject(T t2)">
     /**
      * devuelve la lista de CompositeKey con las llaves secundarias,name, value
@@ -5589,7 +5589,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         String value = "";
         try {
             Object t = entityClass.newInstance();
-            for (CompositeKey p :compositeKeyList) {
+            for (CompositeKey p : compositeKeyList) {
                 String name = util.letterToLower(p.getName());
                 Method method;
                 try {
@@ -5616,9 +5616,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         return map;
     }
     // </editor-fold>
-    
-    
-     // <editor-fold defaultstate="collapsed" desc="isFoundByCompositeKey(T t2)">
+
+    // <editor-fold defaultstate="collapsed" desc="isFoundByCompositeKey(T t2)">
     /**
      * Busca por la llave secundaria del documento
      *
@@ -5661,10 +5660,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
-   
-    
-    // <editor-fold defaultstate="collapsed" desc="Optional<T> findByCompositeKey(T t2)">
 
+    // <editor-fold defaultstate="collapsed" desc="Optional<T> findByCompositeKey(T t2)">
     /**
      * Busca por la llave secundaria del documento
      *
@@ -5698,9 +5695,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
-    
-     // <editor-fold defaultstate="collapsed" desc="Optional<T> findByCompositeKey(Document doc)">
 
+    // <editor-fold defaultstate="collapsed" desc="Optional<T> findByCompositeKey(Document doc)">
     public Optional<T> findByCompositeKey(Document doc) {
 
         try {
@@ -5719,8 +5715,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return Optional.empty();
     }// </editor-fold>
-    
-          // <editor-fold defaultstate="collapsed" desc="Document findDocSecondaryKey(T t2)">
+
+    // <editor-fold defaultstate="collapsed" desc="Document findDocSecondaryKey(T t2)">
     /**
      *
      * @return Document() correspondiente a la llave primaria
@@ -5749,8 +5745,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return doc;
     }// </editor-fold>
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="findById(T t2)">
     /**
      * Busca por la llave primaria del documento
@@ -5783,6 +5778,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return Optional.empty();
     }// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="String secondaryKeyValue(T t2)">
+
     /**
      * Devuelve el valor del campo primario
      *
@@ -5887,7 +5883,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         return value;
     }// </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="Map<String,String> secondaryKey(T t2) ">
     /**
      * Devuelve el valor del campo primario
@@ -5949,8 +5944,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return name;
     }// </editor-fold>
 
-      // <editor-fold defaultstate="collapsed" desc="Boolean isFoundBySecondaryKey(T t2)">
-
+    // <editor-fold defaultstate="collapsed" desc="Boolean isFoundBySecondaryKey(T t2)">
     /**
      * Busca por la llave secundaria del documento
      *
@@ -5988,8 +5982,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return false;
     }// </editor-fold>
 
-    
-      // <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToUpper(T t1)">
+    // <editor-fold defaultstate="collapsed" desc="T secondaryKeyValueToUpper(T t1)">
     /**
      * Devuelve el entity con la llave primaria en Mayuscula
      *
@@ -6063,11 +6056,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
-   
-    
-    
-    
-      // <editor-fold defaultstate="collapsed" desc="Document findDocTertiaryKey(T t2)">
+    // <editor-fold defaultstate="collapsed" desc="Document findDocTertiaryKey(T t2)">
     /**
      *
      * @return Document() correspondiente a la llave primaria
@@ -6096,8 +6085,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return doc;
     }// </editor-fold>
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="findById(T t2)">
     /**
      * Busca por la llave primaria del documento
@@ -6130,6 +6118,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return Optional.empty();
     }// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="String tertiaryKeyValue(T t2)">
+
     /**
      * Devuelve el valor del campo primario
      *
@@ -6234,7 +6223,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         return value;
     }// </editor-fold>
 
-    
     // <editor-fold defaultstate="collapsed" desc="Map<String,String> tertiaryKey(T t2) ">
     /**
      * Devuelve el valor del campo primario
@@ -6296,8 +6284,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return name;
     }// </editor-fold>
 
-      // <editor-fold defaultstate="collapsed" desc="Boolean isFoundByTertiaryKey(T t2)">
-
+    // <editor-fold defaultstate="collapsed" desc="Boolean isFoundByTertiaryKey(T t2)">
     /**
      * Busca por la llave secundaria del documento
      *
@@ -6335,8 +6322,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         return false;
     }// </editor-fold>
 
-    
-      // <editor-fold defaultstate="collapsed" desc="T tertiaryKeyValueToUpper(T t1)">
+    // <editor-fold defaultstate="collapsed" desc="T tertiaryKeyValueToUpper(T t1)">
     /**
      * Devuelve el entity con la llave primaria en Mayuscula
      *
@@ -6444,9 +6430,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         return t1;
     }
     // </editor-fold>
-    
-    
-      // <editor-fold defaultstate="collapsed" desc="HashMap<String, Object> secondaryValueObject(T t2)">
+
+    // <editor-fold defaultstate="collapsed" desc="HashMap<String, Object> secondaryValueObject(T t2)">
     /**
      * devuelve la lista de SecondaryKey con las llaves secundarias,name, value
      *
@@ -6457,7 +6442,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         String value = "";
         try {
             Object t = entityClass.newInstance();
-            for (SecondaryKey p :secondaryKeyList) {
+            for (SecondaryKey p : secondaryKeyList) {
                 String name = util.letterToLower(p.getName());
                 Method method;
                 try {
@@ -6484,9 +6469,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         return map;
     }
     // </editor-fold>
-    
-       // <editor-fold defaultstate="collapsed" desc="T secondaryKeySetValue(T t1, String valueOfSecondaryKey)">
- /**
+
+    // <editor-fold defaultstate="collapsed" desc="T secondaryKeySetValue(T t1, String valueOfSecondaryKey)">
+    /**
      * Devuelve el entity con la llave primaria en Mayuscula
      *
      * @param t1
@@ -6519,8 +6504,5 @@ public abstract class Repository<T> implements InterfaceRepository {
         return t1;
     }
     // </editor-fold>
-    
-    
-    
-  
+
 }
