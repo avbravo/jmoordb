@@ -11,6 +11,7 @@ import com.avbravo.jmoordb.DatePatternBeans;
 import com.avbravo.jmoordb.EmbeddedBeans;
 import com.avbravo.jmoordb.FieldBeans;
 import com.avbravo.jmoordb.JmoordbException;
+import com.avbravo.jmoordb.JmoordbStatistics;
 import com.avbravo.jmoordb.PrimaryKey;
 import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.SecondaryKey;
@@ -46,7 +47,6 @@ import static com.mongodb.client.model.Indexes.descending;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.MethodDescriptor;
@@ -101,9 +101,9 @@ public abstract class Repository<T> implements InterfaceRepository {
     /*
     limite de documentos que puede traer un findAll()
     para evitar la sobrecarga
-    */
-    Integer limitOfDocumentInFindAllMethod =4000;
-    
+     */
+    Integer limitOfDocumentInFindAllMethod = 4000;
+
     private JavaToDocument javaToDocument = new JavaToDocument();
     private DocumentToJavaMongoDB documentToJava = new DocumentToJavaMongoDB();
     private DocumentToJavaJmoordbResult documentToJavaJmoordbResult = new DocumentToJavaJmoordbResult();
@@ -146,10 +146,6 @@ public abstract class Repository<T> implements InterfaceRepository {
         this.limitOfDocumentInFindAllMethod = limitOfDocumentInFindAllMethod;
     }
 
-  
-
-    
-    
     public List<TertiaryKey> getTertiaryKeyList() {
         return tertiaryKeyList;
     }
@@ -199,7 +195,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
-            JmoordbUtil.errorMessage("getMongoDatabase() " + ex.getLocalizedMessage());
+            JmoordbUtil.errorDialog("getMongoDatabase() ", ex.getLocalizedMessage());
+
         }
         return null;
     }// </editor-fold>
@@ -408,8 +405,6 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     }// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="getMongoDatabase()">
-    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="save(T t, Boolean... verifyID)">
     /**
      *
@@ -1561,10 +1556,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Integer size= count();
+            Integer size = count();
             if (size > limitOfDocumentInFindAllMethod) {
-                JmoordbUtil.warningDialog("findAll()","Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros "+limitOfDocumentInFindAllMethod);
-               list = findPagination(1, limitOfDocumentInFindAllMethod,  sortQuery);
+                JmoordbUtil.warningDialog("findAll()", "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
+                list = findPagination(1, limitOfDocumentInFindAllMethod, sortQuery);
                 return list;
             }
 
@@ -6504,5 +6499,102 @@ public abstract class Repository<T> implements InterfaceRepository {
         return t1;
     }
     // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="JmoordbStatistics statistics() ">
+    /**
+     * devuelve las estadisticas de la base de datos
+     *
+     * @param document
+     * @return
+     */
+    public JmoordbStatistics statistics() {
+        JmoordbStatistics jmoordbStatistics = new JmoordbStatistics();
+        Document sortQuery = new Document();
+        try {
+
+            MongoDatabase db = mongoClient.getDatabase(database);
+
+            Document stats = db.runCommand(new Document("dbstats", 1));
+
+            for (Map.Entry<String, Object> set : stats.entrySet()) {
+                switch (set.getKey()) {
+                    case "db":
+                        jmoordbStatistics.setDb(set.getValue().toString());
+                        break;
+
+                    case "collections":
+                        jmoordbStatistics.setCollections(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "objects":
+                        jmoordbStatistics.setObjects(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "avgObjSize":
+                        jmoordbStatistics.setAvgObjSize(Double.parseDouble(set.getValue().toString()));
+                        break;
+                    case "dataSize":
+                        jmoordbStatistics.setDataSize(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "storageSize":
+                        jmoordbStatistics.setStorageSize(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "numExtents":
+                        jmoordbStatistics.setNumExtents(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "indexes":
+                        jmoordbStatistics.setIndexes(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "indexSize":
+                        jmoordbStatistics.setIndexSize(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "fileSize":
+                        jmoordbStatistics.setFileSize(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "nsSizeMB":
+                        jmoordbStatistics.setNsSizeMB(Integer.parseInt(set.getValue().toString()));
+                        break;
+                    case "dataFileVersion":
+                        jmoordbStatistics.setDataFileVersion(set.getValue().toString());
+                        break;
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            JmoordbUtil.errorDialog("statistics()", e.getLocalizedMessage());
+            exception = new Exception("statistics() ", e);
+            new JmoordbException("statistics()");
+        }
+
+        return jmoordbStatistics;
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Boolean internalQueryExecMaxBlockingSortBytes(Integer bytes) ">
+
+    /**
+     * asigna la cantidad de memoria ram para colecciones de gran tamaño por
+     * ejemplo: bytes=150151432 indica que usaremos 150MB para los documnentos
+     *
+     * @param document
+     * @return
+     */
+    public Boolean internalQueryExecMaxBlockingSortBytes(Integer bytes) {
+        Boolean success = true;
+        Document sortQuery = new Document();
+        try {
+
+            MongoDatabase db = mongoClient.getDatabase(database);
+
+            Document stats = db.runCommand(new Document("setParameter:", 1).append("internalQueryExecMaxBlockingSortBytes", bytes));
+
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            JmoordbUtil.errorDialog("internalQueryExecMaxBlockingSortBytes()", e.getLocalizedMessage());
+            exception = new Exception("internalQueryExecMaxBlockingSortBytes() ", e);
+            new JmoordbException("statistics()");
+            success = false;
+        }
+        return success;
+    }// </editor-fold>
 
 }
