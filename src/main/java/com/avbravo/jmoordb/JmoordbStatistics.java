@@ -15,19 +15,22 @@ public class JmoordbStatistics {
     private Integer collections;
     private Integer objects;
     private Double avgObjSize;
-    private Integer dataSize;
-    private Integer storageSize;
+    private Double dataSize;
+    private Double storageSize;
     private Integer numExtents;
     private Integer indexes;
-    private Integer indexSize;
-    private Integer fileSize;
-    private Integer nsSizeMB;
-    private String dataFileVersion;
+    private Double indexSize;
+//    private Integer fileSize;
+//    private Integer nsSizeMB;
+//    private String dataFileVersion;
+    //nuevas
+ private Double   fsTotalSize ;
+private Double fsUsedSize;
 
     public JmoordbStatistics() {
     }
 
-    public JmoordbStatistics(String db, Integer collections, Integer objects, Double avgObjSize, Integer dataSize, Integer storageSize, Integer numExtents, Integer indexes, Integer indexSize, Integer fileSize, Integer nsSizeMB, String dataFileVersion) {
+    public JmoordbStatistics(String db, Integer collections, Integer objects, Double avgObjSize, Double dataSize, Double storageSize, Integer numExtents, Integer indexes, Double indexSize, Double fsTotalSize, Double fsUsedSize) {
         this.db = db;
         this.collections = collections;
         this.objects = objects;
@@ -37,10 +40,33 @@ public class JmoordbStatistics {
         this.numExtents = numExtents;
         this.indexes = indexes;
         this.indexSize = indexSize;
-        this.fileSize = fileSize;
-        this.nsSizeMB = nsSizeMB;
-        this.dataFileVersion = dataFileVersion;
+        this.fsTotalSize = fsTotalSize;
+        this.fsUsedSize = fsUsedSize;
     }
+
+  
+
+    public Double getFsTotalSize() {
+        return fsTotalSize;
+    }
+
+    public void setFsTotalSize(Double fsTotalSize) {
+        this.fsTotalSize = fsTotalSize;
+    }
+
+    public Double getFsUsedSize() {
+        return fsUsedSize;
+    }
+
+    public void setFsUsedSize(Double fsUsedSize) {
+        this.fsUsedSize = fsUsedSize;
+    }
+    
+    
+    
+    
+    
+    
 
     public String getDb() {
         return db;
@@ -74,21 +100,25 @@ public class JmoordbStatistics {
         this.avgObjSize = avgObjSize;
     }
 
-    public Integer getDataSize() {
+    public Double getDataSize() {
         return dataSize;
     }
 
-    public void setDataSize(Integer dataSize) {
+    public void setDataSize(Double dataSize) {
         this.dataSize = dataSize;
     }
 
-    public Integer getStorageSize() {
+    public Double getStorageSize() {
         return storageSize;
     }
 
-    public void setStorageSize(Integer storageSize) {
+    public void setStorageSize(Double storageSize) {
         this.storageSize = storageSize;
     }
+
+   
+
+   
 
     public Integer getNumExtents() {
         return numExtents;
@@ -106,41 +136,21 @@ public class JmoordbStatistics {
         this.indexes = indexes;
     }
 
-    public Integer getIndexSize() {
+    public Double getIndexSize() {
         return indexSize;
     }
 
-    public void setIndexSize(Integer indexSize) {
+    public void setIndexSize(Double indexSize) {
         this.indexSize = indexSize;
-    }
-
-    public Integer getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(Integer fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public Integer getNsSizeMB() {
-        return nsSizeMB;
-    }
-
-    public void setNsSizeMB(Integer nsSizeMB) {
-        this.nsSizeMB = nsSizeMB;
-    }
-
-    public String getDataFileVersion() {
-        return dataFileVersion;
-    }
-
-    public void setDataFileVersion(String dataFileVersion) {
-        this.dataFileVersion = dataFileVersion;
     }
 
     @Override
     public String toString() {
-        return "JmoordbStatistics{" + "db=" + db + ", collections=" + collections + ", objects=" + objects + ", avgObjSize=" + avgObjSize + ", dataSize=" + dataSize + ", storageSize=" + storageSize + ", numExtents=" + numExtents + ", indexes=" + indexes + ", indexSize=" + indexSize + ", fileSize=" + fileSize + ", nsSizeMB=" + nsSizeMB + ", dataFileVersion=" + dataFileVersion + '}';
+        return "JmoordbStatistics{" + "db=" + db + ", collections=" + collections + ", objects=" + objects + ", avgObjSize=" + avgObjSize + ", dataSize=" + dataSize + ", storageSize=" + storageSize + ", numExtents=" + numExtents + ", indexes=" + indexes + ", indexSize=" + indexSize + ", fsTotalSize=" + fsTotalSize + ", fsUsedSize=" + fsUsedSize + '}';
     }
+
+   
+
+  
 
 }

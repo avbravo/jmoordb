@@ -6513,8 +6513,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
 
             MongoDatabase db = mongoClient.getDatabase(database);
-
-            Document stats = db.runCommand(new Document("dbstats", 1));
+           Document stats = db.runCommand(new Document("dbstats", 1));
 
             for (Map.Entry<String, Object> set : stats.entrySet()) {
                 switch (set.getKey()) {
@@ -6532,10 +6531,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                         jmoordbStatistics.setAvgObjSize(Double.parseDouble(set.getValue().toString()));
                         break;
                     case "dataSize":
-                        jmoordbStatistics.setDataSize(Integer.parseInt(set.getValue().toString()));
+                        jmoordbStatistics.setDataSize(Double.parseDouble(set.getValue().toString()));
                         break;
                     case "storageSize":
-                        jmoordbStatistics.setStorageSize(Integer.parseInt(set.getValue().toString()));
+                        jmoordbStatistics.setStorageSize(Double.parseDouble(set.getValue().toString()));
                         break;
                     case "numExtents":
                         jmoordbStatistics.setNumExtents(Integer.parseInt(set.getValue().toString()));
@@ -6544,16 +6543,14 @@ public abstract class Repository<T> implements InterfaceRepository {
                         jmoordbStatistics.setIndexes(Integer.parseInt(set.getValue().toString()));
                         break;
                     case "indexSize":
-                        jmoordbStatistics.setIndexSize(Integer.parseInt(set.getValue().toString()));
+                        jmoordbStatistics.setIndexSize(Double.parseDouble(set.getValue().toString()));
                         break;
-                    case "fileSize":
-                        jmoordbStatistics.setFileSize(Integer.parseInt(set.getValue().toString()));
+                
+                    case "fsTotalSize":
+                        jmoordbStatistics.setFsTotalSize(Double.parseDouble(set.getValue().toString()));
                         break;
-                    case "nsSizeMB":
-                        jmoordbStatistics.setNsSizeMB(Integer.parseInt(set.getValue().toString()));
-                        break;
-                    case "dataFileVersion":
-                        jmoordbStatistics.setDataFileVersion(set.getValue().toString());
+                    case "fsUsedSize":
+                        jmoordbStatistics.setFsUsedSize(Double.parseDouble(set.getValue().toString()));
                         break;
 
                 }
