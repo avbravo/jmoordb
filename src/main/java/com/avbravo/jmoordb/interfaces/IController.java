@@ -285,7 +285,7 @@ public interface IController<T> {
                     }
                     break;
                 case "tertiary":
-                      String tertiaryValue = repository.tertiaryKeyValue(entity);
+                    String tertiaryValue = repository.tertiaryKeyValue(entity);
                     if (tertiaryValue == null || tertiaryValue.isEmpty() || tertiaryValue.equals("null")) {
                         JmoordbUtil.warningMessage(spanish ? "La llave @Tertiary esta vacia" : "the @Tertiary key is empty");
                         return "";
@@ -435,8 +435,8 @@ public interface IController<T> {
                     }
                     break;
                 case "composite":
-                      //Busca por llave secundaria
-                   
+                    //Busca por llave secundaria
+
                     break;
 
                 default:
@@ -592,6 +592,7 @@ public interface IController<T> {
     // <editor-fold defaultstate="collapsed" desc="String delete()">
     default public String delete() {
         Boolean deleted = false;
+        String url = "";
         try {
             JmoordbConfiguration jmc = new JmoordbConfiguration();
             JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
@@ -629,7 +630,11 @@ public interface IController<T> {
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             //------------------------------------
-            //Agregar el UserInfo al entity
+
+            //Los pasa el usuaario
+            url = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("url");
+
+//Agregar el UserInfo al entity
             entity = repository.addUserInfoForEditMethod(entity, username, "delete");
 
             if (!beforeDelete()) {
@@ -679,7 +684,10 @@ public interface IController<T> {
                 JmoordbIntrospection.callSet(controller, "writable", false);
 
                 JmoordbUtil.successMessage(spanish ? "Eliminado" : "Deleted");
-                reset();
+              reset();
+
+             
+
             }
 
         } catch (Exception ex) {
@@ -688,8 +696,10 @@ public interface IController<T> {
         }
 
         afterDelete(deleted);
+        //move(Integer.SIZE);
 
-        return "";
+//        return "";
+        return  prepareGoList();
 
     }// </editor-fold>
 
@@ -1594,7 +1604,7 @@ public interface IController<T> {
                     }
                     break;
                 case "tertiary":
-                     //----------------------------------
+                    //----------------------------------
                     //Busca por llave secundaria
                     //----------------------------------
                     List<TertiaryKey> lsTertiary = repository.getTertiaryKeyList();
