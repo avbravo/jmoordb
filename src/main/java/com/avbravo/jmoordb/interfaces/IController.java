@@ -1733,6 +1733,7 @@ public interface IController<T> {
             Integer page = (Integer) JmoordbIntrospection.callGet(controller, nameFieldOfPage);
 
             JmoordbContext.put("_fieldsearch" + nameOfEntity, value);
+
             move(page);
 
         } catch (Exception e) {
