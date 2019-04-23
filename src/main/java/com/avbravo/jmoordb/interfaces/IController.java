@@ -246,8 +246,8 @@ public interface IController<T> {
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             typeKey = typeKey.toLowerCase().trim();
-            
-                if (!beforeSave()) {
+
+            if (!beforeSave()) {
                 return "";
             }
             switch (typeKey) {
@@ -317,7 +317,7 @@ public interface IController<T> {
             //Agregar el UserInfo al entity
             entity = repository.addUserInfoForSaveMethod(entity, username, "create");
 
-        
+
             String primaryValue = repository.primaryKeyValue(entity);
             if (primaryValue == null || primaryValue.isEmpty() || primaryValue.equals("null")) {
                 JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
@@ -337,7 +337,7 @@ public interface IController<T> {
                 }
 
                 JmoordbUtil.successMessage(spanish ? "Guardado" : "Saved");
-                reset();
+              //  reset();
             } else {
                 JmoordbUtil.errorMessage(nameOfMethod() + " " + repository.getException().toString());
             }
@@ -686,9 +686,7 @@ public interface IController<T> {
                 JmoordbIntrospection.callSet(controller, "writable", false);
 
                 JmoordbUtil.successMessage(spanish ? "Eliminado" : "Deleted");
-              reset();
-
-             
+                reset();
 
             }
 
@@ -701,7 +699,7 @@ public interface IController<T> {
         //move(Integer.SIZE);
 
 //        return "";
-        return  prepareGoList();
+        return prepareGoList();
 
     }// </editor-fold>
 
@@ -1192,8 +1190,6 @@ public interface IController<T> {
         return url;
     }
 // </editor-fold>
-   
- 
 
     // <editor-fold defaultstate="collapsed" desc="Boolean beforePrepareGoList()">
     default Boolean beforePrepareGoList() {
