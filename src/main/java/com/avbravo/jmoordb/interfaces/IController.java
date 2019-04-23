@@ -246,6 +246,10 @@ public interface IController<T> {
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             typeKey = typeKey.toLowerCase().trim();
+            
+                if (!beforeSave()) {
+                return "";
+            }
             switch (typeKey) {
                 case "primary":
                     //convierte la llave primaria a minuscula
@@ -313,9 +317,7 @@ public interface IController<T> {
             //Agregar el UserInfo al entity
             entity = repository.addUserInfoForSaveMethod(entity, username, "create");
 
-            if (!beforeSave()) {
-                return "";
-            }
+        
             String primaryValue = repository.primaryKeyValue(entity);
             if (primaryValue == null || primaryValue.isEmpty() || primaryValue.equals("null")) {
                 JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
