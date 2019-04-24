@@ -56,6 +56,7 @@ public interface IController<T> {
             String typeKey = jme.getTypeKey();
 
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -89,6 +90,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -131,6 +133,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -164,6 +167,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -240,6 +244,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -337,7 +342,10 @@ public interface IController<T> {
                 }
 
                 JmoordbUtil.successMessage(spanish ? "Guardado" : "Saved");
-              //  reset();
+              if(resetInSave){
+                                 reset();
+              }
+ 
             } else {
                 JmoordbUtil.errorMessage(nameOfMethod() + " " + repository.getException().toString());
             }
@@ -389,6 +397,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -626,6 +635,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -745,6 +755,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -886,6 +897,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1015,6 +1027,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1145,6 +1158,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1241,6 +1255,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1334,6 +1349,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1426,6 +1442,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1500,6 +1517,7 @@ public interface IController<T> {
             String typeKey = jme.getTypeKey();
 
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1722,6 +1740,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1768,6 +1787,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1811,6 +1831,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1870,6 +1891,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1931,6 +1953,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
@@ -1993,6 +2016,7 @@ public interface IController<T> {
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
             String typeKey = jme.getTypeKey();
             Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
