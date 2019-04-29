@@ -41,7 +41,8 @@ public class ErrorInfoServices {
         } catch (Exception e) {
             JmoordbUtil.errorMessage("errorMessage() " + e.getLocalizedMessage());
         }
-        JmoordbUtil.errorMessage(metodo + " " + message);
+       // JmoordbUtil.errorMessage(metodo + " " + message);
+        errorDialog(clase, metodo,"error", message);
     }
 
     public void errorDialog(String clase, String metodo, String titulo, String message) {
