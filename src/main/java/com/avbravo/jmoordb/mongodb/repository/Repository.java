@@ -1038,6 +1038,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(document);
             tlocal = (T) iterableSimple(iterable);
+            if(tlocal== null){
+                return Optional.empty();
+            }
             return Optional.of(tlocal);
             //return (T) tlocal;
         } catch (Exception e) {
