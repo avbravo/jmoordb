@@ -242,16 +242,19 @@ public abstract class Repository<T> implements InterfaceRepository {
         //Llave primary
         if (primaryKeyList.isEmpty()) {
             exception = new Exception("No have primaryKey ");
+            JmoordbUtil.errorDialog("Warning", "No have primaryKey in "+entityClass.getName());
 
         } else {
 
             if (primaryKeyList.size() > 1) {
                 exception = new Exception("the entity has more than one primary key @ID ");
+                JmoordbUtil.errorDialog("Warning", "the entity has more than one primary key @ID ");
 
             }
         }
         if (fieldBeansList.isEmpty()) {
             exception = new Exception("No have fields ");
+             JmoordbUtil.errorDialog("Warning", "No have fields ");
         }
 
     }// </editor-fold>
