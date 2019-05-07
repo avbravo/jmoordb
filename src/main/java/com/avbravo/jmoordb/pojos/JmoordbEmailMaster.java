@@ -20,18 +20,30 @@ public class JmoordbEmailMaster {
     private String mail_smtp_auth;
     private String mail_smtp_port;
     private String mail_smtp_starttls_enable;
+    private String activo;
 
     public JmoordbEmailMaster() {
     }
 
-    public JmoordbEmailMaster(String email, String password, String mail_smtp_host, String mail_smtp_auth, String mail_smtp_port, String mail_smtp_starttls_enable) {
+    public JmoordbEmailMaster(String email, String password, String mail_smtp_host, String mail_smtp_auth, String mail_smtp_port, String mail_smtp_starttls_enable, String activo) {
         this.email = email;
         this.password = password;
         this.mail_smtp_host = mail_smtp_host;
         this.mail_smtp_auth = mail_smtp_auth;
         this.mail_smtp_port = mail_smtp_port;
         this.mail_smtp_starttls_enable = mail_smtp_starttls_enable;
+        this.activo = activo;
     }
+
+    public String getActivo() {
+        return activo;
+    }
+
+    public void setActivo(String activo) {
+        this.activo = activo;
+    }
+
+  
 
     
     
