@@ -54,6 +54,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -6598,6 +6599,22 @@ public abstract class Repository<T> implements InterfaceRepository {
             success = false;
         }
         return success;
+    }// </editor-fold>
+
+    
+      // <editor-fold defaultstate="collapsed" desc="T createEntity() ">
+    /**
+     * Crea un entity vacio
+     * @return 
+     */
+     public T createEntity() {
+        try {
+            return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
+        } catch (Exception e) {
+
+          JmoordbUtil.errorDialog("createEntity() ", e.getLocalizedMessage());
+        }
+        return null;
     }// </editor-fold>
 
 }
