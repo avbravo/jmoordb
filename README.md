@@ -14,6 +14,8 @@ Sintaxis similiar a JPA
   Documentos relacionados mediante la anotación @Referenced
   
  ##Documentación y Libro <https://app.gitbook.com/@avbravo-2/s/jmoordb/>
+ 
+ ##Taller Jmoordb <https://avbravo-2.gitbook.io/jmoordbtaller/>
   
 Dependencias
  
