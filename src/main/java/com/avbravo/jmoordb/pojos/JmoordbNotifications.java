@@ -19,12 +19,12 @@ public class JmoordbNotifications {
  private String message;
  private String type;
  private Date date;
- private Boolean viewed;
+ private String viewed;
 
     public JmoordbNotifications() {
     }
 
-    public JmoordbNotifications(Integer idjoordbnotifications, String username, String message, String type, Date date, Boolean viewed) {
+    public JmoordbNotifications(Integer idjoordbnotifications, String username, String message, String type, Date date, String viewed) {
         this.idjoordbnotifications = idjoordbnotifications;
         this.username = username;
         this.message = message;
@@ -33,6 +33,7 @@ public class JmoordbNotifications {
         this.viewed = viewed;
     }
 
+   
  
  
  
@@ -76,14 +77,13 @@ public class JmoordbNotifications {
         this.date = date;
     }
 
-    public Boolean getViewed() {
+    public String getViewed() {
         return viewed;
     }
 
-    public void setViewed(Boolean viewed) {
+    public void setViewed(String viewed) {
         this.viewed = viewed;
     }
- 
- 
- 
+
+   
 }
