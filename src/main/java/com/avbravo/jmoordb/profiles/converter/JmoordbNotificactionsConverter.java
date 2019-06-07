@@ -34,7 +34,7 @@ public class JmoordbNotificactionsConverter implements Converter {
         try {
             if (!s.equals("null")) {
                 JmoordbNotifications b = new JmoordbNotifications();
-                b.setIdjoordbnotifications(Integer.parseInt(s));
+                b.setIdjmoordbnotifications(Integer.parseInt(s));
                 Optional<JmoordbNotifications> optional = jmoordbNotificationsRepository.findById(b);
                 if (optional.isPresent()) {
                     jmoordbNotifications = optional.get();
@@ -52,7 +52,7 @@ public class JmoordbNotificactionsConverter implements Converter {
         try {
             if (o instanceof JmoordbNotifications) {
                 JmoordbNotifications jmoordbNotifications = (JmoordbNotifications) o;
-                r = String.valueOf(jmoordbNotifications.getIdjoordbnotifications());
+                r = String.valueOf(jmoordbNotifications.getIdjmoordbnotifications());
             } else if (o instanceof String) {
                 r = (String) o;
             }

@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class JmoordbNotifications {
  @Id   
- private Integer idjoordbnotifications;
+ private Integer idjmoordbnotifications;
  private String username;
  private String message;
  private String type;
@@ -24,8 +24,10 @@ public class JmoordbNotifications {
     public JmoordbNotifications() {
     }
 
-    public JmoordbNotifications(Integer idjoordbnotifications, String username, String message, String type, Date date, String viewed) {
-        this.idjoordbnotifications = idjoordbnotifications;
+   
+
+    public JmoordbNotifications(Integer idjmoordbnotifications, String username, String message, String type, Date date, String viewed) {
+        this.idjmoordbnotifications = idjmoordbnotifications;
         this.username = username;
         this.message = message;
         this.type = type;
@@ -33,18 +35,14 @@ public class JmoordbNotifications {
         this.viewed = viewed;
     }
 
-   
- 
- 
- 
-    public Integer getIdjoordbnotifications() {
-        return idjoordbnotifications;
+    
+ public Integer getIdjmoordbnotifications() {
+        return idjmoordbnotifications;
     }
 
-    public void setIdjoordbnotifications(Integer idjoordbnotifications) {
-        this.idjoordbnotifications = idjoordbnotifications;
+    public void setIdjmoordbnotifications(Integer idjmoordbnotifications) {
+        this.idjmoordbnotifications = idjmoordbnotifications;
     }
-
     public String getUsername() {
         return username;
     }

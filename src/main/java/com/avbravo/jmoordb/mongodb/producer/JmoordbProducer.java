@@ -54,7 +54,7 @@ public class JmoordbProducer {
             }
 
         } catch (Exception e) {
-            JmoordbUtil.errorMessage("coneecction() "+e.getLocalizedMessage());
+            JmoordbUtil.errorMessage("conecction() "+e.getLocalizedMessage());
         }
 
         return mongo;

@@ -28,7 +28,7 @@ public class JmoordbNotificationsDataModel extends ListDataModel<JmoordbNotifica
     public JmoordbNotifications  getRowData(String rowKey) {
         List<JmoordbNotifications> jmoordbNotificationsList = (List<JmoordbNotifications>) getWrappedData();
         for (JmoordbNotifications jmoordbNotifications : jmoordbNotificationsList) {
-             if (jmoordbNotifications.getIdjoordbnotifications().equals(rowKey)) {
+             if (jmoordbNotifications.getIdjmoordbnotifications().equals(rowKey)) {
                  return jmoordbNotifications;
              }
         }
@@ -36,7 +36,7 @@ public class JmoordbNotificationsDataModel extends ListDataModel<JmoordbNotifica
      }
      @Override
      public Object getRowKey(JmoordbNotifications jmoordbNotifications) {
-         return jmoordbNotifications.getIdjoordbnotifications();
+         return jmoordbNotifications.getIdjmoordbnotifications();
      }
 
 

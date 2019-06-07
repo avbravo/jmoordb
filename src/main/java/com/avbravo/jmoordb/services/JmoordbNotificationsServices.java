@@ -73,7 +73,7 @@ public class JmoordbNotificationsServices {
            JmoordbNotifications jmoordbNotifications = new JmoordbNotifications();
         try {
          
-            jmoordbNotifications.setIdjoordbnotifications(id);
+            jmoordbNotifications.setIdjmoordbnotifications(id);
             Optional<JmoordbNotifications> optional = repository.findById(jmoordbNotifications);
             if (optional.isPresent()) {
                return optional.get();
