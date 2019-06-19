@@ -5,8 +5,10 @@
  */
 package com.avbravo.jmoordb.pojos;
 
+import com.avbravo.jmoordb.anotations.Embedded;
 import com.avbravo.jmoordb.anotations.Id;
 import java.util.Date;
+import java.util.List;
 
 /**
  *Se usa con los websocket para notificaciones con los usuarios
@@ -21,18 +23,31 @@ public class JmoordbNotifications {
  private Date date;
  private String viewed;
 
+ @Embedded
+ List<UserInfo> userInfo;
+ 
     public JmoordbNotifications() {
     }
 
-   
-
-    public JmoordbNotifications(Integer idjmoordbnotifications, String username, String message, String type, Date date, String viewed) {
+    public JmoordbNotifications(Integer idjmoordbnotifications, String username, String message, String type, Date date, String viewed, List<UserInfo> userInfo) {
         this.idjmoordbnotifications = idjmoordbnotifications;
         this.username = username;
         this.message = message;
         this.type = type;
         this.date = date;
         this.viewed = viewed;
+        this.userInfo = userInfo;
+    }
+
+   
+
+   
+    public List<UserInfo> getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(List<UserInfo> userInfo) {
+        this.userInfo = userInfo;
     }
 
     
