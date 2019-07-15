@@ -964,7 +964,7 @@ public interface IController<T> {
         return true;
 
     }// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc=" beforePrepareView(Boolean prepare)()">
+    // <editor-fold defaultstate="collapsed" desc=" afterPrepareView(Boolean prepare)()">
 
     /**
      * se inyecta en el metodo antes de ejecutar el repository. ();
