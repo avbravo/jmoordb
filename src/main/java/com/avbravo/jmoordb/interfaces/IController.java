@@ -322,7 +322,6 @@ public interface IController<T> {
             //Agregar el UserInfo al entity
             entity = repository.addUserInfoForSaveMethod(entity, username, "create");
 
-
             String primaryValue = repository.primaryKeyValue(entity);
             if (primaryValue == null || primaryValue.isEmpty() || primaryValue.equals("null")) {
                 JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
@@ -342,10 +341,10 @@ public interface IController<T> {
                 }
 
                 JmoordbUtil.successMessage(spanish ? "Guardado" : "Saved");
-              if(resetInSave){
-                                 reset();
-              }
- 
+                if (resetInSave) {
+                    reset();
+                }
+
             } else {
                 JmoordbUtil.errorMessage(nameOfMethod() + " " + repository.getException().toString());
             }
@@ -866,6 +865,7 @@ public interface IController<T> {
      */
     default public String prepareView() {
         String url = "";
+        Boolean prepare = false;
         try {
             JmoordbConfiguration jmc = new JmoordbConfiguration();
             JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
@@ -942,18 +942,18 @@ public interface IController<T> {
                 JmoordbContext.put(repository.primaryKeyName(entity), repository.primaryKeyValue(entity));
             }
 
-            if (beforePrepareView()) {
-
+            if (!beforePrepareView()) {
+                return "";
             }
-
+            prepare = true;
         } catch (Exception e) {
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
-
+        afterPrepareView(prepare);
         return url;
     }
 // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc=" beforePrepareView()">
+    // <editor-fold defaultstate="collapsed" desc=" beforePrepareView(Boolean prepare)()">
 
     /**
      * se inyecta en el metodo antes de ejecutar el repository. ();
@@ -961,6 +961,17 @@ public interface IController<T> {
      * @return
      */
     default Boolean beforePrepareView() {
+        return true;
+
+    }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc=" beforePrepareView(Boolean prepare)()">
+
+    /**
+     * se inyecta en el metodo antes de ejecutar el repository. ();
+     *
+     * @return
+     */
+    default Boolean afterPrepareView(Boolean prepare) {
         return true;
 
     }// </editor-fold>
