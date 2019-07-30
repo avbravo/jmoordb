@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD})
 public @interface Referenced {
- String documment();
+ String collection();
  String field();
  String javatype() default "String";
  String repository();

@@ -398,7 +398,7 @@ public class Analizador {
             ReferencedBeans referencedBeans = new ReferencedBeans();
             referencedBeans.setName(variable.getName());
             referencedBeans.setType(variable.getType().getName());
-            referencedBeans.setDocument(referenced.documment());
+            referencedBeans.setDocument(referenced.collection());
             referencedBeans.setField(referenced.field());
             referencedBeans.setJavatype(referenced.javatype());
             referencedBeans.setRepository(referenced.repository());
