@@ -2604,7 +2604,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 // <editor-fold defaultstate="collapsed" desc="Integer deleteAll()">
 
     /**
-     * Remove all documment of a collection
+     * Remove all document of a collection
      *
      * @return count of document delete
      */
