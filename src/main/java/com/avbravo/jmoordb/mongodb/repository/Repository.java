@@ -243,7 +243,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         //Llave primary
         if (primaryKeyList.isEmpty()) {
             exception = new Exception("No have primaryKey ");
-            JmoordbUtil.errorDialog("Warning", "No have primaryKey in "+entityClass.getName());
+            JmoordbUtil.errorDialog("Warning", "No have primaryKey in " + entityClass.getName());
 
         } else {
 
@@ -255,7 +255,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         if (fieldBeansList.isEmpty()) {
             exception = new Exception("No have fields ");
-             JmoordbUtil.errorDialog("Warning", "No have fields ");
+            JmoordbUtil.errorDialog("Warning", "No have fields ");
         }
 
     }// </editor-fold>
@@ -1042,7 +1042,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(document);
             tlocal = (T) iterableSimple(iterable);
-            if(tlocal== null){
+            if (tlocal == null) {
                 return Optional.empty();
             }
             return Optional.of(tlocal);
@@ -3155,6 +3155,163 @@ public abstract class Repository<T> implements InterfaceRepository {
             Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield, Integer secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield, Integer secondaryfieldvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield,String secondaryfieldvalue,String thirdfield, String thirdvalue,, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield,String secondaryfieldvalue,String thirdfield, String thirdvalue,
+            String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+
+
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.eq(thirdfield, thirdvalue),
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield,String secondaryfieldvalue,String thirdfield, Integer thirdvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield,String secondaryfieldvalue,String thirdfield, Integer thirdvalue,
+            String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+
+
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.eq(thirdfield, thirdvalue),
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String integerFieldName,Integer integerFieldValue,String integerFieldName2, Integer integerFieldValue2, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHours(String integerFieldName,Integer integerFieldValue,String integerFieldName2, Integer integerFieldValue2,
+            String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+
+
+            Bson filter = Filters.and(
+                    Filters.eq(integerFieldName,integerFieldValue),
+                    Filters.eq(integerFieldName2, integerFieldValue2),
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
@@ -6520,7 +6677,7 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
 
             MongoDatabase db = mongoClient.getDatabase(database);
-           Document stats = db.runCommand(new Document("dbstats", 1));
+            Document stats = db.runCommand(new Document("dbstats", 1));
 
             for (Map.Entry<String, Object> set : stats.entrySet()) {
                 switch (set.getKey()) {
@@ -6552,7 +6709,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                     case "indexSize":
                         jmoordbStatistics.setIndexSize(Double.parseDouble(set.getValue().toString()));
                         break;
-                
+
                     case "fsTotalSize":
                         jmoordbStatistics.setFsTotalSize(Double.parseDouble(set.getValue().toString()));
                         break;
@@ -6601,18 +6758,18 @@ public abstract class Repository<T> implements InterfaceRepository {
         return success;
     }// </editor-fold>
 
-    
-      // <editor-fold defaultstate="collapsed" desc="T createEntity() ">
+    // <editor-fold defaultstate="collapsed" desc="T createEntity() ">
     /**
      * Crea un entity vacio
-     * @return 
+     *
+     * @return
      */
-     public T createEntity() {
+    public T createEntity() {
         try {
             return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
         } catch (Exception e) {
 
-          JmoordbUtil.errorDialog("createEntity() ", e.getLocalizedMessage());
+            JmoordbUtil.errorDialog("createEntity() ", e.getLocalizedMessage());
         }
         return null;
     }// </editor-fold>
