@@ -3243,6 +3243,46 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
 // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield,Integer secondaryfieldvalue,String thirdfield, String thirdvalue,, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
+
+    /**
+     * Crea un filtro para filtrar entre fechas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield,Integer secondaryfieldvalue,String thirdfield, String thirdvalue,
+            String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+
+
+            Bson filter = Filters.and(
+                    Filters.eq(secondaryfield, secondaryfieldvalue),
+                    Filters.eq(thirdfield, thirdvalue),
+                    Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+
+            list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDatePagination ", e);
+        }
+
+        return list;
+    }
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield,String secondaryfieldvalue,String thirdfield, Integer thirdvalue, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
 
     /**
