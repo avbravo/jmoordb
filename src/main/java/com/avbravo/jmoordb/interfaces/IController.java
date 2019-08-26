@@ -1773,6 +1773,51 @@ public interface IController<T> {
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String searchBy(String nameOfSearch, String field, Object value) ">
+    /**
+     * Se usa para los casos que las busquedas no son por el entity y construimos otros atributos
+     * componentes <jmoordbjsf:search>
+     * Lo invocan los componentes de busqueda
+     *
+     * @param field
+     * @param value
+     * @return
+     */
+    default public String searchBy(String nameOfSearch, String field, Object value) {
+        try {
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            //------------------------------------
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+            //------------------------------------
+            JmoordbContext.put("search" + nameOfSearch, field);
+            JmoordbIntrospection.callSet(controller, "writable", true);
+            Integer page = (Integer) JmoordbIntrospection.callGet(controller, nameFieldOfPage);
+
+            JmoordbContext.put("_fieldsearch" + nameOfSearch, value);
+
+            move(page);
+
+        } catch (Exception e) {
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
+        }
+        return "";
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="searchBetweenDate(String field, Date start, Date end)">
     /**
      * se usa con componente
