@@ -1480,7 +1480,7 @@ public interface IController<T> {
     }
 // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Boolean beforePrepareGoNew()">
+    // <editor-fold defaultstate="collapsed" desc="Boolean beforeClear()">
     default Boolean beforeClear() {
         return true;
     } // </editor-fold>
