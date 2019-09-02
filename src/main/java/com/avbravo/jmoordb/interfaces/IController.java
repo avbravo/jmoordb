@@ -59,7 +59,9 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
             HashMap parameters = jme.getParameters();
+            String nameOfController = controller.getClass().getSimpleName();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             //------------------------------------
@@ -93,6 +95,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -136,6 +140,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = jme.getPathReportAll();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -170,6 +176,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -247,6 +255,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -399,6 +409,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -637,6 +649,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -757,6 +771,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -817,7 +833,7 @@ public interface IController<T> {
 
                 JmoordbIntrospection.callSet(controller, nameOfEntity.trim() + "List", list);
                 JmoordbIntrospection.callSet(controller, "writable", false);
-                JmoordbContext.put("page" + nameOfEntity, page.toString());
+                JmoordbContext.put("page" + nameOfController, page.toString());
 
                 JmoordbUtil.successMessage(spanish ? "Eliminado" : "Deleted");
 
@@ -900,6 +916,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -930,9 +948,9 @@ public interface IController<T> {
             Integer page = JmoordbIntrospection.getPageInController(controller);
 
             // 2.Invocar al metodo getPage() del Controller
-            JmoordbContext.put("page" + nameOfEntity, page.toString());
-            JmoordbContext.put(nameOfEntity, "view");
-            JmoordbContext.put(nameOfEntity + "_value", entity);
+            JmoordbContext.put("page" + nameOfController, page.toString());
+            JmoordbContext.put("action" + nameOfController, "view");
+            JmoordbContext.put("action" + nameOfController + "_value", entity);
 //           
             JmoordbIntrospection.callSet(controller, nameOfEntity, entity);
             JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entity);
@@ -978,7 +996,7 @@ public interface IController<T> {
 
     // <editor-fold defaultstate="collapsed" desc="start()">
     /**
-     * 1. Obtener el action mediante JmoordbContext.get(nombreentity)
+     * 1. Obtener el nameOfController mediante JmoordbContext.get(nombreentity)
      *
      * 2. Obtener eñ pageSession mediante
      * JmoordbContext.get("page"+nombreentity")
@@ -1004,7 +1022,7 @@ public interface IController<T> {
      *
      * 12. invocar el setPage para asignar el numero de pagina
      *
-     * 13. Validar el action
+     * 13. Validar el nameOfController
      */
     default void start() {
         Boolean started = true;
@@ -1041,6 +1059,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1053,13 +1073,25 @@ public interface IController<T> {
 
             }
 
-            String action = (String) JmoordbContext.get(nameOfEntity);
-
-            String pageSession = (String) JmoordbContext.get("page" + nameOfEntity);
+            //  String nameOfController = (String) JmoordbContext.get(nameOfEntity);
+            String pageSession = (String) JmoordbContext.get("page" + nameOfController);
             //Search
 
-            if (JmoordbContext.get("search" + nameOfEntity) == null || (JmoordbContext.get("search" + nameOfEntity).toString().equals(""))) {
-                JmoordbContext.put("search" + nameOfEntity, "_init");
+            if (JmoordbContext.get("search" + nameOfController) == null || (JmoordbContext.get("search" + nameOfController).toString().equals(""))) {
+                JmoordbContext.put("search" + nameOfController, "_init");
+            }
+            /**
+             * Action
+             */
+            if (JmoordbContext.get("action" + nameOfController) == null || (JmoordbContext.get("action" + nameOfController).toString().equals(""))) {
+                //inicializa generalmente con el gotlist
+                if (action == null || action.equals("")) {
+                    action = "golist";
+                }
+                JmoordbContext.put("action" + nameOfController, action);
+            } else {
+                //Obtiene el action del contexto
+                action = (String) JmoordbContext.get("action" + nameOfController);
             }
 
             JmoordbIntrospection.callSet(controller, "writable", false);
@@ -1093,7 +1125,7 @@ public interface IController<T> {
                         //Recupera el entiry desdel el Context
                         //invoca elsetEntity pasandole el entity recuperado
                         //invoca el setEntitySelected pasandole el entity seleccionado
-                        entity = (Object) JmoordbContext.get(nameOfEntity + "_value");
+                        entity = (Object) JmoordbContext.get("action" + nameOfController + "_value");
 
                         JmoordbIntrospection.callSet(controller, nameOfEntity, entity);
                         JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entity);
@@ -1172,6 +1204,9 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1200,8 +1235,8 @@ public interface IController<T> {
             Integer page = JmoordbIntrospection.getPageInController(controller);
 
             // 2.Invocar al metodo getPage() del Controller
-            JmoordbContext.put("page" + nameOfEntity, page.toString());
-            JmoordbContext.put(nameOfEntity, "golist");
+            JmoordbContext.put("page" + nameOfController, page.toString());
+            JmoordbContext.put("action" + nameOfController, "golist");
 
             if (beforePrepareGoList()) {
 
@@ -1269,6 +1304,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1295,8 +1332,8 @@ public interface IController<T> {
             Integer page = JmoordbIntrospection.getPageInController(controller);
 
             // 2.Invocar al metodo getPage() del Controller
-            JmoordbContext.put("page" + nameOfEntity, page.toString());
-            JmoordbContext.put(nameOfEntity, "gonew");
+            JmoordbContext.put("page" + nameOfController, page.toString());
+            JmoordbContext.put("action" + nameOfController, "gonew");
 
             if (beforePrepareGoNew()) {
 
@@ -1363,6 +1400,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1374,14 +1413,14 @@ public interface IController<T> {
             lo asigna al entitySelected
             writable lo coloca a false
             crear en el FacesContext pageentity
-            crear en el FacesContext el action
+            crear en el FacesContext el nameOfController
              */
             //1.Obtener el nombre del entity
             Integer page = JmoordbIntrospection.getPageInController(controller);
 
             // 2.Invocar al metodo getPage() del Controller
-            JmoordbContext.put("page" + nameOfEntity, page.toString());
-            JmoordbContext.put(nameOfEntity, "new");
+            JmoordbContext.put("page" + nameOfController, page.toString());
+            JmoordbContext.put("action" + nameOfController, "new");
             Object entitynew = JmoordbIntrospection.newEntity(entity);
 
 //           
@@ -1456,6 +1495,8 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1463,7 +1504,7 @@ public interface IController<T> {
 
             Integer page = 1;
 
-            JmoordbContext.put("search" + nameOfEntity, "_init");
+            JmoordbContext.put("search" + nameOfController, "_init");
 //           
             JmoordbIntrospection.callSet(controller, "page", 1);
             move(page);
@@ -1531,6 +1572,7 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1729,7 +1771,7 @@ public interface IController<T> {
 
     } // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="String searchBy(String field)">
+    // <editor-fold defaultstate="collapsed" desc="String satar(String field)">
     /**
      * componentes <jmoordbjsf:search>
      * Lo invocan los componentes de busqueda
@@ -1754,15 +1796,17 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             //------------------------------------
-            JmoordbContext.put("search" + nameOfEntity, field);
+            JmoordbContext.put("search" + nameOfController, field);
             JmoordbIntrospection.callSet(controller, "writable", true);
             Integer page = (Integer) JmoordbIntrospection.callGet(controller, nameFieldOfPage);
 
-            JmoordbContext.put("_fieldsearch" + nameOfEntity, value);
+            JmoordbContext.put("valuesearch" + nameOfController, value);
 
             move(page);
 
@@ -1775,8 +1819,8 @@ public interface IController<T> {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="String searchBy(String nameOfSearch, String field, Object value) ">
     /**
-     * Se usa para los casos que las busquedas no son por el entity y construimos otros atributos
-     * componentes <jmoordbjsf:search>
+     * Se usa para los casos que las busquedas no son por el entity y
+     * construimos otros atributos componentes <jmoordbjsf:search>
      * Lo invocan los componentes de busqueda
      *
      * @param field
@@ -1799,6 +1843,7 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1807,7 +1852,7 @@ public interface IController<T> {
             JmoordbIntrospection.callSet(controller, "writable", true);
             Integer page = (Integer) JmoordbIntrospection.callGet(controller, nameFieldOfPage);
 
-            JmoordbContext.put("_fieldsearch" + nameOfSearch, value);
+            JmoordbContext.put("valuesearch" + nameOfSearch, value);
 
             move(page);
 
@@ -1846,16 +1891,18 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
             //------------------------------------
-            JmoordbContext.put("search" + nameOfEntity, field);
+            JmoordbContext.put("search" + nameOfController, field);
             JmoordbIntrospection.callSet(controller, "writable", true);
             Integer page = (Integer) JmoordbIntrospection.callGet(controller, nameFieldOfPage);
 
-            JmoordbContext.put("_fieldsearch" + nameOfEntity, start);
-            JmoordbContext.put("_fieldsearch" + nameOfEntity + "2", end);
+            JmoordbContext.put("valuesearch" + nameOfController, start);
+            JmoordbContext.put("valuesearch" + nameOfController + "2", end);
             move(page);
 
         } catch (Exception e) {
@@ -1890,6 +1937,7 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -1950,6 +1998,7 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -2012,6 +2061,7 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -2075,6 +2125,7 @@ public interface IController<T> {
             Boolean resetInSave = jme.getResetInSave();
             String pathReportDetail = jme.getPathReportDetail();
             String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
             HashMap parameters = jme.getParameters();
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
@@ -2100,5 +2151,129 @@ public interface IController<T> {
         return "";
 
     }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="String getSearchActionForMove()">
+    /**
+     * Devuelve el valor de la condicion que se usara para el search en el move
+     *
+     * @return
+     */
+    default String getSearch() {
+        String condition = "_init";
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+
+            if (JmoordbContext.get("search" + nameOfController) == null) {
+                JmoordbContext.put("search" + nameOfController, "_init");
+            }
+            condition = (String) JmoordbContext.get("search" + nameOfController);
+
+        } catch (Exception ex) {
+
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
+
+        }
+
+        return condition;
+
+    } // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Object getFieldSearchForMove()">
+
+    /**
+     * Devuelve el valor de la condicion que se usara para el search en el move
+     *
+     * @return
+     */
+    default Object getValueSearch() {
+        Object value = null;
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+
+            if (JmoordbContext.get("valuesearch" + nameOfController) == null) {
+                JmoordbContext.put("valuesearch" + nameOfController, "_init");
+            }
+            value = JmoordbContext.get("valuesearch" + nameOfController);
+
+        } catch (Exception ex) {
+
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
+
+        }
+
+        return value;
+
+    } // </editor-fold>
 
 }
