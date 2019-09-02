@@ -21,7 +21,7 @@ public class JmoordbControllerEnvironment {
     Repository repository;
     String nameFieldOfPage;
     String nameFieldOfRowPage;
-    Object entity;
+    Object entity; 
     Object service;
     Object controller;
     String typeKey;
@@ -32,13 +32,14 @@ public class JmoordbControllerEnvironment {
     HashMap parameters = new HashMap();
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     Map<String, Object> sessionMap = externalContext.getSessionMap();
+    String action;
 
     public JmoordbControllerEnvironment() {
     }
 
     public JmoordbControllerEnvironment(Object controller, Repository repository, Object entity, Object service, String nameFieldOfPage, String nameFieldOfRowPage, 
             String typeKey,Boolean searchLowerCase,
-            String pathReportDetail, String pathReportAll, HashMap parameters,Boolean resetInSave) {
+            String pathReportDetail, String pathReportAll, HashMap parameters,Boolean resetInSave, String action) {
         this.repository = repository;
         this.nameFieldOfPage = nameFieldOfPage;
         this.nameFieldOfRowPage = nameFieldOfRowPage;
@@ -51,6 +52,7 @@ public class JmoordbControllerEnvironment {
         this.pathReportAll = pathReportAll;
         this.parameters = parameters;
        this.resetInSave =resetInSave;
+       this.action = action;
 
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         sessionMap.put("repository", repository);
@@ -65,6 +67,7 @@ public class JmoordbControllerEnvironment {
         sessionMap.put("pathReportAll", pathReportAll);
         sessionMap.put("parameters", parameters);
         sessionMap.put("resetInSave", resetInSave);
+        sessionMap.put("action", action);
     }
 
     public HashMap getParameters() {
@@ -158,6 +161,12 @@ public class JmoordbControllerEnvironment {
         String typeKey = (String) sessionMap.get("typeKey");
         return typeKey;
     }
+    public String getAction() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        String action = (String) sessionMap.get("action");
+        return action;
+    }
     public Boolean getSearchLowerCase() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();
@@ -165,6 +174,12 @@ public class JmoordbControllerEnvironment {
         return searchLowerCase;
     }
 
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    
+    
     public void setSearchLowerCase(Boolean searchLowerCase) {
         this.searchLowerCase = searchLowerCase;
     }
@@ -258,6 +273,7 @@ public class JmoordbControllerEnvironment {
         String pathReportAll;
         HashMap parameters = new HashMap();
         Boolean resetInSave;
+        String action;
 
         
           public Builder withPathReportDetail(String pathReportDetail) {
@@ -284,6 +300,10 @@ public class JmoordbControllerEnvironment {
 
         public Builder withNameFieldOfPage(String nameFieldOfPage) {
             this.nameFieldOfPage = nameFieldOfPage;
+            return this;
+        }
+        public Builder withAction(String action) {
+            this.action= action;
             return this;
         }
 
@@ -318,7 +338,7 @@ public class JmoordbControllerEnvironment {
 
         public JmoordbControllerEnvironment build() {
             return new JmoordbControllerEnvironment(controller, repository, entity, service, nameFieldOfPage, nameFieldOfRowPage, typeKey,searchLowerCase, 
-                    pathReportDetail,  pathReportAll,  parameters,resetInSave);
+                    pathReportDetail,  pathReportAll,  parameters,resetInSave,action);
         }
 
     }
