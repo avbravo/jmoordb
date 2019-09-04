@@ -950,7 +950,7 @@ public interface IController<T> {
             // 2.Invocar al metodo getPage() del Controller
             JmoordbContext.put("page" + nameOfController, page.toString());
             JmoordbContext.put("action" + nameOfController, "view");
-            JmoordbContext.put("action" + nameOfController + "_value", entity);
+            JmoordbContext.put("entityValue" + nameOfController, entity);
 //           
             JmoordbIntrospection.callSet(controller, nameOfEntity, entity);
             JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entity);
@@ -1125,7 +1125,7 @@ public interface IController<T> {
                         //Recupera el entiry desdel el Context
                         //invoca elsetEntity pasandole el entity recuperado
                         //invoca el setEntitySelected pasandole el entity seleccionado
-                        entity = (Object) JmoordbContext.get("action" + nameOfController + "_value");
+                        entity = (Object) JmoordbContext.get("entityValue" + nameOfController );
 
                         JmoordbIntrospection.callSet(controller, nameOfEntity, entity);
                         JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entity);
@@ -2466,4 +2466,67 @@ public interface IController<T> {
 
     } // </editor-fold>
     
+    
+    // <editor-fold defaultstate="collapsed" desc="Object getEntityValue()">
+
+    /**
+     * Devuelve el valor del entity del controller actual en el contexto
+     *
+     * @return
+     */
+    default Object getEntityValue() {
+        Object value = null;
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+
+            if (JmoordbContext.get("entityValue" + nameOfController) == null) {
+               value = null;
+            }
+           value =(Object) JmoordbContext.get("entityValue" + nameOfController);
+
+        } catch (Exception ex) {
+
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
+
+        }
+
+        return value;
+
+    } // </editor-fold>
 }
