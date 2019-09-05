@@ -2402,7 +2402,7 @@ public interface IController<T> {
         return actionLocal;
 
     } // </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="Object getAction() )">
+// <editor-fold defaultstate="collapsed" desc="void setAction(String actionValue) ">
 
     /**
      * Asigna valor al action
