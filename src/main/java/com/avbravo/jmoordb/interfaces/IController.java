@@ -2152,7 +2152,7 @@ public interface IController<T> {
 
     }// </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="String String getSearch()">
+    // <editor-fold defaultstate="collapsed" desc=" String getSearch()">
     /**
      * Devuelve el valor de la condicion que se usara para el search en el move
      *
@@ -2211,6 +2211,183 @@ public interface IController<T> {
         }
 
         return condition;
+
+    } // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Package entityPackage()">
+    /**
+     * Devuelve el paquete del entity
+     *
+     * @return
+     */
+    default Package entityPackage() {
+        String condition = "_init";
+        Package p = null;
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+          
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+
+            p = entity.getClass().getPackage();
+        } catch (Exception ex) {
+
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
+
+        }
+
+        return p;
+
+    } // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Package repositoryPackage()">
+    /**
+     * Devuelve el paquete del repositorio
+     *
+     * @return
+     */
+    default Package repositoryPackage() {
+
+        Package p = null;
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+          
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+
+            p = repository.getClass().getPackage();
+        } catch (Exception ex) {
+
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
+
+        }
+
+        return p;
+
+    } // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Package repositoryPackage()">
+    /**
+     * Devuelve el paquete del sevice
+     *
+     * @return
+     */
+    default Package servicesPackage() {
+
+        Package p = null;
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+          
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+
+            p = service.getClass().getPackage();
+        } catch (Exception ex) {
+
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
+
+        }
+
+        return p;
 
     } // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Object getValueSearch() )">
