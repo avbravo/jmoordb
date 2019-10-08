@@ -3690,10 +3690,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
+            
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+          
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+                    Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
         } catch (Exception e) {
@@ -3726,15 +3731,19 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+         
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+                    Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
         } catch (Exception e) {
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHourPagination ", e);
+            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterDayWithoutHour ", e);
         }
 
         return list;
@@ -3763,8 +3772,13 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Bson filter = Filters.and(Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+         
+            
+            Bson filter = Filters.and(Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
         } catch (Exception e) {
@@ -3798,8 +3812,13 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Bson filter = Filters.and(myfilter, Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+            
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+    
+            Bson filter = Filters.and(myfilter, Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
         } catch (Exception e) {
@@ -3833,8 +3852,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Bson date = Filters.and(Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+           
+            Bson date = Filters.and(Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
             Bson filter = Filters.and(myfilter, date);
 
             list = filters(filter, sortQuery);
@@ -3869,9 +3892,11 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Bson filter = Filters.and(Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
-
+              Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+            Bson filter = Filters.and(Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
@@ -3904,10 +3929,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+           
+            
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+                    Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
         } catch (Exception e) {
@@ -3941,10 +3971,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
+            
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+          
             Bson filter = Filters.and(
                     myfilter,
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+                    Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
         } catch (Exception e) {
@@ -3978,10 +4013,16 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
+            
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+         
+            
             Bson filter = Filters.and(
                     myfilter,
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+                    Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
         } catch (Exception e) {
@@ -4014,10 +4055,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
+            
+             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateEnd = setHourToDate(datevalue, 23, 59);
+            
+          
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
-                    Filters.gte(fielddate, datevalue),
-                    Filters.lte(fielddate, datevalue));
+                    Filters.gte(fielddate, dateStart),
+                    Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
         } catch (Exception e) {
