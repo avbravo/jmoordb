@@ -33,9 +33,11 @@ public class RevisionHistoryServices {
             revisionhistory.setContent(content);
             LocalDateTime ahora = LocalDateTime.now();
             Date date2 = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
-        UUID uuiduser = UUID.randomUUID();
-            UserInfo userinfo = new UserInfo(uuiduser.toString(),username, date2, operation);
+            UUID uuiduser = UUID.randomUUID();
+            UserInfo userinfo = new UserInfo(uuiduser.toString(), username, date2, operation);
             revisionhistory.setUserInfo(userinfo);
+            revisionhistory.setUsername(username);
+            revisionhistory.setFecha(date2);
 
         } catch (Exception e) {
             System.out.println("getRevisionhistory() " + e.getLocalizedMessage());
