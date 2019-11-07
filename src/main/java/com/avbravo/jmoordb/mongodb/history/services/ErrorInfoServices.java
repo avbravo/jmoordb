@@ -34,7 +34,7 @@ public class ErrorInfoServices {
             ErrorInfo errorInfo = new ErrorInfo();
             errorInfo.setIderror(JmoordbUtil.getUUID());
             errorInfo.setClase(clase);
-            errorInfo.setMensaje(clase);
+            errorInfo.setMensaje(message);
             errorInfo.setMetodo(metodo);
             errorInfo.setDate(JmoordbUtil.getFechaHoraActual());
             errorInfo.setUsername(username);
@@ -59,8 +59,9 @@ public class ErrorInfoServices {
         } catch (Exception ex) {
             JmoordbUtil.errorMessage("errorMessage() " + ex.getLocalizedMessage());
         }
-        // JmoordbUtil.errorMessage(metodo + " " + message);
-        errorDialog(clase, metodo, "error", message, e);
+        //  JmoordbUtil.errorMessage(message);
+         JmoordbUtil.errorMessage(metodo + " " + message);
+    //    errorDialog(clase, metodo, "error", message, e);
     }
 
     public void errorDialog(String clase, String metodo, String titulo, String message, Exception e) {
@@ -96,6 +97,6 @@ public class ErrorInfoServices {
         } catch (Exception ex) {
             JmoordbUtil.errorMessage("errorMessage() " + ex.getLocalizedMessage());
         }
-        JmoordbUtil.errorMessage(message);
+        JmoordbUtil.errorDialog(titulo,message);
     }
 }
