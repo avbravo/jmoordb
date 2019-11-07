@@ -295,4 +295,16 @@ public class JmoordbUtil {
                 titulo, texto);
         PrimeFaces.current().dialog().showMessageDynamic(message);
     }    // </editor-fold>
+    
+     /**
+     * Actualiza un componente JSF en un formulario .xhtml
+     * @param texto
+     * @return 
+     */
+    public static String updateJSFComponent(String jsfcomponent) {
+       PrimeFaces.current().ajax().update(jsfcomponent);
+        return "";
+     
+    }
+    // </editor-fold>
 }
