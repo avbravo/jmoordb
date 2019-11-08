@@ -40,7 +40,8 @@ public class ErrorInfoServices {
             errorInfo.setUsername(username);
             List<ErrorEmbedded> errorEmbeddedList = new ArrayList<>();
             Integer c = 0;
-            for (StackTraceElement s : e.getStackTrace()) {
+            if(e !=null){
+               for (StackTraceElement s : e.getStackTrace()) {
                 if (s.getFileName().indexOf(clase) != -1) {
                     ErrorEmbedded errorEmbedded = new ErrorEmbedded();
                     errorEmbedded.setIderrorembedded(c++);
@@ -52,7 +53,9 @@ public class ErrorInfoServices {
                     errorEmbeddedList.add(errorEmbedded);
                 }
 
+            } 
             }
+            
             errorInfo.setErrorEmbedded(errorEmbeddedList);
             errorInfoRepository.save(errorInfo);
 

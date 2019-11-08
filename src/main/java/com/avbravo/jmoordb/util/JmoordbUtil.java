@@ -1682,6 +1682,26 @@ public class JmoordbUtil {
     }
 // </editor-fold>
     
-   
+   // <editor-fold defaultstate="collapsed" desc="nameOfClass()">
+    public static String nameOfClass() {
+        final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+        final String s = e.getClassName();
+        return s.substring(s.lastIndexOf('.') + 1, s.length());
+    }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="nameOfClassAndMethod())">
+    public static String nameOfClassAndMethod() {
+        final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+        final String s = e.getClassName();
+        return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
+    }// </editor-fold>
 
+    
+    // <editor-fold defaultstate="collapsed" desc="nameOfMethod())">
+
+    public static String nameOfMethod() {
+        final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+        final String s = e.getClassName();
+        return e.getMethodName();
+    }// </editor-fold>
 }
