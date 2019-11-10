@@ -26,12 +26,12 @@ public class ErrorInfoServices {
     ErrorInfoRepository errorInfoRepository;
 
     public void errorMessage(String clase, String metodo, String message, Exception e) {
-
+        ErrorInfo errorInfo = new ErrorInfo();
         try {
 
             JmoordbConfiguration jmc = new JmoordbConfiguration();
             String username = jmc.getUsername();
-            ErrorInfo errorInfo = new ErrorInfo();
+
             errorInfo.setIderror(JmoordbUtil.getUUID());
             errorInfo.setClase(clase);
             errorInfo.setMensaje(message);
@@ -40,39 +40,54 @@ public class ErrorInfoServices {
             errorInfo.setUsername(username);
             List<ErrorEmbedded> errorEmbeddedList = new ArrayList<>();
             Integer c = 0;
-            if(e !=null){
-               for (StackTraceElement s : e.getStackTrace()) {
-                if (s.getFileName().indexOf(clase) != -1) {
-                    ErrorEmbedded errorEmbedded = new ErrorEmbedded();
-                    errorEmbedded.setIderrorembedded(c++);
-                    errorEmbedded.setMethod(s.getMethodName());
-                    errorEmbedded.setLine(s.getLineNumber());
 
-                    //    System.out.println("---> className"+s.getClassName() + " filename: "+s.getFileName());
-                    //   System.out.println("---> getMethodName: "+s.getMethodName() + " LineNumber: "+s.getLineNumber());
-                    errorEmbeddedList.add(errorEmbedded);
+            if (e != null) {
+
+                for (StackTraceElement s : e.getStackTrace()) {
+
+                    if (s.getFileName() != null) {
+                        if (s.getFileName().indexOf(clase) != -1) {
+
+                            ErrorEmbedded errorEmbedded = new ErrorEmbedded();
+
+                            errorEmbedded.setIderrorembedded(c++);
+
+                            errorEmbedded.setMethod(s.getMethodName());
+
+                            errorEmbedded.setLine(s.getLineNumber());
+
+                            errorEmbeddedList.add(errorEmbedded);
+
+                        }
+
+                    }
+
                 }
 
-            } 
-            }
-            
-            errorInfo.setErrorEmbedded(errorEmbeddedList);
-            errorInfoRepository.save(errorInfo);
+                errorInfo.setErrorEmbedded(errorEmbeddedList);
 
+                if (errorInfoRepository.save(errorInfo)) {
+
+                }
+            }
         } catch (Exception ex) {
             JmoordbUtil.errorMessage("errorMessage() " + ex.getLocalizedMessage());
+
+            if (errorInfoRepository.save(errorInfo)) {
+
+            }
         }
         //  JmoordbUtil.errorMessage(message);
-         JmoordbUtil.errorMessage(metodo + " " + message);
-    //    errorDialog(clase, metodo, "error", message, e);
+        JmoordbUtil.errorMessage(metodo + " " + message);
+        //    errorDialog(clase, metodo, "error", message, e);
     }
 
     public void errorDialog(String clase, String metodo, String titulo, String message, Exception e) {
-
+        ErrorInfo errorInfo = new ErrorInfo();
         try {
             JmoordbConfiguration jmc = new JmoordbConfiguration();
             String username = jmc.getUsername();
-            ErrorInfo errorInfo = new ErrorInfo();
+
             errorInfo.setIderror(JmoordbUtil.getUUID());
             errorInfo.setClase(clase);
             errorInfo.setMensaje(titulo + " " + message);
@@ -82,24 +97,27 @@ public class ErrorInfoServices {
             List<ErrorEmbedded> errorEmbeddedList = new ArrayList<>();
             Integer c = 0;
             for (StackTraceElement s : e.getStackTrace()) {
-                if (s.getFileName().indexOf(clase) != -1) {
-                    ErrorEmbedded errorEmbedded = new ErrorEmbedded();
-                    errorEmbedded.setIderrorembedded(c++);
-                    errorEmbedded.setMethod(s.getMethodName());
-                    errorEmbedded.setLine(s.getLineNumber());
+                if (s.getFileName() != null) {
+                    if (s.getFileName().indexOf(clase) != -1) {
+                        ErrorEmbedded errorEmbedded = new ErrorEmbedded();
+                        errorEmbedded.setIderrorembedded(c++);
+                        errorEmbedded.setMethod(s.getMethodName());
+                        errorEmbedded.setLine(s.getLineNumber());
 
-                    //    System.out.println("---> className"+s.getClassName() + " filename: "+s.getFileName());
-                    //   System.out.println("---> getMethodName: "+s.getMethodName() + " LineNumber: "+s.getLineNumber());
-                    errorEmbeddedList.add(errorEmbedded);
+                        errorEmbeddedList.add(errorEmbedded);
+                    }
+
                 }
 
             }
+
             errorInfo.setErrorEmbedded(errorEmbeddedList);
             errorInfoRepository.save(errorInfo);
 
         } catch (Exception ex) {
             JmoordbUtil.errorMessage("errorMessage() " + ex.getLocalizedMessage());
+            errorInfoRepository.save(errorInfo);
         }
-        JmoordbUtil.errorDialog(titulo,message);
+        JmoordbUtil.errorDialog(titulo, message);
     }
 }
