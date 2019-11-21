@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -1703,5 +1704,22 @@ public class JmoordbUtil {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         final String s = e.getClassName();
         return e.getMethodName();
+    }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Object copyBeans(Object destino, Object fuente)">
+    /**
+     * Copia el contenido de un bean en otro
+     *
+     * @param destino
+     * @param fuente
+     * @return
+     */
+    public static Object copyBeans(Object destino, Object fuente) {
+        try {
+            BeanUtils.copyProperties(destino, fuente);
+        } catch (Exception e) {
+        }
+
+        return destino;
     }// </editor-fold>
 }
