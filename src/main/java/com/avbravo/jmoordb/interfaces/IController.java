@@ -787,50 +787,47 @@ public interface IController<T> {
                 return "";
 
             }
-            
+
             //Obetener la lista seleccionada para eliminar
             List<Object> listSelected = (List<Object>) JmoordbIntrospection.callGet(controller, nameOfEntity.trim() + "ListSelected");
-            for(Object o:listSelected){
-                if (repository.primaryKeyIsInteger(o)) {
-                    System.out.println("===========>recorrido el ListSelected es llave entera");
-                }else{
-                    System.out.println("===========>recorrido el ListSelected  ES LLAVE STRING");
-                }
-            }
-            
-            String nameOfPrimaryKey = repository.primaryKeyName(entity);
+            for (Object entityDelete : listSelected) {
 
-            if (repository.primaryKeyIsInteger(entity)) {
-                //si es llave primaria  de tipo Integer
-                Integer value = repository.primaryKeyValueInteger(entity);
-                if (repository.delete(nameOfPrimaryKey, value)) {
-                    deleted = true;
+                String nameOfPrimaryKey = repository.primaryKeyName(entityDelete);
+
+                if (repository.primaryKeyIsInteger(entityDelete)) {
+                    //si es llave primaria  de tipo Integer
+                    Integer value = repository.primaryKeyValueInteger(entityDelete);
+                    if (repository.delete(nameOfPrimaryKey, value)) {
+                        deleted = true;
+                    } else {
+                        JmoordbUtil.errorMessage(nameOfMethod() + " " + repository.getException().toString());
+                    }
                 } else {
-                    JmoordbUtil.errorMessage(nameOfMethod() + " " + repository.getException().toString());
-                }
-            } else {
-                //si es llave primaria de tipo String
-                String value = repository.primaryKeyValue(entity);
-                if (repository.delete(nameOfPrimaryKey, value)) {
-                    deleted = true;
-                } else {
-                    JmoordbUtil.errorMessage(nameOfMethod() + " " + repository.getException().toString());
-                }
-
-            }
-            
-            if (deleted) {
-                //Devuelve el valor de la llave primaria
-                String primarykeyvalue = repository.primaryKeyValue(entity);
-
-                if (saverevision) {
-
-                    if (_validRevisionHistory(repositoryRevisionHistory, revisionHistoryServices, spanish)) {
-                        repositoryRevisionHistory.save(revisionHistoryServices.getRevisionHistory(primarykeyvalue, username,
-                                "delete", nameOfEntity, repository.toDocument(entity).toString()));
+                    //si es llave primaria de tipo String
+                    String value = repository.primaryKeyValue(entityDelete);
+                    if (repository.delete(nameOfPrimaryKey, value)) {
+                        deleted = true;
+                    } else {
+                        JmoordbUtil.errorMessage(nameOfMethod() + " " + repository.getException().toString());
                     }
 
                 }
+
+                if (deleted) {
+                    //Devuelve el valor de la llave primaria
+                    String primarykeyvalue = repository.primaryKeyValue(entityDelete);
+
+                    if (saverevision) {
+
+                        if (_validRevisionHistory(repositoryRevisionHistory, revisionHistoryServices, spanish)) {
+                            repositoryRevisionHistory.save(revisionHistoryServices.getRevisionHistory(primarykeyvalue, username,
+                                    "delete", nameOfEntity, repository.toDocument(entityDelete).toString()));
+                        }
+
+                    }
+
+                }
+
                 /**
                  * 1. Obtener la lista de Entity 2. Remover el elemento
                  * seleccionado 3. Invocar el setEntityList con la nueva lista
@@ -838,9 +835,12 @@ public interface IController<T> {
                  * pagina actual 6- Guardar en el Context el numero de pagina
                  * actual
                  */
-
                 List<Object> list = (List<Object>) JmoordbIntrospection.callGet(controller, nameOfEntity.trim() + "List");
-                list.remove(entity);
+                for(Object entityDelete2 :listSelected){
+                       list.remove(entityDelete2);
+                }
+             
+            
                 Integer page = JmoordbIntrospection.getPageInController(controller);
 
                 JmoordbIntrospection.callSet(controller, nameOfEntity.trim() + "List", list);
@@ -1137,7 +1137,7 @@ public interface IController<T> {
                         //Recupera el entiry desdel el Context
                         //invoca elsetEntity pasandole el entity recuperado
                         //invoca el setEntitySelected pasandole el entity seleccionado
-                        entity = (Object) JmoordbContext.get("entityValue" + nameOfController );
+                        entity = (Object) JmoordbContext.get("entityValue" + nameOfController);
 
                         JmoordbIntrospection.callSet(controller, nameOfEntity, entity);
                         JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entity);
@@ -2226,6 +2226,7 @@ public interface IController<T> {
 
     } // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Package entityPackage()">
+
     /**
      * Devuelve el paquete del entity
      *
@@ -2259,7 +2260,7 @@ public interface IController<T> {
             Repository repository = jme.getRepository();
             Object controller = jme.getController();
             Object entity = jme.getEntity();
-          
+
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
@@ -2285,6 +2286,7 @@ public interface IController<T> {
 
     } // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Package repositoryPackage()">
+
     /**
      * Devuelve el paquete del repositorio
      *
@@ -2318,7 +2320,7 @@ public interface IController<T> {
             Repository repository = jme.getRepository();
             Object controller = jme.getController();
             Object entity = jme.getEntity();
-          
+
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
@@ -2344,6 +2346,7 @@ public interface IController<T> {
 
     } // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Package repositoryPackage()">
+
     /**
      * Devuelve el paquete del sevice
      *
@@ -2377,7 +2380,7 @@ public interface IController<T> {
             Repository repository = jme.getRepository();
             Object controller = jme.getController();
             Object entity = jme.getEntity();
-          
+
             Object service = jme.getService();
             String nameFieldOfPage = jme.getNameFieldOfPage();
             String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
@@ -2464,9 +2467,8 @@ public interface IController<T> {
         return value;
 
     } // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="String setSearchAndValue(String search, Object valuesearch)">
 
+    // <editor-fold defaultstate="collapsed" desc="String setSearchAndValue(String search, Object valuesearch)">
     /**
      * Asigna al search y searchvalue los valores para ser usados en el move()
      * Se invocan desde los metodos handleSelected generalmente.
@@ -2514,10 +2516,9 @@ public interface IController<T> {
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
 
-          
-                JmoordbContext.put("search" + nameOfController, search);
-                JmoordbContext.put("valuesearch" + nameOfController, valuesearch);
-          
+            JmoordbContext.put("search" + nameOfController, search);
+            JmoordbContext.put("valuesearch" + nameOfController, valuesearch);
+
         } catch (Exception ex) {
 
             JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
@@ -2527,17 +2528,15 @@ public interface IController<T> {
         return "";
 
     } // </editor-fold>
-    
-    
-// <editor-fold defaultstate="collapsed" desc="Object getAction() )">
 
+// <editor-fold defaultstate="collapsed" desc="Object getAction() )">
     /**
-     * Obtiene el valor del action 
+     * Obtiene el valor del action
      *
      * @return
      */
     default String getAction() {
-        String actionLocal= "golist";
+        String actionLocal = "golist";
         try {
             JmoordbConfiguration jmc = new JmoordbConfiguration();
             JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
@@ -2580,7 +2579,7 @@ public interface IController<T> {
             if (JmoordbContext.get("action" + nameOfController) == null) {
                 JmoordbContext.put("action" + nameOfController, "golist");
             }
-           actionLocal =(String) JmoordbContext.get("action" + nameOfController);
+            actionLocal = (String) JmoordbContext.get("action" + nameOfController);
 
         } catch (Exception ex) {
 
@@ -2599,7 +2598,7 @@ public interface IController<T> {
      * @return
      */
     default void setAction(String actionValue) {
-       
+
         try {
             JmoordbConfiguration jmc = new JmoordbConfiguration();
             JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
@@ -2639,11 +2638,8 @@ public interface IController<T> {
             String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
 
-            
-                JmoordbContext.put("action" + nameOfController, actionValue);
+            JmoordbContext.put("action" + nameOfController, actionValue);
             jme.setAction(actionValue);
-            
-     
 
         } catch (Exception ex) {
 
@@ -2651,13 +2647,9 @@ public interface IController<T> {
 
         }
 
-  
-
     } // </editor-fold>
-    
-    
-    // <editor-fold defaultstate="collapsed" desc="Object getEntityValue()">
 
+    // <editor-fold defaultstate="collapsed" desc="Object getEntityValue()">
     /**
      * Devuelve el valor del entity del controller actual en el contexto
      *
@@ -2705,9 +2697,9 @@ public interface IController<T> {
             entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
 
             if (JmoordbContext.get("entityValue" + nameOfController) == null) {
-               value = null;
+                value = null;
             }
-           value =(Object) JmoordbContext.get("entityValue" + nameOfController);
+            value = (Object) JmoordbContext.get("entityValue" + nameOfController);
 
         } catch (Exception ex) {
 
