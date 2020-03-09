@@ -787,6 +787,17 @@ public interface IController<T> {
                 return "";
 
             }
+            
+            //Obetener la lista seleccionada para eliminar
+            List<Object> listSelected = (List<Object>) JmoordbIntrospection.callGet(controller, nameOfEntity.trim() + "ListSelected");
+            for(Object o:listSelected){
+                if (repository.primaryKeyIsInteger(o)) {
+                    System.out.println("===========>recorrido el ListSelected es llave entera");
+                }else{
+                    System.out.println("===========>recorrido el ListSelected  ES LLAVE STRING");
+                }
+            }
+            
             String nameOfPrimaryKey = repository.primaryKeyName(entity);
 
             if (repository.primaryKeyIsInteger(entity)) {
@@ -807,6 +818,7 @@ public interface IController<T> {
                 }
 
             }
+            
             if (deleted) {
                 //Devuelve el valor de la llave primaria
                 String primarykeyvalue = repository.primaryKeyValue(entity);
