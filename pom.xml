@@ -4,7 +4,7 @@
 
     <groupId>com.avbravo</groupId>
     <artifactId>jmoordb</artifactId>
-    <version>0.53.100</version>
+    <version>0.54</version>
     <packaging>ejb</packaging>
 
     <name>jmoordb</name>
@@ -78,7 +78,7 @@ Para report
          <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>7.0</version>
+            <version>8.0</version>
         </dependency>
          
     </dependencies>
