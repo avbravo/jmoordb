@@ -31,12 +31,13 @@ public class JmoordbProducer {
     public MongoClient mongoClient() {
         MongoClient mongo = new MongoClient("localhost", 27017);
         try {
-            String username = (String) JmoordbContext.get("username");
-            String password = (String) JmoordbContext.get("password");
-            String database = (String) JmoordbContext.get("database");
-            String host = (String) JmoordbContext.get("host");
-            String port = (String) JmoordbContext.get("port");
-            Boolean security = (Boolean) JmoordbContext.get("security");
+        
+            String username = JmoordbContext.get("username")==null?"":(String) JmoordbContext.get("username");
+            String password =JmoordbContext.get("password")==null?"": (String) JmoordbContext.get("password");
+            String database = JmoordbContext.get("database")==null?"":(String) JmoordbContext.get("database");
+            String host = JmoordbContext.get("host")==null?"":(String) JmoordbContext.get("host");
+            String port = JmoordbContext.get("port")==null?"":(String) JmoordbContext.get("port");
+            Boolean security = JmoordbContext.get("security")==null ?false:(Boolean) JmoordbContext.get("security");
             if (security == null && username == null) {
                 security = false;
             }
@@ -54,7 +55,8 @@ public class JmoordbProducer {
             }
 
         } catch (Exception e) {
-            JmoordbUtil.errorMessage("conecction() "+e.getLocalizedMessage());
+            System.out.println("error() "+e.getLocalizedMessage());
+     //       JmoordbUtil.errorMessage("conecction() "+e.getLocalizedMessage());
         }
 
         return mongo;
