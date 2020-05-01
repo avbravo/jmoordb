@@ -196,7 +196,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
             new JmoordbException("getMongoDatabase() " + ex.getLocalizedMessage());
             exception = new Exception("getMongoDatabase() " + ex.getLocalizedMessage());
-            JmoordbUtil.errorDialog("getMongoDatabase() ", ex.getLocalizedMessage());
+            // JmoordbUtil.errorDialog("getMongoDatabase() ", ex.getLocalizedMessage());
 
         }
         return null;
@@ -243,19 +243,19 @@ public abstract class Repository<T> implements InterfaceRepository {
         //Llave primary
         if (primaryKeyList.isEmpty()) {
             exception = new Exception("No have primaryKey ");
-            JmoordbUtil.errorDialog("Warning", "No have primaryKey in " + entityClass.getName());
+            // JmoordbUtil.errorDialog("Warning", "No have primaryKey in " + entityClass.getName());
 
         } else {
 
             if (primaryKeyList.size() > 1) {
                 exception = new Exception("the entity has more than one primary key @ID ");
-                JmoordbUtil.errorDialog("Warning", "the entity has more than one primary key @ID ");
+                // JmoordbUtil.errorDialog("Warning", "the entity has more than one primary key @ID ");
 
             }
         }
         if (fieldBeansList.isEmpty()) {
             exception = new Exception("No have fields ");
-            JmoordbUtil.errorDialog("Warning", "No have fields ");
+            // JmoordbUtil.errorDialog("Warning", "No have fields ");
         }
 
     }// </editor-fold>
@@ -1565,7 +1565,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             Integer size = count();
             if (size > limitOfDocumentInFindAllMethod) {
-                JmoordbUtil.warningDialog("findAll()", "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
+               // JmoordbUtil.warningDialog("findAll()", "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
+              exception = new Exception("findAll() "+  "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
                 list = findPagination(1, limitOfDocumentInFindAllMethod, sortQuery);
                 return list;
             }
@@ -5490,7 +5491,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                         lookup.unreflect(userInfoProperty.getWriteMethod()));
                 userInfoSetter.accept(t1, generateListUserinfo(username, descripcion));
             } else {
-                JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+             //   JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+             exception = new Exception("No contiene el metodo UserInfo");
             }
 
         } catch (Exception e) {
@@ -5541,7 +5543,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 userInfoSetter.accept(t1, list);
 
             } else {
-                JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+                 exception = new Exception("No contiene el metodo UserInfo");
+                //JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+                
             }
 
         } catch (Exception e) {
@@ -5896,7 +5900,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     return true;
                 }
             } else {
-                JmoordbUtil.warningMessage("No tiene llaves secundaria @Composite no se puede buscar");
+           //     JmoordbUtil.warningMessage("No tiene llaves secundaria @Composite no se puede buscar");
+                 exception = new Exception("No tiene llaves secundaria @Composite no se puede buscar");
                 return false;
             }
         } catch (Exception e) {
@@ -6809,7 +6814,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            JmoordbUtil.errorDialog("statistics()", e.getLocalizedMessage());
+            // JmoordbUtil.errorDialog("statistics()", e.getLocalizedMessage());
             exception = new Exception("statistics() ", e);
             new JmoordbException("statistics()");
         }
@@ -6836,7 +6841,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
         } catch (Exception e) {
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            JmoordbUtil.errorDialog("internalQueryExecMaxBlockingSortBytes()", e.getLocalizedMessage());
+            // JmoordbUtil.errorDialog("internalQueryExecMaxBlockingSortBytes()", e.getLocalizedMessage());
             exception = new Exception("internalQueryExecMaxBlockingSortBytes() ", e);
             new JmoordbException("statistics()");
             success = false;
@@ -6855,7 +6860,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
         } catch (Exception e) {
 
-            JmoordbUtil.errorDialog("createEntity() ", e.getLocalizedMessage());
+            // JmoordbUtil.errorDialog("createEntity() ", e.getLocalizedMessage());
         }
         return null;
     }// </editor-fold>
