@@ -2484,6 +2484,40 @@ public abstract class Repository<T> implements InterfaceRepository {
         }
         return false;
     }// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Boolean delete(T t) ">
+    /**
+     * elimina un documento
+     *
+     * @param doc
+     * @return
+     */
+    
+ 
+    public Boolean delete(T t) {
+        try {
+             T t_ = (T) findInternal(findDocPrimaryKey(t));
+
+                if (t_ == null) {
+                    // no lo encontro
+                } else {
+                    exception = new Exception("A document with the primary key already exists.");
+                    return false;
+                }
+            
+                                   
+                    
+            Document doc = new Document();
+
+            DeleteResult dr = getMongoDatabase().getCollection(collection).deleteOne(doc);
+            if (dr.getDeletedCount() >= 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Repository.class.getName() + "delete()").log(Level.SEVERE, null, e);
+            exception = new Exception("delete() ", e);
+        }
+        return false;
+    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Boolean delete(Document doc)">
     /**
