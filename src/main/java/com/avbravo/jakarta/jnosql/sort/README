@@ -1,0 +1,8 @@
+Sort sort = Sort.asc("name");
+Sorts sorts = Sorts.sorts().asc("name").desc("age");
+
+Pagination pagination = Pagination.page(1).size(10);
+
+List<Person> all = personRepository.findAll(pagination);//findAll by pagination
+List<Person> byName = personRepository.findByName("Ada", sort);//find by name order by name asc
+List<Person> byAgeGreaterThan = personRepository.findByAgeGreaterThan(22, sorts);//find age greater than 22 sort name asc then age desc
