@@ -11,6 +11,7 @@ import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.util.ClassDescriptor;
 import com.avbravo.jmoordb.util.ClassDescriptorsCache;
 import com.avbravo.jmoordb.util.FieldDescriptor;
+import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.avbravo.jmoordb.util.ReflectionUtils;
 import com.avbravo.jmoordb.util.Test;
 import com.mongodb.BasicDBList;
@@ -64,6 +65,10 @@ public class DocumentToJavaMongoDB<T> {
                 fieldDescriptor.getField().set(object,
                         fromDocumentRecursive(dbObject.get(fieldDescriptor.getName()), fieldDescriptor));
             } catch (Exception e) {
+                System.out.println("------------------------------------------------------------------------------------------------");
+                System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                System.out.println("Error " + e.getLocalizedMessage());
+                System.out.println("------------------------------------------------------------------------------------------------");
                 throw new JmoordbException("Failed to set field value " + fieldDescriptor.getName(), e);
             }
         }
@@ -174,21 +179,20 @@ public class DocumentToJavaMongoDB<T> {
                                     if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
                                         //@Id de tipo Integer
                                         Integer n = (Integer) doc.get(referencedBeans.getField());
-                                      //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+                                        //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
                                         //Invocar el metodod de la superclase
-                                         Class parent = cls.getSuperclass();
+                                        Class parent = cls.getSuperclass();
                                         method = parent.getDeclaredMethod("search", String.class, Integer.class);
-                                        
-////Test.msg(" voy a optional Integer");
 
+////Test.msg(" voy a optional Integer");
                                         t1 = (T) method.invoke(obj, referencedBeans.getField(), n);
 
                                     } else {
                                         //Test.msg(" voy a optional String");
                                         value = (String) doc.get(referencedBeans.getField());
                                         paramString[1] = String.class;
-                                         Class parent = cls.getSuperclass();
-                                       method = parent.getDeclaredMethod("search", paramString);
+                                        Class parent = cls.getSuperclass();
+                                        method = parent.getDeclaredMethod("search", paramString);
 //                                        method = cls.getMethod("search", paramString);
                                         //method = cls.getMethod("search", paramString);
 
@@ -268,6 +272,10 @@ public class DocumentToJavaMongoDB<T> {
                                             fromDocumentRecursive(((Document) dbObject).get(childDescriptor.getName()),
                                                     childDescriptor));
                         } catch (Exception e) {
+                            System.out.println("------------------------------------------------------------------------------------------------");
+                            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                            System.out.println("Error " + e.getLocalizedMessage());
+                            System.out.println("------------------------------------------------------------------------------------------------");
                             throw new JmoordbException("[isObject]Failed to set field value " + childDescriptor.getName(), e);
                         }
                     }
@@ -289,6 +297,10 @@ public class DocumentToJavaMongoDB<T> {
                                                                 childDescriptor));
                                     }
                                 } catch (Exception e) {
+                                    System.out.println("------------------------------------------------------------------------------------------------");
+                                    System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                                    System.out.println("Error " + e.getLocalizedMessage());
+                                    System.out.println("------------------------------------------------------------------------------------------------");
                                     throw new JmoordbException("Failed to set field value " + childDescriptor.getName(), e);
                                 }
                             }
@@ -305,8 +317,8 @@ public class DocumentToJavaMongoDB<T> {
                             if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
                                 //@Id de tipo Integer
                                 Class[] paramString = new Class[2];
- Class parent = cls.getSuperclass();                                                                
-                              //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+                                Class parent = cls.getSuperclass();
+                                //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
                                 method = parent.getDeclaredMethod("search", String.class, Integer.class);
 
                                 Integer value = 0;
@@ -323,7 +335,7 @@ public class DocumentToJavaMongoDB<T> {
                                 Class[] paramString = new Class[2];
                                 paramString[0] = String.class;
                                 paramString[1] = String.class;
-                                 Class parent = cls.getSuperclass();
+                                Class parent = cls.getSuperclass();
                                 //method = cls.getDeclaredMethod("findById", paramString);
                                 method = parent.getDeclaredMethod("search", paramString);
 
@@ -350,6 +362,10 @@ public class DocumentToJavaMongoDB<T> {
 
             }
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             throw new JmoordbException("fromDocumentRecursive() " + fieldDescriptor.getName(), e);
         }
         return null;
@@ -363,7 +379,7 @@ public class DocumentToJavaMongoDB<T> {
 //        Bean bean = bm.getBeans(name).iterator().next();
 //        CreationalContext ctx = bm.createCreationalContext(bean); // could be inlined below
 //     o = bm.getReference(bean, bean.getClass(), ctx); // could be inlined with
-//        } catch (Exception e) {
+//        } catch (Exception e) {            System.out.println("------------------------------------------------------------------------------------------------");            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());            System.out.println("Error " + e.getLocalizedMessage());            System.out.println("------------------------------------------------------------------------------------------------");
 //            LOG.warning("getBeanByName() "+e.getLocalizedMessage());
 //            //Test.msg("getBeanByName() "+e.getLocalizedMessage());
 //        }
@@ -390,6 +406,10 @@ public class DocumentToJavaMongoDB<T> {
             }
             return false;
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isEmbedded() " + e.getLocalizedMessage());
         }
         return false;
@@ -412,6 +432,10 @@ public class DocumentToJavaMongoDB<T> {
             }
             return false;
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isReferenced() " + e.getLocalizedMessage());
         }
         return false;

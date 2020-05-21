@@ -11,6 +11,7 @@ import com.avbravo.jmoordb.ReferencedBeans;
 import com.avbravo.jmoordb.util.ClassDescriptor;
 import com.avbravo.jmoordb.util.ClassDescriptorsCache;
 import com.avbravo.jmoordb.util.FieldDescriptor;
+import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.avbravo.jmoordb.util.ReflectionUtils;
 import com.avbravo.jmoordb.util.Test;
 import com.mongodb.BasicDBList;
@@ -54,8 +55,7 @@ public class DocumentToJavaJmoordbResult<T> {
         if (dbObject == null) {
             return null;
         }
-      
-        
+
         this.embeddedBeansList = embeddedBeansList;
         this.referencedBeansList = referencedBeansList;
         ClassDescriptor classDescriptor = cache.get(clazz);
@@ -66,6 +66,10 @@ public class DocumentToJavaJmoordbResult<T> {
                 fieldDescriptor.getField().set(object,
                         fromDocumentRecursive(dbObject.get(fieldDescriptor.getName()), fieldDescriptor));
             } catch (Exception e) {
+                System.out.println("------------------------------------------------------------------------------------------------");
+                System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                System.out.println("Error " + e.getLocalizedMessage());
+                System.out.println("------------------------------------------------------------------------------------------------");
                 throw new JmoordbException("Failed to set field value " + fieldDescriptor.getName(), e);
             }
         }
@@ -170,7 +174,7 @@ public class DocumentToJavaJmoordbResult<T> {
                                     paramString[0] = String.class;
                                     Class cls = Class.forName(referencedBeans.getRepository());
 //                                    Object obj = cls.newInstance();
-      Object obj = lookUpClassInBeanManager(cls);
+                                    Object obj = lookUpClassInBeanManager(cls);
                                     Method method;
                                     String value = "";
                                     if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
@@ -263,6 +267,10 @@ public class DocumentToJavaJmoordbResult<T> {
                                             fromDocumentRecursive(((Document) dbObject).get(childDescriptor.getName()),
                                                     childDescriptor));
                         } catch (Exception e) {
+                            System.out.println("------------------------------------------------------------------------------------------------");
+                            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                            System.out.println("Error " + e.getLocalizedMessage());
+                            System.out.println("------------------------------------------------------------------------------------------------");
                             throw new JmoordbException("[isObject]Failed to set field value " + childDescriptor.getName(), e);
                         }
                     }
@@ -284,13 +292,17 @@ public class DocumentToJavaJmoordbResult<T> {
                                                                 childDescriptor));
                                     }
                                 } catch (Exception e) {
+                                    System.out.println("------------------------------------------------------------------------------------------------");
+                                    System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                                    System.out.println("Error " + e.getLocalizedMessage());
+                                    System.out.println("------------------------------------------------------------------------------------------------");
                                     throw new JmoordbException("Failed to set field value " + childDescriptor.getName(), e);
                                 }
                             }
                             return object;
 //                       
                         } else {
-  //Test.msg("                 [   Lazy == false carga los relacionados ]");
+                            //Test.msg("                 [   Lazy == false carga los relacionados ]");
                             Class cls = Class.forName(referencedBeans.getRepository());
 
                             Object obj = lookUpClassInBeanManager(cls);
@@ -341,6 +353,10 @@ public class DocumentToJavaJmoordbResult<T> {
 
             }
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             throw new JmoordbException("fromDocumentRecursive() " + fieldDescriptor.getName(), e);
         }
         return null;
@@ -354,7 +370,7 @@ public class DocumentToJavaJmoordbResult<T> {
 //        Bean bean = bm.getBeans(name).iterator().next();
 //        CreationalContext ctx = bm.createCreationalContext(bean); // could be inlined below
 //     o = bm.getReference(bean, bean.getClass(), ctx); // could be inlined with
-//        } catch (Exception e) {
+//        } catch (Exception e) {            System.out.println("------------------------------------------------------------------------------------------------");            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());            System.out.println("Error " + e.getLocalizedMessage());            System.out.println("------------------------------------------------------------------------------------------------");
 //            LOG.warning("getBeanByName() "+e.getLocalizedMessage());
 //            //Test.msg("getBeanByName() "+e.getLocalizedMessage());
 //        }
@@ -381,6 +397,10 @@ public class DocumentToJavaJmoordbResult<T> {
             }
             return false;
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isEmbedded() " + e.getLocalizedMessage());
         }
         return false;
@@ -403,6 +423,10 @@ public class DocumentToJavaJmoordbResult<T> {
             }
             return false;
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isReferenced() " + e.getLocalizedMessage());
         }
         return false;
