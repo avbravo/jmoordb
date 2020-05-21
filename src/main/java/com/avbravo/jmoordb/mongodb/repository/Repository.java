@@ -1376,6 +1376,10 @@ public abstract class Repository<T> implements InterfaceRepository {
             });
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
             exception = new Exception("iterableSimple() ", e);
 
@@ -1565,8 +1569,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             Integer size = count();
             if (size > limitOfDocumentInFindAllMethod) {
-               // JmoordbUtil.warningDialog("findAll()", "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
-              exception = new Exception("findAll() "+  "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
+                // JmoordbUtil.warningDialog("findAll()", "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
+                exception = new Exception("findAll() " + "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
                 list = findPagination(1, limitOfDocumentInFindAllMethod, sortQuery);
                 return list;
             }
@@ -2485,27 +2489,25 @@ public abstract class Repository<T> implements InterfaceRepository {
         return false;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Boolean delete(T t) ">
+
     /**
      * elimina un documento
      *
      * @param doc
      * @return
      */
-    
- 
+
     public Boolean delete(T t) {
         try {
-             T t_ = (T) findInternal(findDocPrimaryKey(t));
+            T t_ = (T) findInternal(findDocPrimaryKey(t));
 
-                if (t_ == null) {
-                    // no lo encontro
-                } else {
-                    exception = new Exception("A document with the primary key already exists.");
-                    return false;
-                }
-            
-                                   
-                    
+            if (t_ == null) {
+                // no lo encontro
+            } else {
+                exception = new Exception("A document with the primary key already exists.");
+                return false;
+            }
+
             Document doc = new Document();
 
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteOne(doc);
@@ -3239,7 +3241,6 @@ public abstract class Repository<T> implements InterfaceRepository {
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="filterBetweenDatePagination(String secondaryfield,String secondaryfieldvalue,String thirdfield, String thirdvalue,, String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort)">
-
     /**
      * Crea un filtro para filtrar entre fechas
      *
@@ -3250,7 +3251,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      *
      * @return
      */
-    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield,String secondaryfieldvalue,String thirdfield, String thirdvalue,
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield, String secondaryfieldvalue, String thirdfield, String thirdvalue,
             String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
         list = new ArrayList<>();
         try {
@@ -3262,7 +3263,6 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             Date dateStart = setHourToDate(datestartvalue, 0, 0);
             Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
-
 
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
@@ -3290,7 +3290,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      *
      * @return
      */
-    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield,Integer secondaryfieldvalue,String thirdfield, String thirdvalue,
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield, Integer secondaryfieldvalue, String thirdfield, String thirdvalue,
             String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
         list = new ArrayList<>();
         try {
@@ -3302,7 +3302,6 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             Date dateStart = setHourToDate(datestartvalue, 0, 0);
             Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
-
 
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
@@ -3330,7 +3329,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      *
      * @return
      */
-    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield,String secondaryfieldvalue,String thirdfield, Integer thirdvalue,
+    public List<T> filterBetweenDatePaginationWithoutHours(String secondaryfield, String secondaryfieldvalue, String thirdfield, Integer thirdvalue,
             String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
         list = new ArrayList<>();
         try {
@@ -3342,7 +3341,6 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             Date dateStart = setHourToDate(datestartvalue, 0, 0);
             Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
-
 
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
@@ -3370,7 +3368,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      *
      * @return
      */
-    public List<T> filterBetweenDatePaginationWithoutHours(String integerFieldName,Integer integerFieldValue,String integerFieldName2, Integer integerFieldValue2,
+    public List<T> filterBetweenDatePaginationWithoutHours(String integerFieldName, Integer integerFieldValue, String integerFieldName2, Integer integerFieldValue2,
             String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Integer pageNumber, Integer rowsForPage, Document... docSort) {
         list = new ArrayList<>();
         try {
@@ -3383,9 +3381,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Date dateStart = setHourToDate(datestartvalue, 0, 0);
             Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
 
-
             Bson filter = Filters.and(
-                    Filters.eq(integerFieldName,integerFieldValue),
+                    Filters.eq(integerFieldName, integerFieldValue),
                     Filters.eq(integerFieldName2, integerFieldValue2),
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
@@ -3725,11 +3722,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-          
+
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
                     Filters.gte(fielddate, dateStart),
@@ -3766,10 +3762,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-         
+
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
                     Filters.gte(fielddate, dateStart),
@@ -3807,11 +3802,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-         
-            
+
             Bson filter = Filters.and(Filters.gte(fielddate, dateStart),
                     Filters.lte(fielddate, dateEnd));
 
@@ -3847,11 +3840,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-    
+
             Bson filter = Filters.and(myfilter, Filters.gte(fielddate, dateStart),
                     Filters.lte(fielddate, dateEnd));
 
@@ -3887,10 +3879,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-           
+
             Bson date = Filters.and(Filters.gte(fielddate, dateStart),
                     Filters.lte(fielddate, dateEnd));
             Bson filter = Filters.and(myfilter, date);
@@ -3927,9 +3918,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-              Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
+
             Bson filter = Filters.and(Filters.gte(fielddate, dateStart),
                     Filters.lte(fielddate, dateEnd));
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
@@ -3964,11 +3955,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-           
-            
+
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
                     Filters.gte(fielddate, dateStart),
@@ -4006,11 +3995,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-          
+
             Bson filter = Filters.and(
                     myfilter,
                     Filters.gte(fielddate, dateStart),
@@ -4048,12 +4036,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-         
-            
+
             Bson filter = Filters.and(
                     myfilter,
                     Filters.gte(fielddate, dateStart),
@@ -4090,11 +4076,10 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            
-             Date dateStart = setHourToDate(datevalue, 0, 0);
+
+            Date dateStart = setHourToDate(datevalue, 0, 0);
             Date dateEnd = setHourToDate(datevalue, 23, 59);
-            
-          
+
             Bson filter = Filters.and(
                     Filters.eq(secondaryfield, secondaryfieldvalue),
                     Filters.gte(fielddate, dateStart),
@@ -5525,8 +5510,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                         lookup.unreflect(userInfoProperty.getWriteMethod()));
                 userInfoSetter.accept(t1, generateListUserinfo(username, descripcion));
             } else {
-             //   JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
-             exception = new Exception("No contiene el metodo UserInfo");
+                //   JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
+                exception = new Exception("No contiene el metodo UserInfo");
             }
 
         } catch (Exception e) {
@@ -5577,9 +5562,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 userInfoSetter.accept(t1, list);
 
             } else {
-                 exception = new Exception("No contiene el metodo UserInfo");
+                exception = new Exception("No contiene el metodo UserInfo");
                 //JmoordbUtil.warningMessage("No contiene el metodo UserInfo");
-                
+
             }
 
         } catch (Exception e) {
@@ -5934,8 +5919,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     return true;
                 }
             } else {
-           //     JmoordbUtil.warningMessage("No tiene llaves secundaria @Composite no se puede buscar");
-                 exception = new Exception("No tiene llaves secundaria @Composite no se puede buscar");
+                //     JmoordbUtil.warningMessage("No tiene llaves secundaria @Composite no se puede buscar");
+                exception = new Exception("No tiene llaves secundaria @Composite no se puede buscar");
                 return false;
             }
         } catch (Exception e) {
