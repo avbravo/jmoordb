@@ -70,6 +70,10 @@ public interface IController<T> {
             size = repository.sizeOfPage(rowPage);
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return size;
@@ -106,6 +110,10 @@ public interface IController<T> {
             page = sizeOfPage();
             move(page);
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
@@ -117,6 +125,10 @@ public interface IController<T> {
             Integer page = 1;
             move(page);
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
@@ -154,6 +166,10 @@ public interface IController<T> {
 
             move(page);
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
@@ -190,6 +206,10 @@ public interface IController<T> {
             }
             move(page);
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
@@ -836,11 +856,10 @@ public interface IController<T> {
                  * actual
                  */
                 List<Object> list = (List<Object>) JmoordbIntrospection.callGet(controller, nameOfEntity.trim() + "List");
-                for(Object entityDelete2 :listSelected){
-                       list.remove(entityDelete2);
+                for (Object entityDelete2 : listSelected) {
+                    list.remove(entityDelete2);
                 }
-             
-            
+
                 Integer page = JmoordbIntrospection.getPageInController(controller);
 
                 JmoordbIntrospection.callSet(controller, nameOfEntity.trim() + "List", list);
@@ -977,6 +996,10 @@ public interface IController<T> {
             }
             prepare = true;
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         afterPrepareView(prepare);
@@ -1255,6 +1278,10 @@ public interface IController<T> {
             }
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
             golist = false;
         }
@@ -1352,6 +1379,10 @@ public interface IController<T> {
             }
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
             gonew = false;
         }
@@ -1445,6 +1476,10 @@ public interface IController<T> {
             }
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
 
@@ -1526,6 +1561,10 @@ public interface IController<T> {
             }
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
 
@@ -1823,6 +1862,10 @@ public interface IController<T> {
             move(page);
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
@@ -1869,6 +1912,10 @@ public interface IController<T> {
             move(page);
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
@@ -1918,6 +1965,10 @@ public interface IController<T> {
             move(page);
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
@@ -1960,6 +2011,10 @@ public interface IController<T> {
             move(page);
 
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
         }
         return "";
