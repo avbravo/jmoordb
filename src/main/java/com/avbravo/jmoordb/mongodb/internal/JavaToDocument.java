@@ -184,7 +184,7 @@ public class JavaToDocument {
                         return dbObject;
 
                     } else {
-                        //Test.msg("                     [No es Referenced]");
+                        Test.msg("                     [No es Referenced]");
                         new JmoordbException("@Embedded or @Reference is required for this field " + fieldDescriptor.getName());
                         return new BasicDBObject();
                     }

@@ -1488,6 +1488,11 @@ public abstract class Repository<T> implements InterfaceRepository {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="iterableList(FindIterable<Document> iterable)">
+    /**
+     * 
+     * @param iterable
+     * @return  List<T>
+     */
     private List< T> iterableList(FindIterable<Document> iterable) {
         List< T> l = new ArrayList<>();
         try {
@@ -1495,6 +1500,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 @Override
                 public void apply(final Document document) {
                     try {
+                        Test.msg("Prueba: iterable: "+document.toJson());
                         t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                         l.add(t1);
                     } catch (Exception e) {
@@ -1762,7 +1768,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return
      */
     public List< T> findAll(Document... docSort) {
-        Test.msg("findAll()");
+       
         list = new ArrayList<>();
         Document sortQuery = new Document();
         try {
@@ -1770,21 +1776,21 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = docSort[0];
 
             }
-            Test.msg("paso 1");
+   
             Integer size = count();
             if (size > limitOfDocumentInFindAllMethod) {
                 // JmoordbUtil.warningDialog("findAll()", "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
                 exception = new Exception("findAll() " + "Existen " + size + " documentos mejor use findPagination() en lugar de findAll(). Se devolveran los primeros " + limitOfDocumentInFindAllMethod);
-                Test.msg("paso 2");
+                
                 list = findPagination(1, limitOfDocumentInFindAllMethod, sortQuery);
-                Test.msg("paso 3");
+             
                 return list;
             }
-Test.msg("paso 4");
+
             MongoDatabase db = mongoClient.getDatabase(database);
-            Test.msg("paso 5");
+         
             FindIterable<Document> iterable = db.getCollection(collection).find().sort(sortQuery);
-            Test.msg("paso 6");
+         
             list = iterableList(iterable);
 
         } catch (Exception e) {
