@@ -52,7 +52,7 @@ public class JavaToDocument {
             return dbObject;
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("toDocument() " + e.getLocalizedMessage());
@@ -85,7 +85,7 @@ public class JavaToDocument {
             return dbObject;
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("toDocumentReferenced() " + e.getLocalizedMessage());
@@ -213,7 +213,7 @@ public class JavaToDocument {
             }
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("toDBObjectRecursive() " + e.getLocalizedMessage());
@@ -235,7 +235,7 @@ public class JavaToDocument {
             return false;
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isEmbedded() " + e.getLocalizedMessage());
@@ -262,7 +262,7 @@ public class JavaToDocument {
             return false;
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isReferenced() " + e.getLocalizedMessage());

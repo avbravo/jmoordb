@@ -71,7 +71,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -111,7 +111,7 @@ public interface IController<T> {
             move(page);
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -126,7 +126,7 @@ public interface IController<T> {
             move(page);
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -167,7 +167,7 @@ public interface IController<T> {
             move(page);
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -207,7 +207,7 @@ public interface IController<T> {
             move(page);
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -997,7 +997,7 @@ public interface IController<T> {
             prepare = true;
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -1279,7 +1279,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -1380,7 +1380,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -1477,7 +1477,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -1562,7 +1562,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -1863,7 +1863,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -1913,7 +1913,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -1966,7 +1966,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
@@ -2012,7 +2012,7 @@ public interface IController<T> {
 
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());

@@ -41,9 +41,9 @@ import org.bson.Document;
  *
  * @author avbravo
  */
-public class DocumentToJavaMongoDB<T> {
+public class DocumentToJavaMongoDB1<T> {
 
-    private static final Logger LOG = Logger.getLogger(DocumentToJavaMongoDB.class.getName());
+    private static final Logger LOG = Logger.getLogger(DocumentToJavaMongoDB1.class.getName());
     Document documentMaster = new Document();
 
     private ClassDescriptorsCache cache = new ClassDescriptorsCache();
@@ -126,8 +126,7 @@ public class DocumentToJavaMongoDB<T> {
             } else if (fieldDescriptor.isList()) {
                 Test.msg(" [isList()  ]" + fieldDescriptor.getName());
                 if (isEmbedded(fieldDescriptor.getName())) {
-                    Test.msg("***************************************************************");
-                    Test.msg("Es  -->>isList()  AND  [isEmbedded]");
+                    Test.msg("     [es Embebido]");
 
                     List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
 
@@ -139,14 +138,8 @@ public class DocumentToJavaMongoDB<T> {
 
                             list.add(listEl);
                         } else {
-           final Field[] fields = fieldDescriptor.getClass().getDeclaredFields();
-                        
-                           Test.msg("      Obtuve los campos..invocare al analizdor");
-                        Analizador analizador = new Analizador();
-                        analizador.analizar(fields);
-                        Test.msg("------Ahora usare la lista del analizador...");
-                            list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl,analizador.getEmbeddedBeansList(), analizador.getReferencedBeansList()));
-//                            list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedBeansList, referencedBeansList));
+
+                            list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedBeansList, referencedBeansList));
                         }
                     }
 

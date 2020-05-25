@@ -18,7 +18,7 @@ public class Test {
     
     public static void msg(String texto){
         LOG.warning(texto);
-
+        System.out.println(texto);
         //Test.msg( texto);
     }
 }

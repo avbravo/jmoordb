@@ -67,7 +67,7 @@ public class DocumentToJavaJmoordbResult<T> {
                         fromDocumentRecursive(dbObject.get(fieldDescriptor.getName()), fieldDescriptor));
             } catch (Exception e) {
                 System.out.println("------------------------------------------------------------------------------------------------");
-                System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
                 System.out.println("Error " + e.getLocalizedMessage());
                 System.out.println("------------------------------------------------------------------------------------------------");
                 throw new JmoordbException("Failed to set field value " + fieldDescriptor.getName(), e);
@@ -268,7 +268,7 @@ public class DocumentToJavaJmoordbResult<T> {
                                                     childDescriptor));
                         } catch (Exception e) {
                             System.out.println("------------------------------------------------------------------------------------------------");
-                            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
                             System.out.println("Error " + e.getLocalizedMessage());
                             System.out.println("------------------------------------------------------------------------------------------------");
                             throw new JmoordbException("[isObject]Failed to set field value " + childDescriptor.getName(), e);
@@ -293,7 +293,7 @@ public class DocumentToJavaJmoordbResult<T> {
                                     }
                                 } catch (Exception e) {
                                     System.out.println("------------------------------------------------------------------------------------------------");
-                                    System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
                                     System.out.println("Error " + e.getLocalizedMessage());
                                     System.out.println("------------------------------------------------------------------------------------------------");
                                     throw new JmoordbException("Failed to set field value " + childDescriptor.getName(), e);
@@ -354,7 +354,7 @@ public class DocumentToJavaJmoordbResult<T> {
             }
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             throw new JmoordbException("fromDocumentRecursive() " + fieldDescriptor.getName(), e);
@@ -370,7 +370,7 @@ public class DocumentToJavaJmoordbResult<T> {
 //        Bean bean = bm.getBeans(name).iterator().next();
 //        CreationalContext ctx = bm.createCreationalContext(bean); // could be inlined below
 //     o = bm.getReference(bean, bean.getClass(), ctx); // could be inlined with
-//        } catch (Exception e) {            System.out.println("------------------------------------------------------------------------------------------------");            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());            System.out.println("Error " + e.getLocalizedMessage());            System.out.println("------------------------------------------------------------------------------------------------");
+//        } catch (Exception e) {            System.out.println("------------------------------------------------------------------------------------------------");            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());            System.out.println("Error " + e.getLocalizedMessage());            System.out.println("------------------------------------------------------------------------------------------------");
 //            LOG.warning("getBeanByName() "+e.getLocalizedMessage());
 //            //Test.msg("getBeanByName() "+e.getLocalizedMessage());
 //        }
@@ -398,7 +398,7 @@ public class DocumentToJavaJmoordbResult<T> {
             return false;
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isEmbedded() " + e.getLocalizedMessage());
@@ -424,7 +424,7 @@ public class DocumentToJavaJmoordbResult<T> {
             return false;
         } catch (Exception e) {
             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Claee:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
             new JmoordbException("isReferenced() " + e.getLocalizedMessage());
