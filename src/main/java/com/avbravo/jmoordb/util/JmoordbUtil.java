@@ -2683,7 +2683,45 @@ public class JmoordbUtil {
     }
       
       
-  
+   // <editor-fold defaultstate="collapsed" desc="desencritpar">  
+    /**
+     * Encripta un texto en base a una llave
+     *
+     * @param textoencriptado
+     * @param texto: myclavepersonal
+     * @param key : mykey
+     * @return
+     */
+    public static String desencriptar(String textoencriptado) {
+        try {
+            JmoordbCryptoConverter cryptoConverter = new JmoordbCryptoConverter(); 
+
+            return cryptoConverter.convertToEntityAttribute(textoencriptado);
+        } catch (Exception e) {
+            errorMessage("desencriptar() " + e.getLocalizedMessage());
+        }
+        return "";
+    }// </editor-fold>
+
+     // <editor-fold defaultstate="collapsed" desc="encriptar">  
+    /**
+     * Encripta un texto en base a una llave
+     *
+     * @param texto: myclavepersonal
+     * @param key : mykey
+     * @return
+     */
+    public static String encriptar(String texto) {
+
+        try {
+            JmoordbCryptoConverter cryptoConverter = new JmoordbCryptoConverter();
+
+            return cryptoConverter.convertToDatabaseColumn(texto);
+        } catch (Exception e) {
+            errorMessage("encriptar() " + e.getLocalizedMessage());
+        }
+        return "";
+    }// </editor-fold>
 
 
 }
