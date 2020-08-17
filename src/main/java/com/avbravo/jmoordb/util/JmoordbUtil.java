@@ -6,6 +6,20 @@
 package com.avbravo.jmoordb.util;
 
 import com.avbravo.jmoordb.JmoordbException;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -20,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +42,12 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.apache.commons.beanutils.BeanUtils;
@@ -37,6 +58,19 @@ import org.primefaces.PrimeFaces;
  * @author avbravo
  */
 public class JmoordbUtil {
+    
+        private static String opertativeSystem = System.getProperty("os.name").toLowerCase();
+        
+        
+    private static final Logger LOG = Logger.getLogger(JmoordbUtil.class.getName());
+    private static final String EMAIL_REGEX = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+
+    // static Pattern object, since pattern is fixed
+    private static Pattern pattern;
+
+    // non-static Matcher object because it's created from the input String
+    private static Matcher matcher;
+    // <editor-fold defaultstate="collapsed" desc="String letterToUpper(String texto)">
       public static  String letterToUpper(String texto) {
         try {
 
@@ -53,7 +87,18 @@ public class JmoordbUtil {
         }
         return texto;
     }
+// </editor-fold>
+      
+      
+       // <editor-fold defaultstate="collapsed" desc="String fileSeparator()">
+    //https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
+    public static String fileSeparator() {
+        return System.getProperty("file.separator");
 
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="String letterToLower(String texto)">
     /**
      * ConvertirLetraMinuscula
      *
@@ -78,7 +123,9 @@ public class JmoordbUtil {
         }
         return texto;
     }
+    // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="String traductor(String texto, String idioma)">
     public static  String traductor(String texto, String idioma){
         String traduccion = "";
         try {
@@ -89,7 +136,7 @@ public class JmoordbUtil {
         }
  return traduccion;       
     }
-    
+    // </editor-fold>
     
      public static  Date getFechaHoraActual() {
         LocalDateTime ahora = LocalDateTime.now();
@@ -1722,4 +1769,921 @@ public class JmoordbUtil {
 
         return destino;
     }// </editor-fold>
+    
+     // <editor-fold defaultstate="collapsed" desc="Boolean appendTextToLogErrorFile(String filePath, String nameOfClass, String nameOfMethod, String text, Exception exception, Boolean generateDailyFile) {">
+    /**
+     *
+     * @return
+     */
+    public static Boolean appendTextToLogErrorFile(String filePath, String nameOfClass, String nameOfMethod, String text, Exception exception) {
+        try {
+
+            String path = pathOfFile(filePath);
+            String filePathDialy = pathOfFile(filePath) + fileSeparator() + nameOfFileInPath(filePath) + "_" + JmoordbDateUtil.anioActual() + "_" + JmoordbDateUtil.mesActual() + "_" + JmoordbDateUtil.diaActual()
+                    + "." + extensionOfFileInPath(filePath);
+            String filePathAll = pathOfFile(filePath) + fileSeparator() + nameOfFileInPath(filePath) + "_All" + "." + extensionOfFileInPath(filePath);
+            if (!existDirectory(path)) {
+
+                mkdir(path);
+            }
+
+            String json = "";
+            String jsonDialy = "";
+            String jsonAll = "";
+
+            if (!existFile(filePath)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePath), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+            } else {
+
+                json = "\n                   ,";
+            }
+
+            /**
+             * Archivo de log.json Diario
+             */
+            if (!existFile(filePathDialy)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePathDialy), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+            } else {
+
+                jsonDialy = "\n               ,";
+            }
+            /**
+             * Archivo de log.json All
+             */
+            if (!existFile(filePathAll)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePathAll), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+            } else {
+
+                jsonAll = "\n               ,";
+            }
+
+            /**
+             * procesa el trace
+             */
+            String trace = "";
+            if (exception != null) {
+                Integer c = 0;
+                for (StackTraceElement s : exception.getStackTrace()) {
+
+                    if (s.getFileName() != null) {
+            if (s.getFileName().indexOf(nameOfClass) != -1) {
+                        if (c == 0) {
+                            c++;
+                            trace += "\n            {";
+                            trace += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            trace += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            trace += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            trace += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            trace += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            trace += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            trace += "\n            }";
+                        } else {
+                            trace += "\n           ,{";
+                            trace += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            trace += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            trace += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            trace += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            trace += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            trace += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            trace += "\n            }";
+                        }
+
+                        }
+                    }
+
+                }
+            }
+            /**
+             * procesa el trace All
+             */
+            String traceAll = "";
+            if (exception != null) {
+                Integer c = 0;
+                for (StackTraceElement s : exception.getStackTrace()) {
+
+                    if (s.getFileName() != null) {
+           
+                        if (c == 0) {
+                            c++;
+                            traceAll += "\n            {";
+                            traceAll += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            traceAll += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            traceAll += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            traceAll += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            traceAll += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            traceAll += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            traceAll += "\n            }";
+                        } else {
+                            traceAll += "\n           ,{";
+                            traceAll += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            traceAll += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            traceAll += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            traceAll += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            traceAll += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            traceAll += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            traceAll += "\n            }";
+                        }
+
+                     
+                    }
+
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+
+            json += trace;
+
+            jsonDialy += trace;
+            jsonAll += traceAll;
+
+            insertarTextoArchivo(filePath, "]", json, true);
+
+            /**
+             * Si se indica que se genera un archivo diario.
+             */
+            insertarTextoArchivo(filePathDialy, "]", jsonDialy, true);
+
+            
+            /**
+             * Si se indica que se genera un archivo all
+             */
+            insertarTextoArchivo(filePathAll, "]", jsonAll, true);
+
+            
+            
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("appendTextToLogErrorFile()" + e.getLocalizedMessage());
+            // errorDialog("appendTextToLogErrorFile()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+
+    // </editor-fold>    
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean insertarTextoArchivo(String rutaArchivo, String search, String textoInsertar, boolean antes)>
+
+    /*
+     * Inserta texto en el archivo antes o despues de la linea donde se
+     * encuentre la cadena search el parametro antes = true : indica que se
+     * insertara antes antes = false : indica que se insertara despues
+     * InsertarTextoArchivo("/home/avbravo/Documentos/etiquetas.properties",
+     * "name", "email=\"@ww\"", false)
+     */
+    public static Boolean insertarTextoArchivo(String rutaArchivo, String search, String textoInsertar, Boolean antes) {
+        try {
+
+            File file = new File(rutaArchivo);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = "", oldtext = "";
+            boolean encontrado = false;
+            while ((line = reader.readLine()) != null) {
+                if (line.indexOf(search) != -1) {
+                    if (antes) {
+                        //insertarlo antes
+                        oldtext += textoInsertar + "\r\n" + line + "\r\n";
+                    } else {
+                        //insertar despues
+                        oldtext += line + "\r\n" + textoInsertar + "\r\n";
+                    }
+
+                    encontrado = true;
+
+                } else {
+                    oldtext += line + "\r\n";
+                }
+
+            }
+            reader.close();
+
+            if (encontrado) {
+                FileWriter writer = new FileWriter(rutaArchivo);
+                writer.write(oldtext);
+                writer.close();
+
+                return true;
+            }
+
+        } catch (Exception ex) {
+            System.out.println("insertarTextoArchivo()" + ex.getLocalizedMessage());
+            // errorDialog("insertarTextoArchivo()", ex.getLocalizedMessage());
+        }
+        return false;
+    }
+    // </editor-fold>
+    
+      // <editor-fold defaultstate="collapsed" desc="Boolean existFile(String filePath) ">
+
+    public static Boolean existFile(String filePath) {
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                return false;
+                // file.createNewFile();
+            }
+            return true;
+        } catch (Exception e) {
+            errorDialog("existFile()", e.getLocalizedMessage());
+        }
+        return false;
+
+    }
+    // </editor-fold>   
+    
+     // <editor-fold defaultstate="collapsed" desc="String pathOfFile(String filenamePath) >
+    /**
+     *
+     * @param filenamePath
+     * @return el path de un archivo
+     */
+    public static String pathOfFile(String filenamePath) {
+        String path = "";
+        try {
+            path = filenamePath.substring(0, filenamePath.lastIndexOf(System.getProperty("file.separator")));
+        } catch (Exception e) {
+            errorDialog("pathOfFile()", e.getLocalizedMessage());
+        }
+        return path;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="String extensionOfFileInPath(String filenamePath)">
+    /**
+     *
+     * @param filenamePath
+     * @return devuelve la extension de un archivo en un path
+     */
+    public static String extensionOfFileInPath(String filenamePath) {
+        String extension = "";
+        try {
+            extension = filenamePath.substring(filenamePath.lastIndexOf('.') + 1, filenamePath.length());
+        } catch (Exception e) {
+        }
+        return extension;
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean zipDirectory(String sourceDirectory, String targetDirectoryAndNamezip)">
+    /**
+     *
+     * @param sourceDirectory
+     * @param targetDirectoryAndNamezip
+     * @return Comprime una carpeta
+     */
+    public static Boolean zipDirectory(String sourceDirectory, String targetDirectoryAndNamezip) {
+        try {
+
+            String sourceFile = sourceDirectory;
+
+            FileOutputStream fos = new FileOutputStream(targetDirectoryAndNamezip);
+            ZipOutputStream zipOut = new ZipOutputStream(fos);
+            File fileToZip = new File(sourceFile);
+
+            zipFile(fileToZip, fileToZip.getName(), zipOut);
+            zipOut.close();
+            fos.close();
+            return true;
+        } catch (Exception e) {
+            errorDialog("zipDirectory()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) ">
+    /**
+     * fuente https://www.baeldung.com/java-compress-and-uncompress
+     *
+     * @param fileToZip
+     * @param fileName
+     * @param zipOut
+     * @throws IOException
+     */
+    private static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) {
+        try {
+            if (fileToZip.isHidden()) {
+                return;
+            }
+            if (fileToZip.isDirectory()) {
+                if (fileName.endsWith("/")) {
+                    zipOut.putNextEntry(new ZipEntry(fileName));
+                    zipOut.closeEntry();
+                } else {
+                    zipOut.putNextEntry(new ZipEntry(fileName + "/"));
+                    zipOut.closeEntry();
+                }
+                File[] children = fileToZip.listFiles();
+                for (File childFile : children) {
+                    zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
+                }
+                return;
+            }
+            FileInputStream fis = new FileInputStream(fileToZip);
+            ZipEntry zipEntry = new ZipEntry(fileName);
+            zipOut.putNextEntry(zipEntry);
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = fis.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+            fis.close();
+        } catch (Exception e) {
+            errorDialog("zipFile()", e.getLocalizedMessage());
+        }
+
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="unzipFileToDirectory(String fileZipWithPath, String pathToUnzip)">
+    /**
+     * Fuente
+     * https://examples.javacodegeeks.com/core-java/util/zip/extract-zip-file-with-subdirectories/
+     *
+     * @param fileZipWithPath
+     * @param pathToUnzip
+     * @return
+     */
+    public static Boolean unzipFileToDirectory(String fileZipWithPath, String pathToUnzip) {
+        try {
+
+            String filename = fileZipWithPath;
+
+            File srcFile = new File(filename);
+
+            // create a directory with the same name to which the contents will be extracted
+            String zipPath = filename.substring(0, filename.length() - 4);
+            File temp = new File(zipPath);
+            temp.mkdir();
+
+            ZipFile zipFile = null;
+
+            try {
+
+                zipFile = new ZipFile(srcFile);
+
+                // get an enumeration of the ZIP file entries
+                Enumeration<? extends ZipEntry> e = zipFile.entries();
+
+                while (e.hasMoreElements()) {
+
+                    ZipEntry entry = e.nextElement();
+
+                    File destinationPath = new File(zipPath, entry.getName());
+
+                    //create parent directories
+                    destinationPath.getParentFile().mkdirs();
+
+                    // if the entry is a file extract it
+                    if (entry.isDirectory()) {
+                        continue;
+                    } else {
+
+                        System.out.println("Extracting file: " + destinationPath);
+
+                        BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+
+                        int b;
+                        byte buffer[] = new byte[1024];
+
+                        FileOutputStream fos = new FileOutputStream(destinationPath);
+
+                        BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
+
+                        while ((b = bis.read(buffer, 0, 1024)) != -1) {
+                            bos.write(buffer, 0, b);
+                        }
+
+                        bos.close();
+                        bis.close();
+
+                    }
+
+                }
+                return true;
+            } catch (IOException ioe) {
+                System.out.println("Error opening zip file" + ioe);
+            } finally {
+                try {
+                    if (zipFile != null) {
+                        zipFile.close();
+                    }
+                } catch (IOException ioe) {
+                    System.out.println("Error while closing zip file" + ioe);
+                }
+            }
+
+        } catch (Exception e) {
+            errorDialog("unzipFileToDirectory()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+    // </editor-fold>
+    
+     /**
+     * Crea directorio especificado en el path
+     *
+     * @param directoryPath
+     * @return
+     */
+    public static Boolean existDirectory(String directoryPath) {
+        try {
+            File directorio = new File(directoryPath);
+            if (directorio.exists()) {
+                return true;
+
+            }
+
+        } catch (Exception e) {
+            errorDialog("existDirectory()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Boolean mkdir(String directoryPath)">
+    /**
+     * Crea directorio especificado en el path
+     *
+     * @param directoryPath
+     * @return
+     */
+    public static Boolean mkdir(String directoryPath) {
+        try {
+            File directorio = new File(directoryPath);
+            if (!directorio.exists()) {
+                //Crear el directorio
+                if (directorio.mkdirs()) {
+                    return true;
+//
+                } else {
+                    return false;
+                }
+            }
+
+        } catch (Exception e) {
+            errorDialog("mkdir()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+// </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="String nameOfFileInPath(String filenamePath)">
+
+    /**
+     *
+     * @param filenamePath
+     * @return el nombre del archivo que esta en un path
+     */
+    public static String nameOfFileInPath(String filenamePath) {
+        String name = "";
+        try {
+            name = filenamePath.substring(filenamePath.lastIndexOf(System.getProperty("file.separator")) + 1,
+                    filenamePath.lastIndexOf('.'));
+        } catch (Exception e) {
+            errorDialog("nameOfFileInPath()", e.getLocalizedMessage());
+        }
+        return name;
+    }
+
+    // </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean appendTextToLogErrorFile(String filePath, String nameOfClass, String nameOfMethod, String text, Exception exception, Boolean generateDailyFile) {">
+    /**
+     *
+     * @return
+     */
+    public static Boolean appendTextToLogErrorFile2(String filePath, String nameOfClass, String nameOfMethod, String text, Exception exception) {
+        try {
+
+            String path = pathOfFile(filePath);
+            String filePathDialy = pathOfFile(filePath) + fileSeparator() + nameOfFileInPath(filePath) + "_" + JmoordbDateUtil.anioActual() + "_" + JmoordbDateUtil.mesActual() + "_" + JmoordbDateUtil.diaActual()
+                    + "." + extensionOfFileInPath(filePath);
+            String filePathAll = pathOfFile(filePath) + fileSeparator() + nameOfFileInPath(filePath) + "_All" + "." + extensionOfFileInPath(filePath);
+            if (!existDirectory(path)) {
+
+                mkdir(path);
+            }
+
+            String json = "";
+            String jsonDialy = "";
+            String jsonAll = "";
+
+            if (!existFile(filePath)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePath), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+            } else {
+
+                json = "\n                   ,";
+            }
+
+            /**
+             * Archivo de log.json Diario
+             */
+            if (!existFile(filePathDialy)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePathDialy), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+            } else {
+
+                jsonDialy = "\n               ,";
+            }
+            /**
+             * Archivo de log.json All
+             */
+            if (!existFile(filePathAll)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePathAll), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+            } else {
+
+                jsonAll = "\n               ,";
+            }
+
+            /**
+             * procesa el trace
+             */
+            String trace = "";
+            if (exception != null) {
+                Integer c = 0;
+                for (StackTraceElement s : exception.getStackTrace()) {
+
+                    if (s.getFileName() != null) {
+            if (s.getFileName().indexOf(nameOfClass) != -1) {
+                        if (c == 0) {
+                            c++;
+                            trace += "\n            {";
+                            trace += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            trace += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            trace += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            trace += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            trace += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            trace += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            trace += "\n            }";
+                        } else {
+                            trace += "\n           ,{";
+                            trace += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            trace += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            trace += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            trace += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            trace += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            trace += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            trace += "\n            }";
+                        }
+
+                        }
+                    }
+
+                }
+            }
+            /**
+             * procesa el trace All
+             */
+            String traceAll = "";
+            if (exception != null) {
+                Integer c = 0;
+                for (StackTraceElement s : exception.getStackTrace()) {
+
+                    if (s.getFileName() != null) {
+           
+                        if (c == 0) {
+                            c++;
+                            traceAll += "\n            {";
+                            traceAll += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            traceAll += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            traceAll += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            traceAll += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            traceAll += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            traceAll += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            traceAll += "\n            }";
+                        } else {
+                            traceAll += "\n           ,{";
+                            traceAll += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                            traceAll += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                            traceAll += "\n            \"className\":\"" + s.getClassName() + "\",";
+                            traceAll += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                            traceAll += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                            traceAll += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                            traceAll += "\n            }";
+                        }
+
+                     
+                    }
+
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+
+            json += trace;
+
+            jsonDialy += trace;
+            jsonAll += traceAll;
+
+            insertarTextoArchivo(filePath, "]", json, true);
+
+            /**
+             * Si se indica que se genera un archivo diario.
+             */
+            insertarTextoArchivo(filePathDialy, "]", jsonDialy, true);
+
+            
+            /**
+             * Si se indica que se genera un archivo all
+             */
+            insertarTextoArchivo(filePathAll, "]", jsonAll, true);
+
+            
+            
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("appendTextToLogErrorFile()" + e.getLocalizedMessage());
+            // errorDialog("appendTextToLogErrorFile()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+
+    // </editor-fold>    
+    // <editor-fold defaultstate="collapsed" desc="Boolean appendTextToLogErrorFile(String filePath, String nameOfClass, String nameOfMethod, String text, Exception exception, Boolean generateDailyFile) {">
+    /**
+     *
+     * @return
+     */
+    public static Boolean appendTextToLogErrorFileOld(String filePath, String nameOfClass, String nameOfMethod, String text, Exception exception, Boolean generateDailyFile) {
+        try {
+            String path = pathOfFile(filePath);
+            String filePathDialy = pathOfFile(filePath) + fileSeparator() + nameOfFileInPath(filePath) + "_" + JmoordbDateUtil.anioActual() + "_" + JmoordbDateUtil.mesActual() + "_" + JmoordbDateUtil.diaActual()
+                    + extensionOfFileInPath(filePath);
+            if (!existDirectory(path)) {
+
+                mkdir(path);
+            }
+
+            String json = "";
+            String jsonDialy = "";
+
+            if (!existFile(filePath)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePath), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            } else {
+
+                json = "\n,";
+            }
+
+            if (generateDailyFile) {
+                /**
+                 * Archivo de log.json Diario
+                 */
+                if (!existFile(filePathDialy)) {
+
+                    Charset utf8 = StandardCharsets.UTF_8;
+                    List<String> list = Arrays.asList("[\n]");
+
+                    Files.write(Paths.get(filePathDialy), list, utf8,
+                            StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                } else {
+
+                    jsonDialy = "\n,";
+                }
+
+            }
+
+            /**
+             * procesa el trace
+             */
+            String trace = "\n,\"trace\":";
+            trace += "\n          [";
+            if (exception != null) {
+                Integer c = 0;
+                for (StackTraceElement s : exception.getStackTrace()) {
+
+                    if (s.getFileName() != null) {
+                        if (s.getFileName().indexOf(nameOfClass) != -1) {
+                            if (c == 0) {
+                                c++;
+                                trace += "\n            {";
+                                trace += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                                trace += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                                trace += "\n            \"className\":\"" + s.getClassName() + "\",";
+                                trace += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                                trace += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                                trace += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                                trace += "\n            }";
+                            } else {
+                                trace += "\n           ,{";
+                                trace += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
+                                trace += "\n            \"fileName\":\"" + s.getFileName() + "\",";
+                                trace += "\n            \"className\":\"" + s.getClassName() + "\",";
+                                trace += "\n            \"methods\":\"" + s.getMethodName() + "\",";
+                                trace += "\n            \"lineNumbre\":\"" + s.getLineNumber() + "\",";
+                                trace += "\n            \"exception\":\"" + exception.getLocalizedMessage() + "\"";
+                                trace += "\n            }";
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+            trace += "\n          ]";
+
+            System.out.println("---------------===========TRACE====================------------------------------");
+            System.out.println(trace);
+            System.out.println("---------------===============================------------------------------");
+
+            json += "{\n \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",\n \"nameOfClass\":\"" + nameOfClass + "\",\n \"nameOfMethod\":\"" + nameOfMethod + "\",\n \"Error\":\"" + text + "\"";
+            json += trace;
+            json += "\n}";
+//            if (generateDailyFile) {
+//                jsonDialy += "{\n \"dateTime\":\"" + DateUtil.fechaHoraActual() + "\",\n \"nameOfClass\":\"" + nameOfClass + "\",\n \"nameOfMethod\":\"" + nameOfMethod + "\",\n \"Error\":\"" + text + "\"";
+//                jsonDialy += trace;
+//                jsonDialy += "\n}";
+//            }
+            insertarTextoArchivo(filePath, "]", json, true);
+
+            /**
+             * Si se indica que se genera un archivo diario.
+             */
+            if (generateDailyFile) {
+                insertarTextoArchivo(filePathDialy, "]", json, true);
+
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            errorDialog("appendTextToLogErrorFile()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+    // </editor-fold>    
+    // <editor-fold defaultstate="collapsed" desc="Boolean appendTextToLogJson(String filePath, String titulo, String text)">
+    /**
+     *
+     * @return
+     */
+    public static Boolean appendTextToLogJson(String filePath, String titulo, String text, Boolean generateDailyFile) {
+        try {
+            String path = pathOfFile(filePath);
+            String filePathDialy = pathOfFile(filePath) + fileSeparator() + nameOfFileInPath(filePath) + "_" + JmoordbDateUtil.anioActual() + "_" + JmoordbDateUtil.mesActual() + "_" + JmoordbDateUtil.diaActual()
+                    + extensionOfFileInPath(filePath);
+            if (!existDirectory(path)) {
+
+                mkdir(path);
+            }
+
+            String json = "";
+            String jsonDialy = "";
+
+            if (!existFile(filePath)) {
+
+                Charset utf8 = StandardCharsets.UTF_8;
+                List<String> list = Arrays.asList("[\n]");
+
+                Files.write(Paths.get(filePath), list, utf8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            } else {
+
+                json = "\n,";
+            }
+
+            if (generateDailyFile) {
+                /**
+                 * Archivo de log.json Diario
+                 */
+                if (!existFile(filePathDialy)) {
+
+                    Charset utf8 = StandardCharsets.UTF_8;
+                    List<String> list = Arrays.asList("[\n]");
+
+                    Files.write(Paths.get(filePathDialy), list, utf8,
+                            StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                } else {
+
+                    jsonDialy = "\n,";
+                }
+
+            }
+
+           
+    
+
+            json += "{\n \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",\n \"titulo\":\"" + titulo +  "\",\n \"text\":\"" + text + "\"";
+
+            json += "\n}";
+
+            insertarTextoArchivo(filePath, "]", json, true);
+
+            /**
+             * Si se indica que se genera un archivo diario.
+             */
+            if (generateDailyFile) {
+                insertarTextoArchivo(filePathDialy, "]", json, true);
+
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            errorDialog("appendTextToLogErrorFile()", e.getLocalizedMessage());
+        }
+        return false;
+    }
+    // </editor-fold>    
+
+    
+        // <editor-fold defaultstate="collapsed" desc="isWindows()">
+    /*
+    Implementado desde el ejemplo de Mkyong
+    https://mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
+     */
+    public static boolean isWindows() {
+
+        return (opertativeSystem.indexOf("win") >= 0);
+
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="isMac()">
+    public static boolean isMac() {
+
+        return (opertativeSystem.indexOf("mac") >= 0);
+
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="boolean isLinux()">
+    public static boolean isLinux() {
+
+        return (opertativeSystem.indexOf("nix") >= 0 || opertativeSystem.indexOf("nux") >= 0 || opertativeSystem.indexOf("aix") > 0);
+
+    }
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="boolean isSolaris()">
+    public static boolean isSolaris() {
+
+        return (opertativeSystem.indexOf("sunos") >= 0);
+
+    }
+    // </editor-fold>
+    
+      public static String userHome() {
+        return System.getProperty("user.home");
+
+    }
+      
+      
+  
+
+
 }
