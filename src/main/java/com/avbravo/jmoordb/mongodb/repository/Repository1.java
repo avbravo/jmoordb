@@ -188,9 +188,9 @@ public abstract class Repository1<T> implements InterfaceRepository {
 
             MongoDatabase db = mongoClient.getDatabase(database);
             if (db == null) {
-                //Test.msg("+++AbstractFacade.getMonogDatabase() == null");
+                ////Test.msg("+++AbstractFacade.getMonogDatabase() == null");
             } else {
-                //Test.msg("+++AbstractFacade.getMonogDatabase() != null");
+                ////Test.msg("+++AbstractFacade.getMonogDatabase() != null");
             }
             return db;
         } catch (Exception ex) {
@@ -1206,7 +1206,7 @@ public abstract class Repository1<T> implements InterfaceRepository {
             } else {
             }
             FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
-            //Test.msg("+++ paso iterable");
+            ////Test.msg("+++ paso iterable");
             haveElements = false;
             iterable.forEach(new Block<Document>() {
                 @Override
@@ -1255,7 +1255,7 @@ public abstract class Repository1<T> implements InterfaceRepository {
             } else {
             }
             FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
-            //Test.msg("+++ paso iterable");
+            ////Test.msg("+++ paso iterable");
             haveElements = false;
             iterable.forEach(new Block<Document>() {
                 @Override
@@ -1304,7 +1304,7 @@ public abstract class Repository1<T> implements InterfaceRepository {
             } else {
             }
             FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
-            //Test.msg("+++ paso iterable");
+            ////Test.msg("+++ paso iterable");
             haveElements = false;
             iterable.forEach(new Block<Document>() {
                 @Override
@@ -1450,7 +1450,7 @@ public abstract class Repository1<T> implements InterfaceRepository {
      */
     private T iterableSimple(FindIterable<Document> iterable) {
         try {
-            //      //Test.msg("$$$$$$$iterable simple");
+            //      ////Test.msg("$$$$$$$iterable simple");
             haveElements = false;
 
             iterable.forEach(new Block<Document>() {
@@ -1496,13 +1496,13 @@ public abstract class Repository1<T> implements InterfaceRepository {
     private List< T> iterableList(FindIterable<Document> iterable) {
         List< T> l = new ArrayList<>();
         try {
-            Test.msg("-->IterableList::");
+            //Test.msg("-->IterableList::");
             iterable.forEach(new Block<Document>() {
                 @Override
                 public void apply(final Document document) {
                     try {
-                        Test.msg("..........................................................................");
-                        Test.msg("Prueba: iterable: "+document.toJson());
+                        //Test.msg("..........................................................................");
+                        //Test.msg("Prueba: iterable: "+document.toJson());
                         t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                         l.add(t1);
                     } catch (Exception e) {
@@ -1770,7 +1770,7 @@ public abstract class Repository1<T> implements InterfaceRepository {
      * @return
      */
     public List< T> findAll(Document... docSort) {
-       Test.msg("---->findAll()::");
+       //Test.msg("---->findAll()::");
         list = new ArrayList<>();
         Document sortQuery = new Document();
         try {

@@ -30,7 +30,7 @@ public class JavaToDocumentCouchbase {
     ReferencedBeans referencedBeans = new ReferencedBeans();
 
     public JsonObject toDocument(Object obj, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
-        // Test.msg("-----{{{toDocument}}----");
+        // //Test.msg("-----{{{toDocument}}----");
         if (obj == null) {
             return null;
         }
@@ -40,11 +40,11 @@ public class JavaToDocumentCouchbase {
         JsonObject dbObject = JsonObject.empty();
         ClassDescriptor classDescriptor = cache.get(obj.getClass());
         for (FieldDescriptor fieldDescriptor : classDescriptor.getFields()) {
-            // Test.msg("[Analizando :  " + fieldDescriptor.getName() + " ]");
+            // //Test.msg("[Analizando :  " + fieldDescriptor.getName() + " ]");
             dbObject.put(fieldDescriptor.getName(), toDBObjectRecursive(obj, fieldDescriptor, embeddedBeansList, referencedBeansList));
 
         }
-        // Test.msg(" .....return dbObject " + dbObject.toString());
+        // //Test.msg(" .....return dbObject " + dbObject.toString());
         return dbObject;
     }
 
@@ -73,14 +73,14 @@ public class JavaToDocumentCouchbase {
 
     @SuppressWarnings("rawtypes")
     public Object toDBObjectRecursive(Object object, FieldDescriptor fieldDescriptor, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
-        // Test.msg("           toDBObjectRecursive() " + fieldDescriptor.getName());
+        // //Test.msg("           toDBObjectRecursive() " + fieldDescriptor.getName());
         if (object == null) {
-            // Test.msg(" object == null");
+            // //Test.msg(" object == null");
             return null;
         }
         if (fieldDescriptor.isArray()) {
 
-            // Test.msg(" isArray");
+            // //Test.msg(" isArray");
             if (ReflectionUtils.isSimpleClass(fieldDescriptor.getField().getType().getComponentType())) {
                 return fieldDescriptor.getFieldValue(object);
             } else {
@@ -93,7 +93,7 @@ public class JavaToDocumentCouchbase {
                 return fieldObj;
             }
         } else if (fieldDescriptor.isIterable()) {
-            // Test.msg(" -------------------isIterable---------------------------");
+            // //Test.msg(" -------------------isIterable---------------------------");
 
             Iterable col = (Iterable) fieldDescriptor.getFieldValue(object);
             //   JsonArray
@@ -105,7 +105,7 @@ public class JavaToDocumentCouchbase {
                 for (Object el : col) {
 
                     if (ReflectionUtils.isSimpleClass(el.getClass())) {
-                        // Test.msg("     isIterable.isSimpleClass()");
+                        // //Test.msg("     isIterable.isSimpleClass()");
                         JsonObject dbObject2 = JsonObject.empty();
                         dbObject2.put("", el);
 //                        fieldObj.add(el);
@@ -113,11 +113,11 @@ public class JavaToDocumentCouchbase {
                     } else {
 
                         if (isEmbedded(fieldDescriptor.getName())) {
-                            // Test.msg("     isIterable.isEmbedded()");
+                            // //Test.msg("     isIterable.isEmbedded()");
                             fieldObj.add(toDocument(el, embeddedBeansList, referencedBeansList));
                         } else {
                             if (isReferenced(fieldDescriptor.getName())) {
-                                // Test.msg("     isIterable.isReferenced()");
+                                // //Test.msg("     isIterable.isReferenced()");
                                 //aris
                                 ClassDescriptor classD = cache.get(el.getClass());
                                 for (FieldDescriptor fieldDesc : classD.getFields()) {
@@ -129,7 +129,7 @@ public class JavaToDocumentCouchbase {
                                 //aris
 
                             } else {
-                                // Test.msg("..........no es embebido ni referenciado");
+                                // //Test.msg("..........no es embebido ni referenciado");
                             }
                         }
 
@@ -174,7 +174,7 @@ public class JavaToDocumentCouchbase {
                     return dbObject;
 
                 } else {
-                    // Test.msg("                     [No es Referenced]");
+                    // //Test.msg("                     [No es Referenced]");
                     new JmoordbException("@Embedded or @Reference is required for this field " + fieldDescriptor.getName());
                     return JsonObject.empty();
                 }
@@ -182,9 +182,9 @@ public class JavaToDocumentCouchbase {
             }
 
         } else if (fieldDescriptor.isMap()) {
-//            // Test.msg("==========================");
-//            // Test.msg("fieldDescriptor.isMap()");
-//            // Test.msg("==========================");
+//            // //Test.msg("==========================");
+//            // //Test.msg("fieldDescriptor.isMap()");
+//            // //Test.msg("==========================");
             JsonObject dbObject = JsonObject.empty();
             Map map = (Map) fieldDescriptor.getFieldValue(object);
             for (Object key : map.keySet()) {
@@ -198,7 +198,7 @@ public class JavaToDocumentCouchbase {
             return dbObject;
         } else {
             //valor del atributo que no es otra clase
-            // Test.msg("              " + fieldDescriptor.getFieldValue(object));
+            // //Test.msg("              " + fieldDescriptor.getFieldValue(object));
             return fieldDescriptor.getFieldValue(object);
         }
     }

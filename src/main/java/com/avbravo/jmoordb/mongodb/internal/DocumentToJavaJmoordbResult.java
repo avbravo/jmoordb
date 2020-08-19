@@ -62,7 +62,7 @@ public class DocumentToJavaJmoordbResult<T> {
         Object object = classDescriptor.newInstance();
         for (FieldDescriptor fieldDescriptor : classDescriptor.getFields()) {
             try {
-                //Test.msg(" Analizando: " + fieldDescriptor.getName());
+                ////Test.msg(" Analizando: " + fieldDescriptor.getName());
                 fieldDescriptor.getField().set(object,
                         fromDocumentRecursive(dbObject.get(fieldDescriptor.getName()), fieldDescriptor));
             } catch (Exception e) {
@@ -86,8 +86,8 @@ public class DocumentToJavaJmoordbResult<T> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Object fromDocumentRecursive(Object dbObject, FieldDescriptor fieldDescriptor) {
         try {
-            //Test.msg("==================================================");
-            //Test.msg("  fromDocumentRecursive: " + fieldDescriptor.getName());
+            ////Test.msg("==================================================");
+            ////Test.msg("  fromDocumentRecursive: " + fieldDescriptor.getName());
 
             if (dbObject == null) {
 
@@ -96,10 +96,10 @@ public class DocumentToJavaJmoordbResult<T> {
 
             Class<?> fieldType = fieldDescriptor.getField().getType();
             if (fieldDescriptor.isSimple()) {
-                //Test.msg("   [isSimple] " + fieldDescriptor.getSimpleValue(dbObject));
+                ////Test.msg("   [isSimple] " + fieldDescriptor.getSimpleValue(dbObject));
                 return fieldDescriptor.getSimpleValue(dbObject);
             } else if (fieldDescriptor.isArray()) {
-                //Test.msg("   [ isArray]");
+                ////Test.msg("   [ isArray]");
                 BasicDBList dbList = (BasicDBList) dbObject;
                 if (fieldType.getComponentType().isPrimitive()) {
 
@@ -120,9 +120,9 @@ public class DocumentToJavaJmoordbResult<T> {
                 Object[] arrayPrototype = (Object[]) Array.newInstance(fieldType.getComponentType(), 0);
                 return list.toArray(arrayPrototype);
             } else if (fieldDescriptor.isList()) {
-                //Test.msg(" [isList()  ]" + fieldDescriptor.getName());
+                ////Test.msg(" [isList()  ]" + fieldDescriptor.getName());
                 if (isEmbedded(fieldDescriptor.getName())) {
-                    //     //Test.msg("     [es Embebido]");
+                    //     ////Test.msg("     [es Embebido]");
 
                     List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
 
@@ -143,9 +143,9 @@ public class DocumentToJavaJmoordbResult<T> {
                 } else {
                     if (isReferenced(fieldDescriptor.getName())) {
                         //Referenciado
-                        //Test.msg("     [es Referenciado]");
+                        ////Test.msg("     [es Referenciado]");
                         if (referencedBeans.getLazy()) {
-                            //Test.msg("[    Lazy == true no carga los relacionados ]");
+                            ////Test.msg("[    Lazy == true no carga los relacionados ]");
 
                             List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
                             List list = (List) fieldDescriptor.newInstance();
@@ -159,7 +159,7 @@ public class DocumentToJavaJmoordbResult<T> {
 
                             return list;
                         } else {
-                            //Test.msg("[    Lazy == false carga los relacionados ]");
+                            ////Test.msg("[    Lazy == false carga los relacionados ]");
 
                             List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
                             List list = (List) fieldDescriptor.newInstance();
@@ -181,12 +181,12 @@ public class DocumentToJavaJmoordbResult<T> {
                                         //@Id de tipo Integer
                                         Integer n = (Integer) doc.get(referencedBeans.getField());
                                         method = cls.getDeclaredMethod("findById", String.class, Integer.class);
-////Test.msg(" voy a optional Integer");
+//////Test.msg(" voy a optional Integer");
 
                                         t1 = (T) method.invoke(obj, referencedBeans.getField(), n);
 
                                     } else {
-                                        //Test.msg(" voy a optional String");
+                                        ////Test.msg(" voy a optional String");
                                         value = (String) doc.get(referencedBeans.getField());
                                         paramString[1] = String.class;
                                         method = cls.getDeclaredMethod("findById", paramString);
@@ -205,7 +205,7 @@ public class DocumentToJavaJmoordbResult<T> {
                         }
 
                     } else {
-                        //Test.msg("    No es[Embebido] ni  [Referenciado]");
+                        ////Test.msg("    No es[Embebido] ni  [Referenciado]");
                         List<BasicDBObject> foundDocument = (ArrayList<BasicDBObject>) dbObject;
                         List list = (List) fieldDescriptor.newInstance();
 
@@ -223,7 +223,7 @@ public class DocumentToJavaJmoordbResult<T> {
                 }
 
             } else if (fieldDescriptor.isSet()) {
-                //Test.msg(" [isSet()  ]");
+                ////Test.msg(" [isSet()  ]");
                 BasicDBList dbList = (BasicDBList) dbObject;
                 Set set = (Set) fieldDescriptor.newInstance();
                 for (Object listEl : dbList) {
@@ -238,7 +238,7 @@ public class DocumentToJavaJmoordbResult<T> {
                 }
                 return set;
             } else if (fieldDescriptor.isMap()) {
-                //Test.msg(" isMap()  ]");
+                ////Test.msg(" isMap()  ]");
                 DBObject dbMap = (DBObject) dbObject;
                 Map map = (Map) fieldDescriptor.newInstance();
                 for (Object key : dbMap.keySet()) {
@@ -256,9 +256,9 @@ public class DocumentToJavaJmoordbResult<T> {
                 }
                 return map;
             } else if (fieldDescriptor.isObject()) {
-                //Test.msg("   [isObject] " + fieldDescriptor.getName() + " ]");
+                ////Test.msg("   [isObject] " + fieldDescriptor.getName() + " ]");
                 if (isEmbedded(fieldDescriptor.getName())) {
-                    //Test.msg("  [es Embebido]");
+                    ////Test.msg("  [es Embebido]");
                     Object object = fieldDescriptor.newInstance();
                     for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
                         try {
@@ -278,9 +278,9 @@ public class DocumentToJavaJmoordbResult<T> {
                 } else {
                     if (isReferenced(fieldDescriptor.getName())) {
                         //Referenciado
-                        //Test.msg("         [es Referenciado] ");
+                        ////Test.msg("         [es Referenciado] ");
                         if (referencedBeans.getLazy()) {
-                            //Test.msg("[    {Lazy == true} No carga los relacionados ]");
+                            ////Test.msg("[    {Lazy == true} No carga los relacionados ]");
                             Object object = fieldDescriptor.newInstance();
                             for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
                                 try {
@@ -302,7 +302,7 @@ public class DocumentToJavaJmoordbResult<T> {
                             return object;
 //                       
                         } else {
-                            //Test.msg("                 [   Lazy == false carga los relacionados ]");
+                            ////Test.msg("                 [   Lazy == false carga los relacionados ]");
                             Class cls = Class.forName(referencedBeans.getRepository());
 
                             Object obj = lookUpClassInBeanManager(cls);
@@ -345,7 +345,7 @@ public class DocumentToJavaJmoordbResult<T> {
 
                         }
                     } else {
-                        //Test.msg("                   [No es Referenced]");
+                        ////Test.msg("                   [No es Referenced]");
                         new JmoordbException("@Embedded or @Reference is required for this field " + fieldDescriptor.getName());
                         return new Document();
                     }
@@ -372,7 +372,7 @@ public class DocumentToJavaJmoordbResult<T> {
 //     o = bm.getReference(bean, bean.getClass(), ctx); // could be inlined with
 //        } catch (Exception e) {            System.out.println("------------------------------------------------------------------------------------------------");            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());            System.out.println("Error " + e.getLocalizedMessage());            System.out.println("------------------------------------------------------------------------------------------------");
 //            LOG.warning("getBeanByName() "+e.getLocalizedMessage());
-//            //Test.msg("getBeanByName() "+e.getLocalizedMessage());
+//            ////Test.msg("getBeanByName() "+e.getLocalizedMessage());
 //        }
 //  
 //        return o;
@@ -417,7 +417,7 @@ public class DocumentToJavaJmoordbResult<T> {
             for (ReferencedBeans eb : referencedBeansList) {
                 if (eb.getName().equals(name)) {
                     referencedBeans = eb;
-                    //Test.msg("Referenced() " + eb.toString());
+                    ////Test.msg("Referenced() " + eb.toString());
                     return true;
                 }
             }

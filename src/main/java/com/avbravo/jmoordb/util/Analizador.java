@@ -257,7 +257,7 @@ public class Analizador {
             }
             return true;
         } catch (Exception e) {
-            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
+            ////Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -292,7 +292,7 @@ public class Analizador {
             }
             return true;
         } catch (Exception e) {
-            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
+            ////Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -327,7 +327,7 @@ public class Analizador {
             }
             return true;
         } catch (Exception e) {
-            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
+            ////Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -362,7 +362,7 @@ public class Analizador {
             }
             return true;
         } catch (Exception e) {
-            //Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
+            ////Test.msg("verifyPrimaryKey() " + e.getLocalizedMessage());
         }
         return false;
     }  // </editor-fold>
@@ -379,7 +379,7 @@ public class Analizador {
             embeddedBeansList.add(embeddedBeans);
             return true;
         } catch (Exception e) {
-            //Test.msg("verifyEmbedded() " + e.getLocalizedMessage());
+            ////Test.msg("verifyEmbedded() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -407,7 +407,7 @@ public class Analizador {
             referencedBeansList.add(referencedBeans);
             return true;
         } catch (Exception e) {
-            //Test.msg("verifyReferenced() " + e.getLocalizedMessage());
+            ////Test.msg("verifyReferenced() " + e.getLocalizedMessage());
         }
         return false;
     }
@@ -431,7 +431,7 @@ public class Analizador {
             datePatternBeansList.add(datePatternBeans);
             return true;
         } catch (Exception e) {
-            //Test.msg("verifyReferenced() " + e.getLocalizedMessage());
+            ////Test.msg("verifyReferenced() " + e.getLocalizedMessage());
         }
         return false;
     }

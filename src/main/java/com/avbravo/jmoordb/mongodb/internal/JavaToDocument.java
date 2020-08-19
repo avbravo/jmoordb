@@ -45,7 +45,7 @@ public class JavaToDocument {
             ClassDescriptor classDescriptor = cache.get(obj.getClass());
             for (FieldDescriptor fieldDescriptor : classDescriptor.getFields()) {
 
-                //      //Test.msg("            [Analizando :  " + fieldDescriptor.getName() + " ]");
+                //      ////Test.msg("            [Analizando :  " + fieldDescriptor.getName() + " ]");
                 dbObject.put(fieldDescriptor.getName(), toDBObjectRecursive(obj, fieldDescriptor, embeddedBeansList, referencedBeansList));
 
             }
@@ -102,7 +102,7 @@ public class JavaToDocument {
             }
             if (fieldDescriptor.isArray()) {
 
-                //Test.msg(" isArray");
+                ////Test.msg(" isArray");
                 if (ReflectionUtils.isSimpleClass(fieldDescriptor.getField().getType().getComponentType())) {
                     return fieldDescriptor.getFieldValue(object);
                 } else {
@@ -141,7 +141,7 @@ public class JavaToDocument {
                                     //aris
 
                                 } else {
-                                    //Test.msg("..........no es embebido ni referenciado");
+                                    ////Test.msg("..........no es embebido ni referenciado");
                                 }
                             }
 
@@ -152,7 +152,7 @@ public class JavaToDocument {
                 return fieldObj;
             } else if (fieldDescriptor.isObject()) {
 
-                ////Test.msg("           fieldDescriptor.isObject()        ");
+                //////Test.msg("           fieldDescriptor.isObject()        ");
                 if (isEmbedded(fieldDescriptor.getName())) {
                     //Embebido
                     Object fieldValue = fieldDescriptor.getFieldValue(object);
@@ -184,7 +184,7 @@ public class JavaToDocument {
                         return dbObject;
 
                     } else {
-                        Test.msg("                     [No es Referenced]");
+                        //Test.msg("                     [No es Referenced]");
                         new JmoordbException("@Embedded or @Reference is required for this field " + fieldDescriptor.getName());
                         return new BasicDBObject();
                     }
@@ -192,9 +192,9 @@ public class JavaToDocument {
                 }
 
             } else if (fieldDescriptor.isMap()) {
-                //Test.msg("==========================");
-                //Test.msg("fieldDescriptor.isMap()");
-                //Test.msg("==========================");
+                ////Test.msg("==========================");
+                ////Test.msg("fieldDescriptor.isMap()");
+                ////Test.msg("==========================");
                 DBObject dbObject = new BasicDBObject();
                 Map map = (Map) fieldDescriptor.getFieldValue(object);
                 for (Object key : map.keySet()) {
@@ -255,7 +255,7 @@ public class JavaToDocument {
             for (ReferencedBeans eb : referencedBeansList) {
                 if (eb.getName().equals(name)) {
                     referencedBeans = eb;
-                    //   //Test.msg("Referenced() "+eb.toString());
+                    //   ////Test.msg("Referenced() "+eb.toString());
                     return true;
                 }
             }

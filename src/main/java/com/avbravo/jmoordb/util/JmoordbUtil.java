@@ -83,7 +83,7 @@ public class JmoordbUtil {
 
             texto = letra.toUpperCase() + texto.substring(1);
         } catch (Exception ex) {
-          //Test.msg("letterToUpper() " + ex.getLocalizedMessage());
+          ////Test.msg("letterToUpper() " + ex.getLocalizedMessage());
         }
         return texto;
     }
@@ -119,7 +119,7 @@ public class JmoordbUtil {
 
             texto = letra.toLowerCase() + texto.substring(1);
         } catch (Exception ex) {
-          //Test.msg("letterToLower() " + ex.getLocalizedMessage());
+          ////Test.msg("letterToLower() " + ex.getLocalizedMessage());
         }
         return texto;
     }
@@ -131,7 +131,7 @@ public class JmoordbUtil {
         try {
             
         } catch (Exception e) {
-            //Test.msg("traductor() "+e.getLocalizedMessage());
+            ////Test.msg("traductor() "+e.getLocalizedMessage());
             new JmoordbException("traductor() "+e.getLocalizedMessage());
         }
  return traduccion;       
