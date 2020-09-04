@@ -4,7 +4,7 @@
 
     <groupId>com.avbravo</groupId>
     <artifactId>jmoordb</artifactId>
-    <version>0.62</version>
+    <version>0.63</version>
     <packaging>ejb</packaging>
 
     <name>jmoordb</name>

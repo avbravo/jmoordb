@@ -22,6 +22,9 @@ import com.avbravo.jmoordb.mongodb.internal.DocumentToJavaMongoDB;
 import com.avbravo.jmoordb.mongodb.internal.JavaToDocument;
 import com.avbravo.jmoordb.pojos.JmoordbResult;
 import com.avbravo.jmoordb.pojos.UserInfo;
+import com.avbravo.jmoordb.query.Query;
+import com.avbravo.jmoordb.query.Sort;
+import com.avbravo.jmoordb.query.Sorter;
 import com.avbravo.jmoordb.util.Analizador;
 import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.avbravo.jmoordb.util.Test;
@@ -100,6 +103,8 @@ public abstract class Repository<T> implements InterfaceRepository {
     MongoClient mongoClient;
 
     Integer contador = 0;
+    Document querySorter = new Document();
+    Document querySearch = new Document();
     /*
     limite de documentos que puede traer un findAll()
     para evitar la sobrecarga
@@ -132,6 +137,24 @@ public abstract class Repository<T> implements InterfaceRepository {
 //MongoDatabase db_;
 // <editor-fold defaultstate="collapsed" desc="get/set">
 
+    public Document getQuerySorter() {
+        return querySorter;
+    }
+
+    public void setQuerySorter(Document querySorter) {
+        this.querySorter = querySorter;
+    }
+
+    public Document getQuerySearch() {
+        return querySearch;
+    }
+
+    public void setQuerySearch(Document querySearch) {
+        this.querySearch = querySearch;
+    }
+
+    
+    
     public Exception getException() {
         return exception;
     }
@@ -7769,6 +7792,71 @@ public abstract class Repository<T> implements InterfaceRepository {
             // JmoordbUtil.errorDialog("createEntity() ", e.getLocalizedMessage());
         }
         return null;
+    }// </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc=" findBy(Document doc, Document... docSort)">
+    /**
+     *USA EL QUERY PARA EJECUTAR LAS OPERACIONES
+     * @param doc
+     * @param docSort
+     * @return
+     */
+    public List<T> findBy(Query query, Sorter sorter) {
+     querySearch = new Document();
+        querySorter = new Document();
+        try {
+            
+           querySorter = queryCreateSort(query.getSorted());
+            System.out.println("================================");
+                   
+            System.out.println(">>>>>>>>>ORDENACION "+querySorter.toString());
+            System.out.println("================================");
+           list = new ArrayList<>();
+
+            MongoDatabase db = mongoClient.getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(querySearch).sort(querySorter);
+            list = iterableList(iterable);
+
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
+            exception = new Exception("findBy() ", e);
+        }
+        return list;
+    }
+
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Document queryCreateSort(Sorter sorter)">
+    /**
+     * para query devuelve un Document sort
+     *
+     * @return
+     */
+    public  Document queryCreateSort(Sorter sorter) {
+         try{
+             
+             if(sorter.getSort().equals(Sort.ASC)){ 
+                 querySorter.append(sorter.getField() ,1);
+             }else{
+                  if(sorter.getSort().equals(Sort.DESC)){
+                  querySorter.append(sorter.getField() ,-1);
+              }
+             }
+             
+          if(sorter.getSorter() ==null){
+          
+                return querySorter;
+            }else{
+                return queryCreateSort(sorter.getSorter());
+            }
+         } catch (Exception e) {
+            System.out.println("---genSort( " + e.getLocalizedMessage());
+        }
+        return querySorter;
     }// </editor-fold>
 
 }
