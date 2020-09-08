@@ -3314,6 +3314,43 @@ public abstract class Repository<T> implements InterfaceRepository {
         return list;
     }
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
+    /**
+     * Crea un filtro para filtrar entre fechas excluyendo las horas
+     *
+     * @param startname
+     * @param datestart
+     * @param endname
+     * @param datelimit
+     *
+     * @return
+     */
+    public List<T> filterBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        list = new ArrayList<>();
+        try {
+            Document sortQuery = new Document();
+
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+              Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+            Bson filter = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+
+            list = filters(filter, sortQuery);
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("filterBetweenDate() ", e);
+        }
+
+        return list;
+    }
+    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="filterBetweenDate(String secondaryfield,String secondaryfieldvalue,String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort)">
     /**
