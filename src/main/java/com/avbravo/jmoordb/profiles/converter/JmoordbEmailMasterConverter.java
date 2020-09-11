@@ -7,7 +7,7 @@ package com.avbravo.jmoordb.profiles.converter;
 
 
 
-import com.avbravo.jmoordb.pojos.JmoordbEmailMaster;
+import com.avbravo.jmoordb.email.JmoordbEmailMaster;
 import com.avbravo.jmoordb.profiles.repository.JmoordbEmailMasterRepository;
 
 import com.avbravo.jmoordb.util.JmoordbUtil;

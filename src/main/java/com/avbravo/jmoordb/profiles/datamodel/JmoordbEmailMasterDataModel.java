@@ -6,7 +6,7 @@
 package com.avbravo.jmoordb.profiles.datamodel;
 
 
-import com.avbravo.jmoordb.pojos.JmoordbEmailMaster;
+import com.avbravo.jmoordb.email.JmoordbEmailMaster;
 import java.util.List;
 import javax.faces.model.ListDataModel;
 import org.primefaces.model.SelectableDataModel;

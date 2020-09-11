@@ -6,7 +6,7 @@
 package com.avbravo.jmoordb.profiles.repository;
 
 import com.avbravo.jmoordb.mongodb.repository.Repository;
-import com.avbravo.jmoordb.pojos.JmoordbEmailMaster;
+import com.avbravo.jmoordb.email.JmoordbEmailMaster;
 
 import javax.ejb.Stateless;
 
