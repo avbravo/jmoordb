@@ -97,6 +97,16 @@ public class JmoordbEmailMaster {
         this.mail_smtp_starttls_enable = mail_smtp_starttls_enable;
     }
 
-    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof JmoordbEmailMaster)) {
+            return false;
+        }
+      JmoordbEmailMaster other = (JmoordbEmailMaster) object;
+        if ((this.email== null && other.email != null) || (this.email != null && !this.email.equals(other.email))) {
+            return false;
+        }
+        return true;
+    }
     
 }
