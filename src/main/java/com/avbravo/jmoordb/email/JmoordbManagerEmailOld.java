@@ -29,14 +29,14 @@ import javax.mail.internet.MimeMultipart;
  *
  * @author avbravo
  */
-public class JmoordbManagerEmail {
+public class JmoordbManagerEmailOld {
 
     Boolean texthtml = false;
 
     /**
      * Creates a new instance of EnviarEmail
      */
-    public JmoordbManagerEmail() {
+    public JmoordbManagerEmailOld() {
     }
 // <editor-fold defaultstate="collapsed" desc="example()"> 
 
