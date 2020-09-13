@@ -7,12 +7,15 @@ package com.avbravo.jmoordb.email;
 
 
 import com.avbravo.jmoordb.util.JmoordbUtil;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.Multipart;
@@ -29,14 +32,15 @@ import javax.mail.internet.MimeMultipart;
  *
  * @author avbravo
  */
-public class JmoordbManagerEmailOld {
+
+public class JmoordbEmailSender implements Serializable{
 
     Boolean texthtml = false;
 
     /**
      * Creates a new instance of EnviarEmail
      */
-    public JmoordbManagerEmailOld() {
+    public JmoordbEmailSender() {
     }
 // <editor-fold defaultstate="collapsed" desc="example()"> 
 
