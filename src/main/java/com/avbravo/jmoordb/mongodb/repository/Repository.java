@@ -7896,4 +7896,69 @@ public abstract class Repository<T> implements InterfaceRepository {
         return querySorter;
     }// </editor-fold>
 
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {">
+    /**
+   crea un filtro Bson entre fechas tomando en cuenta la hora
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param fieldlimitname
+     * @param datelimitvalue
+     * @param docSort
+     * @return 
+     */
+    public Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+        Bson filter = new Document();
+        try {
+      
+              Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+       filter = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
+return filter;
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + "createBsonBetweenDateWithoutHours()").log(Level.SEVERE, null, e);
+            exception = new Exception("createBsonBetweenDateWithoutHours ", e);
+        }
+
+        return filter;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {">
+    /**
+     * crea un filtro Bson entre fechas sin tomar en cuenta la hora
+     * @param fieldnamestart
+     * @param datestartvalue
+     * @param fieldlimitname
+     * @param datelimitvalue
+     * @return 
+     */
+    public Bson createBsonBetweenDateUsingHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue) {
+   Bson filter = new Document();
+        try {
+      
+              Date dateStart = setHourToDate(datestartvalue, 0, 0);
+            Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
+            filter = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname,  datelimitvalue));
+            
+
+return filter;
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + "createBsonBetweenDateWithoutHours()").log(Level.SEVERE, null, e);
+            exception = new Exception("createBsonBetweenDateWithoutHours ", e);
+        }
+
+        return filter;
+    }
+    // </editor-fold>
+    
+     
 }
