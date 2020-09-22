@@ -7898,7 +7898,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     
     
-    // <editor-fold defaultstate="collapsed" desc="Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {">
+    // <editor-fold defaultstate="collapsed" desc="Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue) {">
     /**
    crea un filtro Bson entre fechas tomando en cuenta la hora
      * @param fieldnamestart
@@ -7908,7 +7908,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param docSort
      * @return 
      */
-    public Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {
+    public Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue) {
         Bson filter = new Document();
         try {
       
@@ -7928,7 +7928,7 @@ return filter;
         return filter;
     }
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue, Document... docSort) {">
+    // <editor-fold defaultstate="collapsed" desc="Bson createBsonBetweenDateWithoutHours(String fieldnamestart, Date datestartvalue, String fieldlimitname, Date datelimitvalue) {">
     /**
      * crea un filtro Bson entre fechas sin tomar en cuenta la hora
      * @param fieldnamestart
