@@ -357,6 +357,7 @@ public interface IMicroservices<T> {
                 JmoordbUtil.warningMessage(spanish ? "La llave primaria esta vacia" : "the primary key is empty");
                 return "";
             }
+            
             if (repository.save(entity)) {
                 //Devuelve el valor de la llave primaria
                 String primarykeyvalue = repository.primaryKeyValue(entity);
