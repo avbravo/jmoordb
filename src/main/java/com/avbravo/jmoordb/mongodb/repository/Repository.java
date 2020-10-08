@@ -7960,5 +7960,58 @@ return filter;
     }
     // </editor-fold>
     
-     
+     // <editor-fold defaultstate="collapsed" desc="Integer createOrder(String sorter)">
+    /**
+     * crea un documento para ordenar
+     * @param sortfield
+     * @param order: asc/desc
+     * @return 
+     */
+    public Document sortConstructor(String sortfield, String order  ){
+            Document sort = new Document();
+        try {
+          
+          if(sortfield == null || sortfield.equals("")){
+            
+          }else{
+             return new Document(sortfield, createOrder(order));
+          }
+        } catch (Exception e) {
+        }
+        return sort;
+    }
+       // </editor-fold>
+    
+    
+      // <editor-fold defaultstate="collapsed" desc="Integer createOrder(String sorter)">
+    /**
+     * devuelve el indice de ordenacion
+     * @param sorter
+     * @return 
+     */
+   
+ private Integer createOrder(String sorter){
+     Integer ordernumber =1;
+     try {
+sorter = sorter.trim().toLowerCase();
+switch(sorter){
+    case "asc":
+        ordernumber=1;
+        break;
+    case "desc":
+        ordernumber=-1; 
+        default:
+           ordernumber=1;
+}
+     } catch (Exception e) {
+             System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + "createOrder()").log(Level.SEVERE, null, e);
+            exception = new Exception("createOrder()", e);
+     }
+     return ordernumber;
+ }
+   // </editor-fold>
 }
