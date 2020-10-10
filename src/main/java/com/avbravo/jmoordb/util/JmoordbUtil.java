@@ -6,6 +6,9 @@
 package com.avbravo.jmoordb.util;
 
 import com.avbravo.jmoordb.JmoordbException;
+import com.avbravo.jmoordb.mongodb.repository.Repository;
+import com.mongodb.MongoClient;
+import com.mongodb.client.model.Filters;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -36,12 +39,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +56,9 @@ import java.util.zip.ZipOutputStream;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.apache.commons.beanutils.BeanUtils;
+import org.bson.BsonDocument;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -60,7 +68,7 @@ import org.primefaces.PrimeFaces;
 public class JmoordbUtil {
     
         private static String opertativeSystem = System.getProperty("os.name").toLowerCase();
-        
+     public static      Exception exception; 
         
     private static final Logger LOG = Logger.getLogger(JmoordbUtil.class.getName());
     private static final String EMAIL_REGEX = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
@@ -2722,6 +2730,5 @@ public class JmoordbUtil {
         }
         return "";
     }// </editor-fold>
-
 
 }

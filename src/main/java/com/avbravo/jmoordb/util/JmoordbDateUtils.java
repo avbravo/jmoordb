@@ -5,31 +5,11 @@
  */
 package com.avbravo.jmoordb.util;
 
-import static com.avbravo.jmoordb.util.JmoordbUtil.errorDialog;
-import static com.avbravo.jmoordb.util.JmoordbUtil.errorMessage;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *

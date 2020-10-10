@@ -26,6 +26,7 @@ import com.avbravo.jmoordb.query.Query;
 import com.avbravo.jmoordb.query.Sort;
 import com.avbravo.jmoordb.query.Sorter;
 import com.avbravo.jmoordb.util.Analizador;
+import com.avbravo.jmoordb.util.JmoordbDateUtil;
 import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.avbravo.jmoordb.util.Test;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
@@ -1851,6 +1852,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             FindIterable<Document> iterable = db.getCollection(collection).
                     find().skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
                     limit(rowsForPage).sort(sortQuery);
+            
+      
             list = iterableList(iterable);
 
         } catch (Exception e) {
@@ -7960,14 +7963,14 @@ return filter;
     }
     // </editor-fold>
     
-     // <editor-fold defaultstate="collapsed" desc="Integer createOrder(String sorter)">
+     // <editor-fold defaultstate="collapsed" desc="public Document sortBuilder(String sortfield, String order  )">
     /**
      * crea un documento para ordenar
      * @param sortfield
      * @param order: asc/desc
      * @return 
      */
-    public Document sortConstructor(String sortfield, String order  ){
+    public Document sortBuilder(String sortfield, String order  ){
             Document sort = new Document();
         try {
           
@@ -7977,10 +7980,52 @@ return filter;
              return new Document(sortfield, createOrder(order));
           }
         } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
         }
         return sort;
     }
        // </editor-fold>
+    
+     // <editor-fold defaultstate="collapsed" desc="Document sortBuilder(HashMap<String,String>hashmap )>
+  /**
+   * crea un document sort en base a un hashmap
+   * @param hashmap
+   * @return 
+   */
+    public Document sortBuilder(HashMap<String,String>map ){
+            Document sort = new Document();
+        try {
+          
+          sort.toJson();
+          
+            
+          if(map == null || map.isEmpty()){
+            
+          }else{
+              
+              map.entrySet().forEach(m -> {
+                  sort.append(m.getKey().toString(),createOrder(m.getValue().toString())) ;
+              });  
+
+          }
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
+        }
+        return sort;
+    }
+       // </editor-fold>
+    
+    
     
     
       // <editor-fold defaultstate="collapsed" desc="Integer createOrder(String sorter)">
@@ -8000,6 +8045,7 @@ switch(sorter){
         break;
     case "desc":
         ordernumber=-1; 
+        break;
         default:
            ordernumber=1;
 }
@@ -8008,10 +8054,83 @@ switch(sorter){
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "createOrder()").log(Level.SEVERE, null, e);
-            exception = new Exception("createOrder()", e);
+            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
      }
      return ordernumber;
  }
    // </editor-fold>
+ 
+ 
+  // <editor-fold defaultstate="collapsed" desc="public Document sortBuilder(String sortfield, String order  )">
+    /**
+     * crea un documento para ordenar
+     * @param sortfield
+     * @param order: asc/desc
+     * @return 
+     */
+    public Bson filterEQBuilder(String fieldname, String value,String fieldtype  ){
+        
+     
+          Bson filter  ;
+         try{
+fieldtype = fieldtype.toLowerCase();
+         switch(fieldtype){
+             case "integer":
+                 filter =Filters.eq(fieldname,Integer.parseInt(value));
+                 break;
+             case "double":
+                 filter =Filters.eq(fieldname,Double.parseDouble(value));
+                 break;
+             case "string":
+                  filter =Filters.eq(fieldname,value);
+                  break;
+             case "date":
+                  filter =Filters.eq(fieldname,JmoordbDateUtil.stringToISODate(value));
+             case "boolean":
+                 Boolean valueBoolean =false;
+                 if(value.equals("true")){
+                     valueBoolean=true;
+                 }
+                  filter =Filters.eq(fieldname,valueBoolean);
+                  break;
+             default:
+                 filter =Filters.eq(fieldname,value);
+                 
+         }
+         
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
+        }
+            return null;
+        
+    }
+       // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Document jsonToDocument(String json)">
+    /**
+     * Convierte un Json a Document
+     * @param json
+     * @return 
+     */
+    public Document jsonToDocument(String json){
+        return Document.parse(json.toString());
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String documentToJson(Document doc)">
+    /**
+     * convierre un Document a Json
+     * @param doc
+     * @return 
+     */
+    public String documentToJson(Document doc){
+        return doc.toJson();
+    }
+    // </editor-fold>
+    
 }
