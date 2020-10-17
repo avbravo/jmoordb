@@ -24,6 +24,7 @@ public class JmoordbConnection {
     String host;
     Integer port;
     Boolean security;
+    private String uri;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     Map<String, Object> sessionMap = externalContext.getSessionMap();
 
@@ -36,7 +37,8 @@ public class JmoordbConnection {
             String password,
             String host,
             Integer port,
-            Boolean security) {
+            Boolean security,
+            String uri) {
 
         this.database = database;
         this.username = username;
@@ -44,6 +46,7 @@ public class JmoordbConnection {
         this.host = host;
         this.port = port;
         this.security = security;
+        this.uri=uri;
 
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         sessionMap.put("database", database);
@@ -51,6 +54,7 @@ public class JmoordbConnection {
         sessionMap.put("password", password);
         sessionMap.put("host", host);
         sessionMap.put("security", security);
+        sessionMap.put("uri", uri);
 
     }
 
@@ -62,6 +66,12 @@ public class JmoordbConnection {
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         String username = (String) sessionMap.get("username");
         return username;
+    }
+    public String getUri() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        String uri = (String) sessionMap.get("uri");
+        return uri;
     }
 
     public String getPassword() {
@@ -99,6 +109,9 @@ public class JmoordbConnection {
         return security;
     }
 
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
     public void setDatabase(String database) {
         this.database = database;
     }
@@ -147,7 +160,12 @@ public class JmoordbConnection {
         String host;
         Integer port;
         Boolean security;
+        String uri;
 
+        public Builder withUri(String uri) {
+            this.uri = uri;
+            return this;
+        }
         public Builder withUsername(String username) {
             this.username = username;
             return this;
@@ -185,7 +203,8 @@ public class JmoordbConnection {
                     password,
                     host,
                     port,
-                    security
+                    security,
+                    uri
             );
         }
 
