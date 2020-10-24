@@ -215,8 +215,13 @@ public interface IController<T> {
         return "";
     }// </editor-fold>
 
-    public void move(Integer page);
-
+    
+        // <editor-fold defaultstate="collapsed" desc="move(Integer page)">
+    
+  default  public void move(Integer page){
+      
+  }
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="nameOfClassAndMethod())">
     public default String nameOfClassAndMethod() {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
@@ -2963,4 +2968,13 @@ System.out.println("****>> error "+ex.getLocalizedMessage());
         return value;
 
     } // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="handleSelect(SelectEvent event) ">
+    default public void handleSelect(SelectEvent event) {
+        try {
+        } catch (Exception e) {
+              JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
+        }
+    }// </editor-fold>
+
 }
