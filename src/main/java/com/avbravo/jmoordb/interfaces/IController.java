@@ -242,6 +242,11 @@ public interface IController<T> {
     default public String save() {
         Boolean saved = false;
         try {
+            
+            System.out.println("****llego al save");
+            
+            
+            
             //Obtener la configuracion de Jmoordb
             JmoordbConfiguration jmc = new JmoordbConfiguration();
             JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
@@ -381,7 +386,7 @@ public interface IController<T> {
             saved = true;
 
         } catch (Exception ex) {
-
+System.out.println("****>> error "+ex.getLocalizedMessage());
             JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
         }
 
@@ -1006,6 +1011,109 @@ public interface IController<T> {
         return url;
     }
 // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String prepareViewDialog()">
+    /**
+     * usa el componente <jmoordbjsf:column>
+     * lo invoca el componente
+     *
+     * @return
+     */
+    default public String prepareViewDialog() {
+        String url = "";
+        Boolean prepare = false;
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //------------------------------------
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+            //------------------------------------
+            Object item = (Object) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("item");
+            entity = item;
+            JmoordbIntrospection.callSet(controller, nameOfEntity, item);
+
+            url = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("url");
+
+            /*
+            Necesitamos:
+            1.Obtener el nombre del entity
+            2.Invocar al metodo getPage() del Controller
+            3.Guardar en el FaceContext page{nombre_entity} con page.toString()
+            4.Guardar en el FaceContext {nombre_entity} con "view"
+            5.Invocar a setEntity con {entity} ya que viene de un item de un list.xtml
+            6.Invocar a setEntitySelected con {entity} ya que viene de un item de un list.xtml
+            7.Obtener el nombre de la llave primaria
+            8.Obtener el valor de la llave primaria
+            9.Colocar en el FacesContext {nombre_atributo_llaveprimaria} con el valor de la llave primaria
+            10. invocar el setWritable con true
+            11. Guarda el entity en el Context (entity+"_value")
+            
+            crear en el FacesContext pagerol
+             */
+            //1.Obtener el nombre del entity
+            Integer page = JmoordbIntrospection.getPageInController(controller);
+
+            // 2.Invocar al metodo getPage() del Controller
+            JmoordbContext.put("page" + nameOfController, page.toString());
+            JmoordbContext.put("action" + nameOfController, "view");
+            JmoordbContext.put("entityValue" + nameOfController, entity);
+//           
+            JmoordbIntrospection.callSet(controller, nameOfEntity, entity);
+            JmoordbIntrospection.callSet(controller, nameOfEntity + "Selected", entity);
+            if (repository.primaryKeyIsInteger(entity)) {
+                JmoordbContext.put(repository.primaryKeyName(entity), repository.primaryKeyValueInteger(entity));
+            } else {
+                JmoordbContext.put(repository.primaryKeyName(entity), repository.primaryKeyValue(entity));
+            }
+
+            if (!beforePrepareView()) {
+                return "";
+            }
+            prepare = true;
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
+        }
+        afterPrepareView(prepare);
+        return "";
+    }
+// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc=" beforePrepareView(Boolean prepare)()">
 
     /**
@@ -1388,6 +1496,96 @@ public interface IController<T> {
         }
         afterPrepareGoNew(gonew);
         return url;
+    }
+// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="String prepareGoNew()">
+    /**
+     *
+     * lo invoca el componente
+     *
+     * @return
+     */
+    default public String prepareGoNewDialog() {
+        String url = "";
+        Boolean gonew = true;
+        try {
+            JmoordbConfiguration jmc = new JmoordbConfiguration();
+            JmoordbControllerEnvironment jme = new JmoordbControllerEnvironment();
+            String username = jmc.getUsername();
+            Repository repositoryRevisionHistory = jmc.getRepositoryRevisionHistory();
+            RevisionHistoryServices revisionHistoryServices = jmc.getRevisionHistoryServices();
+            Boolean saverevision = jmc.getRevisionSave();
+            Boolean languaguespanish = jmc.getSpanish();
+
+            Boolean spanish = true;
+            if (languaguespanish == null) {
+                JmoordbUtil.warningMessage("Configure el parametro {languaguespanish} en el ExternalContext de la clase principal");
+            } else {
+                spanish = languaguespanish;
+            }
+
+            if (saverevision == null) {
+                JmoordbUtil.warningMessage(spanish ? "Configure el parametro {saverevision} en el ExternalContext de la clase principal" : "Configure the {saverevision} parameter in the ExternalContext of the main class");
+                saverevision = false;
+            }
+
+            //Obtenerlos desde el JmoordbControllerEnvironment
+            Repository repository = jme.getRepository();
+            Object controller = jme.getController();
+            Object entity = jme.getEntity();
+            Object service = jme.getService();
+            String nameFieldOfPage = jme.getNameFieldOfPage();
+            String nameFieldOfRowPage = jme.getNameFieldOfRowPage();
+            String typeKey = jme.getTypeKey();
+            Boolean searchLowerCase = jme.getSearchLowerCase();
+            Boolean resetInSave = jme.getResetInSave();
+            String pathReportDetail = jme.getPathReportDetail();
+            String pathReportAll = jme.getPathReportAll();
+            String action = jme.getAction();
+            String nameOfController = controller.getClass().getSimpleName();
+            HashMap parameters = jme.getParameters();
+            String nameOfEntity = JmoordbIntrospection.nameOfEntity(entity);
+            entity = (Object) JmoordbIntrospection.callGet(controller, nameOfEntity);
+            //------------------------------------
+            url = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes().get("url");
+
+            /*
+            Necesitamos:
+            1.Obtener el nombre del entity
+            2.Invocar al metodo getPage() del Controller
+            3.Guardar en el FaceContext page{nombre_entity} con page.toString()
+            4.Guardar en el FaceContext {nombre_entity} con "view"
+            5.Invocar a setEntity con {entity} ya que viene de un item de un list.xtml
+            6.Invocar a setEntitySelected con {entity} ya que viene de un item de un list.xtml
+            7.Obtener el nombre de la llave primaria
+            8.Obtener el valor de la llave primaria
+            9.Colocar en el FacesContext {nombre_atributo_llaveprimaria} con el valor de la llave primaria
+            10. invocar el setWritable con true
+            11. Guarda el entity en el Context (entity+"_value")
+            
+            crear en el FacesContext pagerol
+             */
+            //1.Obtener el nombre del entity
+            Integer page = JmoordbIntrospection.getPageInController(controller);
+
+            // 2.Invocar al metodo getPage() del Controller
+            JmoordbContext.put("page" + nameOfController, page.toString());
+            JmoordbContext.put("action" + nameOfController, "gonew");
+
+            if (beforePrepareGoNew()) {
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            JmoordbUtil.errorMessage(nameOfMethod() + " " + e.getLocalizedMessage());
+            gonew = false;
+        }
+        afterPrepareGoNew(gonew);
+        return "";
     }
 // </editor-fold>
 
