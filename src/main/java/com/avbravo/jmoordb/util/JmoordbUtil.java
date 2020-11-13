@@ -2731,4 +2731,24 @@ public class JmoordbUtil {
         return "";
     }// </editor-fold>
 
+     // <editor-fold defaultstate="collapsed" desc="pathOfMicroprofileConfig()">
+    /**
+     * se usa con Microprofile Config para ejempp
+     * #-------------------------------------------------------------- #--Path
+     * Images #-- si pathBaseLinuxAddUserHome (solo para Linux
+     * JsfUtil.isLinux()) #-- si es true se agrega JsfUtil.userHome() al path
+     * (/asistencia/imagenes => /home/miuser/asistencia/imagenes) #-- si es
+     * false = se usa el path completo de pathLinux (/opt/asistencia/imagenes)
+     * pathBaseLinuxAddUserHome=true pathLinux=/asistencia/imagenes/
+     * pathWindows=C:\\asistencia\\imagenes\\
+     *
+     * @param addUserHome
+     * @param pahtLinux
+     * @param pathWindows
+     * @return
+     */
+    public static String pathOfMicroprofileConfig(Boolean addUserHome, String pahtLinux, String pathWindows) {
+        return isLinux() ? (addUserHome ? userHome() + pahtLinux : pahtLinux) : pathWindows;
+    }
+    // </editor-fold>
 }
