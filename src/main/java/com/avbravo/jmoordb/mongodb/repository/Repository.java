@@ -6065,6 +6065,90 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="List<T> availableBetweenDateHour(Bson filter, String namefieldOfStart, Date valueStart, String namefieldOfEnd, Date valueEnd) ">
+    /**
+     * Devuelve una lista de los elementos que estan en ese rango de fechas y
+     * que cumplan la condicion del filtro que se pasa como parametro
+     *
+     * @param filter
+     * @param namefieldOfStart
+     * @param valueStart
+     * @param namefieldOfEnd
+     * @param valueEnd
+     * @return Devuelve una lista de los elementos que estan en ese rango de
+     * fechas y que cumplan la condicion del filtro que se pasa como parametro
+     */
+    public List<T> availableBetweenDateHour(Bson filter, String namefieldOfStart, Date valueStart, String namefieldOfEnd, Date valueEnd) {
+        try {
+          
+          
+            list = new ArrayList<>();
+            Integer count = count();
+            if (count.equals(0)) {
+                return list;
+            }
+            //inicio
+
+           Bson b = Filters.and(
+                    Filters.gt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.gt(namefieldOfEnd, valueEnd)
+            );
+
+            Bson c_e_f_g_h_l = Filters.or(
+                    Filters.eq(namefieldOfStart, valueStart),
+                    Filters.eq(namefieldOfStart, valueEnd),
+                    Filters.eq(namefieldOfEnd, valueStart),
+                    Filters.eq(namefieldOfEnd, valueEnd)
+            );
+
+            Bson j = Filters.and(
+                    Filters.lt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.eq(namefieldOfEnd, valueEnd)
+            );
+
+            Bson d = Filters.and(
+                    Filters.gt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.lt(namefieldOfEnd, valueEnd)
+            );
+            Bson i = Filters.and(
+                    Filters.lt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.gt(namefieldOfEnd, valueEnd)
+            );
+            Bson k = Filters.and(
+                    Filters.lt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.lt(namefieldOfEnd, valueEnd)
+            );
+
+            Bson _filter = Filters.and(filter, or(b, c_e_f_g_h_l, d, i, j, k));
+
+
+            list = findBy(_filter);
+
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            Logger.getLogger(Repository.class.getName() + "isAvailableBetweenDate()").log(Level.SEVERE, null, e);
+            exception = new Exception("isAvailableBetweenDate() ", e);
+
+        }
+        return list;
+    }
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="List<T> notAvailableBetweenDateHour(Bson filter, String namefieldOfStart, Date valueStart, String namefieldOfEnd, Date valueEnd) ">
     /**
      * Devuelve una lista de los elementos que estan en ese rango de fechas y
@@ -6080,7 +6164,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      */
     public List<T> notAvailableBetweenDateHour(Bson filter, String namefieldOfStart, Date valueStart, String namefieldOfEnd, Date valueEnd) {
         try {
-            //Vehiculos en viajes
+          
             list = new ArrayList<>();
             Integer count = count();
             if (count.equals(0)) {
