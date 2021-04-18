@@ -465,10 +465,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             return true;
 
-        } catch (Exception ex) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
-            new JmoordbException("save() " + ex.getLocalizedMessage());
-            exception = new Exception("save() " + ex.getLocalizedMessage());
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -505,10 +503,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             return true;
 
-        } catch (Exception ex) {
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, ex);
-            new JmoordbException("save() " + ex.getLocalizedMessage());
-            exception = new Exception("save() " + ex.getLocalizedMessage());
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -541,22 +537,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                     doc.put(p.getName(), method.invoke(t2));
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("getDocumentPrimaryKey() ", e);
-                }
+                } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("getDocumentPrimaryKey() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return doc;
     }// </editor-fold>
@@ -573,13 +559,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             primaryKeyList.forEach((p) -> {
                 doc.put(p.getName(), 1);
             });
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getIndexPrimaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("getIndexPrimaryKey() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return doc;
     }// </editor-fold>
@@ -596,13 +577,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             secondaryKeyList.forEach((p) -> {
                 doc.put(p.getName(), 1);
             });
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getIndexSecondaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("getIndexSecondaryKey ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return doc;
     }// </editor-fold>
@@ -619,13 +595,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             tertiaryKeyList.forEach((p) -> {
                 doc.put(p.getName(), 1);
             });
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getIndexTertiaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("getIndexTertiaryKey ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return doc;
     }// </editor-fold>
@@ -642,13 +613,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             compositeKeyList.forEach((p) -> {
                 doc.put(p.getName(), 1);
             });
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getIndexCompositeKey").log(Level.SEVERE, null, e);
-            exception = new Exception("getIndexCompositeKey ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return doc;
     }// </editor-fold>
@@ -670,13 +636,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             getMongoDatabase().getCollection(collection).createIndex(docIndex);
             return true;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "createIndex()").log(Level.SEVERE, null, e);
-            exception = new Exception("createIndex() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -701,22 +662,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     doc.put(p.getName(), method.invoke(t2));
 
                     return find(doc);
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("findById() ", e);
-                }
+                 } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
-            exception = new Exception("findById() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -747,22 +698,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
 
                     //    doc.put(p.getName(), method.invoke(t2));
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("primaryKeyValue ", e);
-                }
+                } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeyValue").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeyValue ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -789,13 +730,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 //    doc.put(p.getName(), method.invoke(t2));
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeyIsInteger()").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeyIsInteger() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -826,22 +762,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
 
                     //    doc.put(p.getName(), method.invoke(t2));
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("primaryKeyValueInteger", e);
-                }
+                } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeyValueInteger").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeyValueInteger ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -882,22 +808,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
                     map.put(p.getName(), value);
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("primaryKey ", e);
-                }
+                } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKey ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return map;
     }// </editor-fold>
@@ -918,13 +834,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 name = util.letterToLower(p.getName());
 
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeyValue").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeyValue ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return name;
     }// </editor-fold>
@@ -955,22 +866,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
                     map.put(name, value);
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("compositeKey ", e);
-                }
+                 } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "compositeKey").log(Level.SEVERE, null, e);
-            exception = new Exception("compositeKey ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return map;
     }
@@ -989,13 +890,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return Optional.of(t_);
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
-            exception = new Exception("findById() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -1019,13 +915,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "fisFound()").log(Level.SEVERE, null, e);
-            exception = new Exception("isFound() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -1056,22 +947,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     } else {
                         return true;
                     }
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("isFoundByPrimaryKey ", e);
-                }
+               } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "isFoundByPrimaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("isFoundByPrimaryKey() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -1100,13 +981,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return Optional.of(t_);
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
-            exception = new Exception("findById() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -1128,14 +1004,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         haveElements = true;
                         tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
-                        exception = new Exception("find() ", e);
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
@@ -1145,14 +1016,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             return Optional.empty();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return Optional.empty();
@@ -1176,14 +1041,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             return Optional.of(tlocal);
             //return (T) tlocal;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-            new JmoordbException("find()");
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
 //        return null;
@@ -1205,14 +1064,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             tlocal = (T) iterableSimple(iterable);
             return Optional.of(tlocal);
             //return (T) tlocal;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-            new JmoordbException("find()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
 //        return null;
@@ -1238,14 +1091,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         haveElements = true;
                         tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "search()").log(Level.SEVERE, null, e);
-                        exception = new Exception("search() ", e);
-                    }
+                   } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
@@ -1254,14 +1102,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             return null;
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("search() ", e);
-
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return null;
@@ -1287,14 +1129,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         haveElements = true;
                         tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "search()").log(Level.SEVERE, null, e);
-                        exception = new Exception("search() ", e);
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
@@ -1303,14 +1140,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             return null;
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("search() ", e);
-
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return null;
@@ -1336,14 +1167,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         haveElements = true;
                         tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "search()").log(Level.SEVERE, null, e);
-                        exception = new Exception("search() ", e);
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
@@ -1352,14 +1178,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             return null;
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("search() ", e);
-
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return null;
@@ -1392,14 +1212,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
 
             //return (T) tlocal;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-            new JmoordbException("find()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }
@@ -1431,14 +1245,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             return Optional.of(tlocal);
 
             //return (T) tlocal;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-            new JmoordbException("find()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }
@@ -1453,14 +1261,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             tlocal = (T) iterableSimple(iterable);
             return tlocal;
             //return (T) tlocal;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("find() ", e);
-            new JmoordbException("find()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return null;
     }// </editor-fold>
@@ -1483,26 +1285,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         haveElements = true;
                         t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
-                        exception = new Exception("find() ", e);
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("iterableSimple() ", e);
-
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         if (haveElements) {
             return (T) t1;
@@ -1529,28 +1320,16 @@ public abstract class Repository<T> implements InterfaceRepository {
                         //Test.msg("Prueba: iterable: "+document.toJson());
                         t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                         l.add(t1);
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
-                        exception = new Exception("find() ", e);
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("iterableSimple() ", e);
-
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return l;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="iterableList(FindIterable<Document> iterable)">
@@ -1564,27 +1343,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
                         l.add(t1);
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
-                        exception = new Exception("find() ", e);
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("iterableSimple() ", e);
-
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return l;
@@ -1604,15 +1371,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                         Map<String, Object> map = new HashMap<>(document);
                         lObject.add(map);
 
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
-                        exception = new Exception("find() ", e);
-                        System.out.println("apply error() " + e.getLocalizedMessage());
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
                 }
             });
@@ -1627,14 +1388,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 l.add(jmoordbResult);
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("iterableSimple() ", e);
-            System.out.println("error() " + e.getLocalizedMessage());
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return l;
@@ -1657,13 +1412,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             if (mod > 0) {
                 size++;
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "sizeOfPage()").log(Level.SEVERE, null, e);
-            exception = new Exception("sizeOfPage()", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return size;
     }// </editor-fold>
@@ -1687,13 +1437,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             return pages;
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "listOfPage()").log(Level.SEVERE, null, e);
-            exception = new Exception("listOfPage()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return pages;
     }
@@ -1711,38 +1456,37 @@ public abstract class Repository<T> implements InterfaceRepository {
             Document documento = new Document();
             if (doc.length != 0) {
                 documento = doc[0];
-                MongoDatabase db = mongoClient.getDatabase(database);
-                FindIterable<Document> iterable = db.getCollection(collection).find(documento);
-
-                iterable.forEach(new Block<Document>() {
-                    @Override
-                    public void apply(final Document document) {
-                        try {
-                            contador++;
-                        } catch (Exception e) {
-                            System.out.println("------------------------------------------------------------------------------------------------");
-                            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                            System.out.println("Error " + e.getLocalizedMessage());
-                            System.out.println("------------------------------------------------------------------------------------------------");
-                            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
-                            exception = new Exception("count()", e);
-                        }
-                    }
-                });
+                //nuev a version ejecuta el count con documento como filtro
+                 contador = (int) mongoClient.getDatabase(database).getCollection(collection).count(documento);
+                //Version anterior hace un find y recorre la lista
+//                MongoDatabase db = mongoClient.getDatabase(database);
+//                FindIterable<Document> iterable = db.getCollection(collection).find(documento);
+//
+//                iterable.forEach(new Block<Document>() {
+//                    @Override
+//                    public void apply(final Document document) {
+//                        try {
+//                            contador++;
+//                        } catch (Exception e) {
+//                           
+//                            
+//                            
+//                           
+//                            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
+//                            exception = new Exception("count()", e);
+//                        }
+//                    }
+//                });
 
             } else {
                 // no tiene parametros
+                
                 contador = (int) mongoClient.getDatabase(database).getCollection(collection).count();
 
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
-            exception = new Exception("count()", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return contador;
     }// </editor-fold>
@@ -1756,33 +1500,29 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Integer count(Bson filter) {
         try {
             contador = 0;
-
-            MongoDatabase db = mongoClient.getDatabase(database);
-            FindIterable<Document> iterable = db.getCollection(collection).find(filter);
-
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        contador++;
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
-                        exception = new Exception("count()", e);
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
-            exception = new Exception("count()", e);
+            //Nueva version cuenta directamente con el filtro
+ contador = (int) mongoClient.getDatabase(database).getCollection(collection).count(filter);
+ //Version anterior carga una lista de docuemnntos y luego cuenta
+//            MongoDatabase db = mongoClient.getDatabase(database);
+//            FindIterable<Document> iterable = db.getCollection(collection).find(filter);
+//
+//            iterable.forEach(new Block<Document>() {
+//                @Override
+//                public void apply(final Document document) {
+//                    try {
+//                        contador++;
+//                    } catch (Exception e) {
+//                       
+//                        
+//                        
+//                       
+//                        Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
+//                        exception = new Exception("count()", e);
+//                    }
+//                }
+//            });
+ } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return contador;
     }// </editor-fold>
@@ -1819,14 +1559,8 @@ public abstract class Repository<T> implements InterfaceRepository {
          
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findAll() ", e);
-            new JmoordbException("findAll()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -1856,14 +1590,8 @@ public abstract class Repository<T> implements InterfaceRepository {
       
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findPagination() ", e);
-            new JmoordbException("findPagination()");
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -1891,14 +1619,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     limit(rowsForPage).sort(sortQuery);
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findPagination() ", e);
-            new JmoordbException("findPagination()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -1933,14 +1655,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     limit(rowsForPage).sort(sortQuery);
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findPagination() ", e);
-            new JmoordbException("findPagination()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -1979,22 +1695,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
 
-            } catch (Exception e) {
-                System.out.println("------------------------------------------------------------------------------------------------");
-                System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                System.out.println("Error " + e.getLocalizedMessage());
-                System.out.println("------------------------------------------------------------------------------------------------");
-                Logger.getLogger(Repository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
-                exception = new Exception("findOneAndUpdate()", e);
-            }
+           } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findOneAndUpdate()", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return t1;
@@ -2034,24 +1740,13 @@ public abstract class Repository<T> implements InterfaceRepository {
                 t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
 //                Method method = entityClass.getDeclaredMethod("toPojo", Document.class);
 //                list.add((T) method.invoke(t, iterable));
-            } catch (Exception e) {
-                System.out.println("------------------------------------------------------------------------------------------------");
-                System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                System.out.println("Error " + e.getLocalizedMessage());
-                System.out.println("------------------------------------------------------------------------------------------------");
-                Logger.getLogger(Repository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
-                exception = new Exception("findOneAndUpdate()", e);
-            }
-
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findOneAndUpdate()", e);
+             } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
         return t1;
     }// </editor-fold>
 
@@ -2080,22 +1775,12 @@ public abstract class Repository<T> implements InterfaceRepository {
             try {
                 t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
 
-            } catch (Exception e) {
-                System.out.println("------------------------------------------------------------------------------------------------");
-                System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                System.out.println("Error " + e.getLocalizedMessage());
-                System.out.println("------------------------------------------------------------------------------------------------");
-                Logger.getLogger(Repository.class.getName() + "findOneAndUpdate()").log(Level.SEVERE, null, e);
-                exception = new Exception("findOneAndUpdate()", e);
-            }
+           } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findOneAndUpdate()", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return t1;
@@ -2121,13 +1806,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findBy() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -2153,13 +1833,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             FindIterable<Document> iterable = db.getCollection(collection).find(builder).sort(sortQuery);
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findBy() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -2191,13 +1866,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("sql() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -2220,13 +1890,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = processAggregateIterable(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("aggregate() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -2249,13 +1914,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
             list = processAggregateIterableJmoordbResult(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("aggregate() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -2278,13 +1938,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(builder);
             list = processAggregateIterableJmoordbResult(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("aggregateFromBuilder ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -2303,13 +1958,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
             list = iterableList(iterable);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findBy() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2335,13 +1985,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             FindIterable<Document> iterable = db.getCollection(collection).find(filter).sort(sortQuery);
             list = iterableList(iterable);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findBy() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2367,13 +2012,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             FindIterable<Document> iterable = db.getCollection(collection).find(filter).sort(sortQuery);
             list = iterableList(iterable);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findBy() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2390,13 +2030,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             for (Document name : getMongoDatabase().listCollections()) {
                 list.add(name.get("name").toString());
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
-            exception = new Exception("listCollecctions() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2417,13 +2052,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 }
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "existsCollection()").log(Level.SEVERE, null, e);
-            exception = new Exception("existsCollection() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2439,13 +2069,8 @@ public abstract class Repository<T> implements InterfaceRepository {
         try {
             getMongoDatabase().createCollection(nameCollection);
             return true;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "existsCollection()").log(Level.SEVERE, null, e);
-            exception = new Exception("existsCollection() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2466,13 +2091,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             return false;
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
-            exception = new Exception("drop() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2491,13 +2111,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             return true;
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
-            exception = new Exception("drop() ", e);
+      } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2513,13 +2128,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             return true;
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "drop()").log(Level.SEVERE, null, e);
-            exception = new Exception("drop() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2545,13 +2155,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findHelperSort()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2579,13 +2184,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findHelperSort()", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2625,13 +2225,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("helpers()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2674,13 +2269,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("helpers()", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -2840,13 +2430,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             if (dr.getDeletedCount() >= 0) {
                 return true;
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "delete()").log(Level.SEVERE, null, e);
-            exception = new Exception("delete() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2875,13 +2460,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             if (dr.getDeletedCount() >= 0) {
                 return true;
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "delete()").log(Level.SEVERE, null, e);
-            exception = new Exception("delete() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2900,13 +2480,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "remove()").log(Level.SEVERE, null, e);
-            exception = new Exception("remove() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2936,13 +2511,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "remove()").log(Level.SEVERE, null, e);
-            exception = new Exception("delete() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -2959,13 +2529,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Document doc = new Document(key, value);
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(doc);
             cont = (int) dr.getDeletedCount();
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
-            exception = new Exception("deleteMany() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return cont;
     }// </editor-fold>
@@ -2982,10 +2547,10 @@ public abstract class Repository<T> implements InterfaceRepository {
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(doc);
             cont = (int) dr.getDeletedCount();
         } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
+           
+            
+            
+           
             Logger.getLogger(Repository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
             exception = new Exception("deleteMany() ", e);
         }
@@ -3013,13 +2578,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(doc);
             cont = (int) dr.getDeletedCount();
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "deleteManye()").log(Level.SEVERE, null, e);
-            exception = new Exception("deleteMany() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return cont;
     }// </editor-fold>
@@ -3036,13 +2596,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             DeleteResult dr = getMongoDatabase().getCollection(collection).deleteMany(new Document());
 
             cont = (int) dr.getDeletedCount();
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "removeDocument()").log(Level.SEVERE, null, e);
-            exception = new Exception("removeAll() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return cont;
     }// </editor-fold>
@@ -3069,13 +2624,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             UpdateResult updateResult = getMongoDatabase().getCollection(collection).updateOne(search, doc);
             return (int) updateResult.getModifiedCount();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
-            exception = new Exception("updateOne() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return 0;
     }// </editor-fold>
@@ -3089,13 +2639,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             UpdateResult updateResult = getMongoDatabase().getCollection(collection).updateOne(docSearch, docUpdate);
             return (int) updateResult.getModifiedCount();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
-            exception = new Exception("updateOne() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return 0;
     }// </editor-fold>
@@ -3116,13 +2661,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             UpdateResult updateResult = getMongoDatabase().getCollection(collection).updateMany(docSearch, docUpdate);
             return (int) updateResult.getModifiedCount();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "updateMany()").log(Level.SEVERE, null, e);
-            exception = new Exception("updateMany() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return 0;
     }// </editor-fold>
@@ -3144,13 +2684,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             return (int) updateResult.getModifiedCount();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "replaceOne()").log(Level.SEVERE, null, e);
-            exception = new Exception("replaceOne() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return 0;
     }
@@ -3172,13 +2707,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             return (int) updateResult.getModifiedCount();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "replaceOne()").log(Level.SEVERE, null, e);
-            exception = new Exception("replaceOne() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return 0;
     }// </editor-fold>
@@ -3199,13 +2729,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             UpdateResult updateResult = getMongoDatabase().getCollection(collection).replaceOne(docSearch, docUpdate);
             return (int) updateResult.getModifiedCount();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "updateOne()").log(Level.SEVERE, null, e);
-            exception = new Exception("updateOne() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return 0;
     }// </editor-fold>
@@ -3224,22 +2749,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     method = entityClass.getDeclaredMethod(name);
                     o = method.invoke(t2);
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("getDocumentPrimaryKey() ", e);
-                }
+               } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("getDocumentPrimaryKey() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return o;
     }// </editor-fold>
@@ -3253,13 +2768,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 type = p.getType();
 
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getDocumentPrimaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("getDocumentPrimaryKey() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return type;
     }// </editor-fold>
@@ -3305,13 +2815,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDate() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3342,13 +2847,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDate() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3381,13 +2881,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDate() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3420,15 +2915,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDate() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -3459,13 +2948,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDate() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3500,13 +2984,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDateWithoutHours()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDateWithoutHours() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3539,15 +3018,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDate() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -3580,13 +3053,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDate() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3616,13 +3084,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3653,15 +3116,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 // </editor-fold>
@@ -3693,13 +3150,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3733,13 +3185,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+     } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3776,13 +3223,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3819,13 +3261,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3862,13 +3299,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3905,13 +3337,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3943,13 +3370,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -3982,13 +3404,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, datestartvalue), Filters.lte(fieldlimitname, datelimitvalue));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -4022,15 +3439,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 // </editor-fold>
@@ -4061,15 +3472,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 // </editor-fold>
@@ -4102,15 +3507,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             );
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 // </editor-fold>
@@ -4139,15 +3538,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenInteger()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenInteger() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4175,15 +3568,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenIntegerPagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenIntegerPagination() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
     // </editor-fold>
@@ -4210,15 +3597,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenIntege()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenInteger() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4245,15 +3626,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fieldnamestart, startvalue), Filters.lte(fieldlimitname, limitvalue));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenIntege()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenInteger() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
     // </editor-fold>
@@ -4290,15 +3665,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4333,15 +3702,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHour ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4375,15 +3738,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHour() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4418,15 +3775,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHour() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4461,15 +3812,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(myfilter, date);
 
             list = filters(filter, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHour()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHour() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
     // </editor-fold>
@@ -4502,13 +3847,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             Bson filter = Filters.and(Filters.gte(fielddate, dateStart),
                     Filters.lte(fielddate, dateEnd));
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHourPagination() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -4546,15 +3886,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4591,15 +3925,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4636,15 +3964,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterBetweenDatePagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterBetweenDatePagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
 
@@ -4680,15 +4002,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lte(fielddate, dateEnd));
 
             list = filtersPagination(filter, pageNumber, rowsForPage, sortQuery);
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "filterDayWithoutHourPagination()").log(Level.SEVERE, null, e);
-            exception = new Exception("filterDayWithoutHourPagination ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }
     // </editor-fold>
@@ -4725,13 +4041,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findText()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -4769,13 +4080,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findText()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -4815,13 +4121,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -4861,13 +4162,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
+     } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -4943,13 +4239,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -4989,59 +4280,13 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
 
-//    // <editor-fold defaultstate="collapsed" desc="findRegex(String key, String value, Boolean caseSensitive,Bson filter, Document... docSort) ">
-//
-//    /**
-//     *
-//     * @param key
-//     * @param value
-//     * @param docSort
-//     * @return
-//     */
-//    public List<T> findRegex(String key, String value, Boolean caseSensitive, Bson filter, Document... docSort) {
-//        Document sortQuery = new Document();
-//        list = new ArrayList<>();
-//
-//        try {
-//
-//            if (docSort.length != 0) {
-//                sortQuery = docSort[0];
-//
-//            }
-//            Object t = entityClass.newInstance();
-//            Pattern regex = Pattern.compile(value);
-//
-//            MongoDatabase db = mongoClient.getDatabase(database);
-//            FindIterable<Document> iterable;
-//            if (!caseSensitive) {
-//                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).sort(sortQuery);
-////iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
-//            } else {
-//                iterable = db.getCollection(collection)
-//                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i"))).filter(filter).sort(sortQuery);
-////               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
-//
-//            }
-//
-//            list = iterableList(iterable);
-//
-//         } catch (Exception e) {            System.out.println("------------------------------------------------------------------------------------------------");            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());            System.out.println("Error " + e.getLocalizedMessage());            System.out.println("------------------------------------------------------------------------------------------------");
-//            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-//            exception = new Exception("findRegex()", e);
-//        }
-//        return list;
-//    }// </editor-fold>    
+ 
     // <editor-fold defaultstate="collapsed" desc="findRegexInText(String key, String value, Boolean caseSensitive, Document... docSort)">
     /**
      *
@@ -5075,13 +4320,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexInText()", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5120,13 +4360,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5165,13 +4400,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegex()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>    
@@ -5213,13 +4443,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexPagination()", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5261,13 +4486,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexPagination()", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5309,60 +4529,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexPagination()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
-//    // <editor-fold defaultstate="collapsed" desc="findRegexPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort)">
-//
-//    /**
-//     *
-//     * @param key
-//     * @param value
-//     * @param docSort
-//     * @return
-//     */
-//    public List<T> findRegexPagination(String key, String value, Boolean caseSensitive, Bson filter, Integer pageNumber, Integer rowsForPage, Document... docSort) {
-//        Document sortQuery = new Document();
-//        list = new ArrayList<>();
-//
-//        try {
-//
-//            if (docSort.length != 0) {
-//                sortQuery = docSort[0];
-//
-//            }
-//            Object t = entityClass.newInstance();
-//            Pattern regex = Pattern.compile(value);
-//
-//            MongoDatabase db = mongoClient.getDatabase(database);
-//            FindIterable<Document> iterable;
-//            if (!caseSensitive) {
-//                iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", "^" + value))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
-//                        limit(rowsForPage).sort(sortQuery);
-////iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex)));
-//            } else {
-//                iterable = db.getCollection(collection)
-//                        .find(new Document(key, new Document("$regex", "^" + value).append("$options", "i"))).filter(filter).skip(pageNumber > 0 ? ((pageNumber - 1) * rowsForPage) : 0).
-//                        limit(rowsForPage).sort(sortQuery);
-////               iterable = db.getCollection(collection).find(new Document(key, new Document("$regex", regex).append("$options", "si")));
-//
-//            }
-//
-//            list = iterableList(iterable);
-//
-//         } catch (Exception e) {            System.out.println("------------------------------------------------------------------------------------------------");            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());            System.out.println("Error " + e.getLocalizedMessage());            System.out.println("------------------------------------------------------------------------------------------------");
-//            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-//            exception = new Exception("findRegexPagination()", e);
-//        }
-//        return list;
-//    }// </editor-fold>
+//   
 
     // <editor-fold defaultstate="collapsed" desc="findRegexInTextPagination(String key, String value, Boolean caseSensitive, Integer pageNumber, Integer rowsForPage, Document... docSort))">
     /**
@@ -5400,13 +4572,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexInTextPagination()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5447,13 +4614,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexInTextPagination()", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5494,13 +4656,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = iterableList(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findRegexInTextPagination()", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5534,13 +4691,9 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return type;
     }
     // </editor-fold>
@@ -5579,13 +4732,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("complete()", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }// </editor-fold>
@@ -5610,14 +4758,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = processUnknownIterableJmoordbResult(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findAll() ", e);
-            new JmoordbException("findAll()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -5643,14 +4785,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = processUnknownIterableJmoordbResult(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findAll() ", e);
-            new JmoordbException("findAll()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -5676,16 +4812,9 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = processUnknownIterableJmoordbResult(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findAll() ", e);
-            new JmoordbException("findAll()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return list;
     }// </editor-fold>
 
@@ -5711,14 +4840,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     limit(rowsForPage);
             list = processUnknownIterableJmoordbResult(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findPagination() ", e);
-            new JmoordbException("findPagination()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -5746,14 +4869,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     limit(rowsForPage).sort(sortQuery);
             list = processUnknownIterableJmoordbResult(iterable);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findPagination() ", e);
-            new JmoordbException("findPagination()");
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return list;
@@ -5772,16 +4889,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                         Map<String, Object> map = new HashMap<>(document);
                         lObject.add(map);
 
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName() + "find()").log(Level.SEVERE, null, e);
-                        exception = new Exception("find() ", e);
-                        System.out.println("apply error() " + e.getLocalizedMessage());
-                    }
-
+                  } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
                 }
             });
             for (Map m : lObject) {
@@ -5794,16 +4904,9 @@ public abstract class Repository<T> implements InterfaceRepository {
                 l.add(jmoordbResult);
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("processUnkownIterableJmoordbResult() ", e);
-            System.out.println("error() " + e.getLocalizedMessage());
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return l;
     }// </editor-fold>
 
@@ -5838,13 +4941,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             UpdateResult updateResult = db.getCollection(collection).replaceOne(builder, docUpdate);
             return (int) updateResult.getModifiedCount();
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "unknownUpdate()").log(Level.SEVERE, null, e);
-            exception = new Exception("unknownUpdate() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return 0;
     }// </editor-fold>
@@ -5864,13 +4962,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "unknownDelete()").log(Level.SEVERE, null, e);
-            exception = new Exception("unknownDelete() ", e);
+      } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -5890,13 +4983,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "unknownDelete()").log(Level.SEVERE, null, e);
-            exception = new Exception("unknownDelete() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -5917,13 +5005,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "unknownDeleteAll()").log(Level.SEVERE, null, e);
-            exception = new Exception("unknownDeleteAll() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -5944,13 +5027,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "unknownDeleteMany()").log(Level.SEVERE, null, e);
-            exception = new Exception("unknownDeleteMany() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -5971,13 +5049,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "unknownDeleteAll()").log(Level.SEVERE, null, e);
-            exception = new Exception("unknownDeleteAll() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -6052,14 +5125,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return true;
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "isAvailableBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("isAvailableBetweenDate() ", e);
-
+      } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }
@@ -6137,14 +5204,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = findBy(_filter);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "isAvailableBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("isAvailableBetweenDate() ", e);
-
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -6216,14 +5277,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             list = findBy(_filter);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "isAvailableBetweenDate()").log(Level.SEVERE, null, e);
-            exception = new Exception("isAvailableBetweenDate() ", e);
-
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -6257,13 +5312,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             UUID uuid = UUID.randomUUID();
 
             listUserinfo.add(new UserInfo(uuid.toString(), username, date2, description));
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "generateListUserinfo").log(Level.SEVERE, null, e);
-            exception = new Exception("generateListUserinfo() ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return listUserinfo;
     }  // </editor-fold>
@@ -6286,13 +5336,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             userinfo.setDatetime(date2);
             userinfo.setDescription(description);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "generateUserinfo()").log(Level.SEVERE, null, e);
-            exception = new Exception("generateUserinfo() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return userinfo;
     }  // </editor-fold>
@@ -6332,13 +5377,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 exception = new Exception("No contiene el metodo UserInfo");
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "insertUserInfoForSave").log(Level.SEVERE, null, e);
-            exception = new Exception("insertUserInfoForSave ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6389,13 +5429,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "insertUserInfoForSave").log(Level.SEVERE, null, e);
-            exception = new Exception("insertUserInfoForSave ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6430,13 +5465,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfPrimaryKey.toUpperCase());
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeyValueToUpper").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeyValueToUpper ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6471,13 +5501,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfPrimaryKey.toLowerCase());
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeyValueToLower").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeyValueToLower ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6510,13 +5535,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfPrimaryKey);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeySetValue ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6564,13 +5584,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "compositeKeyValueToUpper").log(Level.SEVERE, null, e);
-            exception = new Exception("compositeKeyValueToUpper ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6602,13 +5617,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, nameOfCompositeKey);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "primaryKeySetValue").log(Level.SEVERE, null, e);
-            exception = new Exception("primaryKeySetValue ", e);
+    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6684,13 +5694,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "compositeKeyValueToUpper").log(Level.SEVERE, null, e);
-            exception = new Exception("compositeKeyValueToUpper ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -6722,22 +5727,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
                     map.put(name, value);
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("compositeKey ", e);
-                }
+            } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "compositeKey").log(Level.SEVERE, null, e);
-            exception = new Exception("compositeKey ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return map;
     }
@@ -6765,14 +5760,9 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                         doc.put(p.getName(), method.invoke(t2));
 
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                        exception = new Exception("isFoundByCompositeKey ", e);
-                    }
+                    } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
                 }
                 T t_ = (T) find(doc);
                 if (t_ == null) {
@@ -6785,13 +5775,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 exception = new Exception("No tiene llaves secundaria @Composite no se puede buscar");
                 return false;
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "isFoundByCompositeKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("isFoundByCompositeKey() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -6815,26 +5800,16 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         method = entityClass.getDeclaredMethod(name);
                         doc.put(p.getName(), method.invoke(t2));
-                    } catch (Exception e) {
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                        System.out.println("Error " + e.getLocalizedMessage());
-                        System.out.println("------------------------------------------------------------------------------------------------");
-                        Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                        exception = new Exception("findByCompositeKey ", e);
-                    }
+                  } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
                 }
                 return find(doc);
             } else {
                 return Optional.empty();
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "findByCompositeKey").log(Level.SEVERE, null, e);
-            exception = new Exception("findByCompositeKey ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -6852,13 +5827,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return Optional.of(t_);
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "findByCompositeKey)").log(Level.SEVERE, null, e);
-            exception = new Exception("findByCompositeKey ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -6881,22 +5851,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                     doc.put(p.getName(), method.invoke(t2));
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("getDocumentSecondaryKey() ", e);
-                }
+               } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getDocumentSecondaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("getDocumentSecondaryKey() ", e);
+      } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return doc;
     }// </editor-fold>
@@ -6921,22 +5881,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     doc.put(p.getName(), method.invoke(t2));
 
                     return find(doc);
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("findById() ", e);
-                }
+                } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
-            exception = new Exception("findById() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -6967,22 +5917,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
 
                     //    doc.put(p.getName(), method.invoke(t2));
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("secondaryKeyValue ", e);
-                }
+                 } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyValue").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyValue ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -7009,13 +5949,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 //    doc.put(p.getName(), method.invoke(t2));
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyIsInteger()").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyIsInteger() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -7046,22 +5981,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
 
                     //    doc.put(p.getName(), method.invoke(t2));
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("secondaryKeyValueInteger", e);
-                }
+                 } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueInteger").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyValueInteger ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -7092,22 +6017,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
                     map.put(p.getName(), value);
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("secondaryKey ", e);
-                }
+              } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKey ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return map;
     }// </editor-fold>
@@ -7128,13 +6043,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 name = util.letterToLower(p.getName());
 
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyValue").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyValue ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return name;
     }// </editor-fold>
@@ -7165,22 +6075,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     } else {
                         return true;
                     }
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("isFoundBySecondaryKey ", e);
-                }
+                } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "isFoundBySecondaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("isFoundBySecondaryKey() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -7214,13 +6114,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfSecondaryKey.toUpperCase());
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToUpper").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyValueToUpper ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -7255,13 +6150,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfSecondaryKey.toLowerCase());
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKeyValueToLower").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeyValueToLower ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -7285,22 +6175,12 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                     doc.put(p.getName(), method.invoke(t2));
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("getDocumentTertiaryKey() ", e);
-                }
+             } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "getDocumentTertiaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("getDocumentTertiaryKey() ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return doc;
     }// </editor-fold>
@@ -7325,22 +6205,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     doc.put(p.getName(), method.invoke(t2));
 
                     return find(doc);
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("findById() ", e);
-                }
+               } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "findById()").log(Level.SEVERE, null, e);
-            exception = new Exception("findById() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return Optional.empty();
     }// </editor-fold>
@@ -7371,22 +6241,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
 
                     //    doc.put(p.getName(), method.invoke(t2));
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("tertiaryKeyValue ", e);
-                }
+                 } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValue").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKeyValue ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -7413,13 +6273,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
                 //    doc.put(p.getName(), method.invoke(t2));
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKeyIsInteger()").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKeyIsInteger() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -7450,22 +6305,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
 
                     //    doc.put(p.getName(), method.invoke(t2));
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("tertiaryKeyValueInteger", e);
-                }
+              } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValueInteger").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKeyValueInteger ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return value;
     }// </editor-fold>
@@ -7496,22 +6341,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
                     map.put(p.getName(), value);
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("tertiaryKey ", e);
-                }
+              } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKey ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return map;
     }// </editor-fold>
@@ -7532,13 +6367,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 name = util.letterToLower(p.getName());
 
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValue").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKeyValue ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return name;
     }// </editor-fold>
@@ -7569,22 +6399,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     } else {
                         return true;
                     }
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("isFoundByTertiaryKey ", e);
-                }
+              } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "isFoundByTertiaryKey()").log(Level.SEVERE, null, e);
-            exception = new Exception("isFoundByTertiaryKey() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return false;
     }// </editor-fold>
@@ -7618,13 +6438,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfTertiaryKey.toUpperCase());
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValueToUpper").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKeyValueToUpper ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -7659,13 +6474,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfTertiaryKey.toLowerCase());
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKeyValueToLower").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKeyValueToLower ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -7698,13 +6508,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfTertiaryKey);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "tertiaryKeySetValue").log(Level.SEVERE, null, e);
-            exception = new Exception("tertiaryKeySetValue ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -7736,22 +6541,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                     }
                     map.put(name, value);
 
-                } catch (Exception e) {
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-                    System.out.println("Error " + e.getLocalizedMessage());
-                    System.out.println("------------------------------------------------------------------------------------------------");
-                    Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-                    exception = new Exception("secondaryKey ", e);
-                }
+               } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
             }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKey").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKey ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return map;
     }
@@ -7784,13 +6579,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                     lookup.unreflect(pkProperty.getWriteMethod()));
             pkSetter.accept(t1, valueOfSecondaryKey);
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "secondaryKeySetValue").log(Level.SEVERE, null, e);
-            exception = new Exception("secondaryKeySetValue ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return t1;
     }
@@ -7853,15 +6643,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             }
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            // JmoordbUtil.errorDialog("statistics()", e.getLocalizedMessage());
-            exception = new Exception("statistics() ", e);
-            new JmoordbException("statistics()");
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return jmoordbStatistics;
@@ -7884,16 +6667,8 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             Document stats = db.runCommand(new Document("setParameter:", 1).append("internalQueryExecMaxBlockingSortBytes", bytes));
 
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            // JmoordbUtil.errorDialog("internalQueryExecMaxBlockingSortBytes()", e.getLocalizedMessage());
-            exception = new Exception("internalQueryExecMaxBlockingSortBytes() ", e);
-            new JmoordbException("statistics()");
-            success = false;
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return success;
     }// </editor-fold>
@@ -7907,13 +6682,8 @@ public abstract class Repository<T> implements InterfaceRepository {
     public T createEntity() {
         try {
             return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-
-            // JmoordbUtil.errorDialog("createEntity() ", e.getLocalizedMessage());
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return null;
     }// </editor-fold>
@@ -7928,26 +6698,14 @@ public abstract class Repository<T> implements InterfaceRepository {
     public List<T> findBy(Query query, Sorter sorter) {
      querySearch = new Document();
         querySorter = new Document();
-        try {
-            
+        try {          
            querySorter = queryCreateSort(query.getSorted());
-            System.out.println("================================");
-                   
-            System.out.println(">>>>>>>>>ORDENACION "+querySorter.toString());
-            System.out.println("================================");
            list = new ArrayList<>();
-
             MongoDatabase db = mongoClient.getDatabase(database);
             FindIterable<Document> iterable = db.getCollection(collection).find(querySearch).sort(querySorter);
             list = iterableList(iterable);
-
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName()).log(Level.SEVERE, null, e);
-            exception = new Exception("findBy() ", e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return list;
     }
@@ -7977,8 +6735,8 @@ public abstract class Repository<T> implements InterfaceRepository {
             }else{
                 return queryCreateSort(sorter.getSorter());
             }
-         } catch (Exception e) {
-            System.out.println("---genSort( " + e.getLocalizedMessage());
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return querySorter;
     }// </editor-fold>
@@ -8003,15 +6761,9 @@ public abstract class Repository<T> implements InterfaceRepository {
             Date dateEnd = setHourToDate(datelimitvalue, 23, 59);
        filter = Filters.and(Filters.gte(fieldnamestart, dateStart), Filters.lte(fieldlimitname, dateEnd));
 return filter;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "createBsonBetweenDateWithoutHours()").log(Level.SEVERE, null, e);
-            exception = new Exception("createBsonBetweenDateWithoutHours ", e);
+       } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
-
         return filter;
     }
     // </editor-fold>
@@ -8034,13 +6786,8 @@ return filter;
             
 
 return filter;
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + "createBsonBetweenDateWithoutHours()").log(Level.SEVERE, null, e);
-            exception = new Exception("createBsonBetweenDateWithoutHours ", e);
+         } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return filter;
@@ -8063,13 +6810,8 @@ return filter;
           }else{
              return new Document(sortfield, createOrder(order));
           }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
-            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
+        } catch (Exception e) {           
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return sort;
     }
@@ -8097,13 +6839,8 @@ return filter;
               });  
 
           }
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
-            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return sort;
     }
@@ -8133,14 +6870,9 @@ switch(sorter){
         default:
            ordernumber=1;
 }
-     } catch (Exception e) {
-             System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
-            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
-     }
+     } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
      return ordernumber;
  }
    // </editor-fold>
@@ -8183,13 +6915,8 @@ fieldtype = fieldtype.toLowerCase();
                  
          }
          
-        } catch (Exception e) {
-            System.out.println("------------------------------------------------------------------------------------------------");
-            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
-            System.out.println("Error " + e.getLocalizedMessage());
-            System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
-            exception = new Exception(JmoordbUtil.nameOfMethod(), e);
+        } catch (Exception e) {    
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
             return null;
         
@@ -8216,5 +6943,17 @@ fieldtype = fieldtype.toLowerCase();
         return doc.toJson();
     }
     // </editor-fold>
-    
+
+
+  // <editor-fold defaultstate="collapsed" desc="String documentToJson(Document doc)">
+        private void excepcionManager(String nameOfClass, String method, String error, Exception e){
+            
+            System.out.println("Class:" + nameOfClass+ " Metodo:" + method);
+            System.out.println("Error " + e.getLocalizedMessage());
+           
+            Logger.getLogger(Repository.class.getName() + "sizeOfPage()").log(Level.SEVERE, null, e);
+            exception = new Exception(method, e);
+        }
+        
+        // </editor-fold>
 }
