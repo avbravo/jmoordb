@@ -1840,6 +1840,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc=" findBy(String sql)">
     /**
      *
@@ -5119,12 +5120,15 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             Bson _filter = Filters.and(filter, or(b, c_e_f_g_h_l, d, i, j, k));
 
-            List<T> list = findBy(_filter);
-
-            if (list.isEmpty()) {
-                return true;
-            }
-
+//            List<T> list = findBy(_filter);
+//
+//            if (list.isEmpty()) {
+//                return true;
+//            }
+Integer countador = count(filter);
+if(contador == 0){
+    return true;
+}
       } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
@@ -6956,4 +6960,8 @@ fieldtype = fieldtype.toLowerCase();
         }
         
         // </editor-fold>
+        
+        
+        
+      
 }
