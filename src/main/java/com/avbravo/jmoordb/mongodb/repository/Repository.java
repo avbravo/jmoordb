@@ -5118,17 +5118,101 @@ public abstract class Repository<T> implements InterfaceRepository {
                     Filters.lt(namefieldOfEnd, valueEnd)
             );
 
-            Bson _filter = Filters.and(filter, or(b, c_e_f_g_h_l, d, i, j, k));
+            Bson filterAll = Filters.and(filter, or(b, c_e_f_g_h_l, d, i, j, k));
 
 //            List<T> list = findBy(_filter);
 //
 //            if (list.isEmpty()) {
 //                return true;
 //            }
-Integer countador = count(filter);
+Integer contador = count(filterAll);
+
 if(contador == 0){
+    
     return true;
 }
+      } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
+        return false;
+    }
+
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="isAvailableBetweenDateHourOld(Bson filter, String namefieldOfStart,Date valueStart,namefieldOfEnd,Date valueEnd )">
+    /**
+     * Devuelve true si no hay registros con la condicion fechay hora de inicio
+     * y fin y el filtro que se pasa como parametro
+     *
+     * @param filter
+     * @param namefieldOfStart
+     * @param valueStart
+     * @param namefieldOfEnd
+     * @param valueEnd
+     * @return
+     */
+    public Boolean isAvailableBetweenDateHourOld(Bson filter, String namefieldOfStart, Date valueStart, String namefieldOfEnd, Date valueEnd) {
+        try {
+            //Vehiculos en viajes
+
+            Integer count = count();
+            if (count.equals(0)) {
+                return true;
+            }
+            //inicio
+
+            Bson b = Filters.and(
+                    Filters.gt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.gt(namefieldOfEnd, valueEnd)
+            );
+
+            Bson c_e_f_g_h_l = Filters.or(
+                    Filters.eq(namefieldOfStart, valueStart),
+                    Filters.eq(namefieldOfStart, valueEnd),
+                    Filters.eq(namefieldOfEnd, valueStart),
+                    Filters.eq(namefieldOfEnd, valueEnd)
+            );
+
+            Bson j = Filters.and(
+                    Filters.lt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.eq(namefieldOfEnd, valueEnd)
+            );
+
+            Bson d = Filters.and(
+                    Filters.gt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.lt(namefieldOfEnd, valueEnd)
+            );
+            Bson i = Filters.and(
+                    Filters.lt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.gt(namefieldOfEnd, valueEnd)
+            );
+            Bson k = Filters.and(
+                    Filters.lt(namefieldOfStart, valueStart),
+                    Filters.lt(namefieldOfStart, valueEnd),
+                    Filters.gt(namefieldOfEnd, valueStart),
+                    Filters.lt(namefieldOfEnd, valueEnd)
+            );
+
+            Bson filterAll = Filters.and(filter, or(b, c_e_f_g_h_l, d, i, j, k));
+
+          
+            List<T> list = findBy(filterAll);
+
+            if (list.isEmpty()) {
+                return true;
+            }
+//Integer countador = count(filter);
+//if(contador == 0){
+//    return true;
+//}
       } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
