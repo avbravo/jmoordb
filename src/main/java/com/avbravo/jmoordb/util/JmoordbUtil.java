@@ -1899,7 +1899,7 @@ public class JmoordbUtil {
                         if (c == 0) {
                             c++;
                             traceAll += "\n            {";
-                             trace += "\n            \"id\":\"" + uuid + "\",";
+                             traceAll += "\n            \"id\":\"" + uuid + "\",";
                             traceAll += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
                             traceAll += "\n            \"fileName\":\"" + s.getFileName() + "\",";
                             traceAll += "\n            \"className\":\"" + s.getClassName() + "\",";
@@ -1909,7 +1909,7 @@ public class JmoordbUtil {
                             traceAll += "\n            }";
                         } else {
                             traceAll += "\n           ,{";
-                             trace += "\n            \"id\":\"" + uuid + "\",";
+                             traceAll += "\n            \"id\":\"" + uuid + "\",";
                             traceAll += "\n            \"dateTime\":\"" + JmoordbDateUtil.fechaHoraActual() + "\",";
                             traceAll += "\n            \"fileName\":\"" + s.getFileName() + "\",";
                             traceAll += "\n            \"className\":\"" + s.getClassName() + "\",";
