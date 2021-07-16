@@ -34,10 +34,14 @@
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
+        <!-- 
+         La version 3.0+ es para Jakarta EE9
+         Si utiliza JavaEE8/JakartaEE8 con javax.rs.ws solo es soportado hasta la versión 2.x
+-->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
-            <version>3.0.2</version>
+            <version2.34</version>
             <type>jar</type>
         </dependency>
 <!--        <dependency>
