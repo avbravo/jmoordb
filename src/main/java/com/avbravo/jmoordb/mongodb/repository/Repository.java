@@ -1813,6 +1813,34 @@ public abstract class Repository<T> implements InterfaceRepository {
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc=" List<T> shell(String shell, Document... docSort)">
+   /**
+    * 
+    * @param shell
+    * @param docSort
+    * @return 
+    */
+    public List<T> shell(String shell, Document... docSort) {
+        Document sortQuery = new Document();
+        try {
+            Document doc= jsonToDocument(shell);
+            if (docSort.length != 0) {
+                sortQuery = docSort[0];
+
+            }
+            list = new ArrayList<>();
+
+            MongoDatabase db = mongoClient.getDatabase(database);
+            FindIterable<Document> iterable = db.getCollection(collection).find(doc).sort(sortQuery);
+            list = iterableList(iterable);
+
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
+        return list;
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc=" findBy(Bson doc, Document... docSort)">
     /**
      *
@@ -1882,6 +1910,29 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return
      */
     public List<T> aggregateToEntity(List<Document> documentList) {
+//    public List<U extends Number> aggregate(List<Document> documentList) {      
+        try {
+            list = new ArrayList<>();
+
+            MongoDatabase db = mongoClient.getDatabase(database);
+            AggregateIterable<Document> iterable = db.getCollection(collection).aggregate(documentList);
+
+            list = processAggregateIterable(iterable);
+
+        } catch (Exception e) {          
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
+        return list;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="aggregate(List<Document> documentList)">
+    /**
+     *
+     * @param doc
+     * @param docSort
+     * @return
+     */
+    public List<T> aggregateToEntityBson(List<Bson> documentList) {
 //    public List<U extends Number> aggregate(List<Document> documentList) {      
         try {
             list = new ArrayList<>();
@@ -7046,6 +7097,6 @@ fieldtype = fieldtype.toLowerCase();
         // </editor-fold>
         
         
-        
+  
       
 }
