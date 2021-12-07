@@ -5,9 +5,9 @@
  */
 package com.avbravo.jmoordb.couchbase.internal;
 
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.JmoordbException;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.ReferencedModel;
 import com.avbravo.jmoordb.util.ClassDescriptor;
 import com.avbravo.jmoordb.util.ClassDescriptorsCache;
 import com.avbravo.jmoordb.util.FieldDescriptor;
@@ -25,11 +25,11 @@ import java.util.Map;
 public class JavaToDocumentCouchbase {
 
     private ClassDescriptorsCache cache = new ClassDescriptorsCache();
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
-    ReferencedBeans referencedBeans = new ReferencedBeans();
+    List<EmbeddedModel> embeddedBeansList = new ArrayList<>();
+    List<ReferencedModel> referencedBeansList = new ArrayList<>();
+    ReferencedModel referencedBeans = new ReferencedModel();
 
-    public JsonObject toDocument(Object obj, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
+    public JsonObject toDocument(Object obj, List<EmbeddedModel> embeddedBeansList, List<ReferencedModel> referencedBeansList) {
         // //Test.msg("-----{{{toDocument}}----");
         if (obj == null) {
             return null;
@@ -72,7 +72,7 @@ public class JavaToDocumentCouchbase {
     }
 
     @SuppressWarnings("rawtypes")
-    public Object toDBObjectRecursive(Object object, FieldDescriptor fieldDescriptor, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
+    public Object toDBObjectRecursive(Object object, FieldDescriptor fieldDescriptor, List<EmbeddedModel> embeddedBeansList, List<ReferencedModel> referencedBeansList) {
         // //Test.msg("           toDBObjectRecursive() " + fieldDescriptor.getName());
         if (object == null) {
             // //Test.msg(" object == null");
@@ -228,7 +228,7 @@ public class JavaToDocumentCouchbase {
     private Boolean isReferenced(String name) {
         try {
 
-            for (ReferencedBeans eb : referencedBeansList) {
+            for (ReferencedModel eb : referencedBeansList) {
                 if (eb.getName().equals(name)) {
                     referencedBeans = eb;
                

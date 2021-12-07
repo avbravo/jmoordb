@@ -5,16 +5,17 @@
  */
 package com.avbravo.jmoordb.mongodb.internal;
 
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.JmoordbException;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.MicroservicesModel;
+import com.avbravo.jmoordb.ReferencedModel;
+import com.avbravo.jmoordb.anotations.Microservices;
 import com.avbravo.jmoordb.util.Analizador;
 import com.avbravo.jmoordb.util.ClassDescriptor;
 import com.avbravo.jmoordb.util.ClassDescriptorsCache;
 import com.avbravo.jmoordb.util.FieldDescriptor;
 import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.avbravo.jmoordb.util.ReflectionUtils;
-import com.avbravo.jmoordb.util.Test;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -27,14 +28,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.Any;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
-import javax.enterprise.util.AnnotationLiteral;
-import javax.faces.context.FacesContext;
-import javax.naming.InitialContext;
-import javax.servlet.ServletContext;
 import org.bson.Document;
 
 /**
@@ -47,13 +43,16 @@ public class DocumentToJavaMongoDB<T> {
     Document documentMaster = new Document();
 
     private ClassDescriptorsCache cache = new ClassDescriptorsCache();
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
-    ReferencedBeans referencedBeans = new ReferencedBeans();
+    List<EmbeddedModel> embeddedModelList = new ArrayList<>();
+    List<ReferencedModel> referencedModelList = new ArrayList<>();
+    List<MicroservicesModel> microservicesModelList = new ArrayList<>();
+    ReferencedModel referencedModel = new ReferencedModel();
+    MicroservicesModel microservicesModel = new MicroservicesModel();
     T t1;
+// <editor-fold defaultstate="collapsed" desc="<T> T fromDocument(Class<T> clazz, Document document, List<EmbeddedModel> embeddedModelList, List<ReferencedModel> referencedModelList, List<MicroservicesModel> microservicesModelList)">    
 
     @SuppressWarnings("unchecked")
-    public <T> T fromDocument(Class<T> clazz, Document document, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
+    public <T> T fromDocument(Class<T> clazz, Document document, List<EmbeddedModel> embeddedModelList, List<ReferencedModel> referencedModelList, List<MicroservicesModel> microservicesModelList) {
 
         if (document == null) {
             return null;
@@ -61,13 +60,14 @@ public class DocumentToJavaMongoDB<T> {
         //Guarda el documento pasado como argumento
         documentMaster = document;
 
-        this.embeddedBeansList = embeddedBeansList;
-        this.referencedBeansList = referencedBeansList;
+        this.embeddedModelList = embeddedModelList;
+        this.referencedModelList = referencedModelList;
+        this.microservicesModelList = microservicesModelList;
         ClassDescriptor classDescriptor = cache.get(clazz);
         Object object = classDescriptor.newInstance();
         for (FieldDescriptor fieldDescriptor : classDescriptor.getFields()) {
             try {
-              //  //Test.msg("--------->Analizando: " + fieldDescriptor.getName());
+                //  //Test.msg("--------->Analizando: " + fieldDescriptor.getName());
                 fieldDescriptor.getField().set(object,
                         fromDocumentRecursive(document.get(fieldDescriptor.getName()), fieldDescriptor));
             } catch (Exception e) {
@@ -80,7 +80,9 @@ public class DocumentToJavaMongoDB<T> {
         }
         return (T) object;
     }
+// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Object fromDocumentRecursive(Object dbObject, FieldDescriptor fieldDescriptor)">    
     /**
      *
      * @param <T>
@@ -117,7 +119,7 @@ public class DocumentToJavaMongoDB<T> {
                         list.add(listEl);
                     } else {
 
-                        list.add(fromDocument((Class<Object>) fieldType.getComponentType(), (Document) listEl, embeddedBeansList, referencedBeansList));
+                        list.add(fromDocument((Class<Object>) fieldType.getComponentType(), (Document) listEl, embeddedModelList, referencedModelList, microservicesModelList));
                     }
                 }
 
@@ -139,14 +141,14 @@ public class DocumentToJavaMongoDB<T> {
 
                             list.add(listEl);
                         } else {
-           final Field[] fields = fieldDescriptor.getClass().getDeclaredFields();
-                        
-                           //Test.msg("      Obtuve los campos..invocare al analizdor");
-                        Analizador analizador = new Analizador();
-                        analizador.analizar(fields);
-                        //Test.msg("------Ahora usare la lista del analizador...");
-                            list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl,analizador.getEmbeddedBeansList(), analizador.getReferencedBeansList()));
-//                            list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedBeansList, referencedBeansList));
+                            final Field[] fields = fieldDescriptor.getClass().getDeclaredFields();
+
+                            //Test.msg("      Obtuve los campos..invocare al analizdor");
+                            Analizador analizador = new Analizador();
+                            analizador.analizar(fields);
+                            //Test.msg("------Ahora usare la lista del analizador...");
+                            list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, analizador.getEmbeddedBeansList(), analizador.getReferencedBeansList(), analizador.getMicroservicesModelList()));
+//                            list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedModelList, referencedModelList));
                         }
                     }
 
@@ -155,7 +157,7 @@ public class DocumentToJavaMongoDB<T> {
                     if (isReferenced(fieldDescriptor.getName())) {
                         //Referenciado
                         //Test.msg("     [es Referenciado]");
-                        if (referencedBeans.getLazy()) {
+                        if (referencedModel.getLazy()) {
                             //Test.msg("[    Lazy == true no carga los relacionados ]");
 
                             List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
@@ -164,7 +166,7 @@ public class DocumentToJavaMongoDB<T> {
                                 if (ReflectionUtils.isSimpleClass(listEl.getClass())) {
                                     list.add(listEl);
                                 } else {
-                                    list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedBeansList, referencedBeansList));
+                                    list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedModelList, referencedModelList, microservicesModelList));
                                 }
                             }
 
@@ -183,32 +185,32 @@ public class DocumentToJavaMongoDB<T> {
                                     Document doc = (Document) listEl;
                                     Class[] paramString = new Class[2];
                                     paramString[0] = String.class;
-                                    Class cls = Class.forName(referencedBeans.getRepository());
+                                    Class cls = Class.forName(referencedModel.getRepository());
 //                                    Object obj = cls.newInstance();
                                     Object obj = lookUpClassInBeanManager(cls);
                                     Method method;
                                     String value = "";
-                                    if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
+                                    if (referencedModel.getJavatype().toLowerCase().equals("integer")) {
                                         //@Id de tipo Integer
-                                        Integer n = (Integer) doc.get(referencedBeans.getField());
+                                        Integer n = (Integer) doc.get(referencedModel.getField());
                                         //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
                                         //Invocar el metodod de la superclase
                                         Class parent = cls.getSuperclass();
                                         method = parent.getDeclaredMethod("search", String.class, Integer.class);
 
 //////Test.msg(" voy a optional Integer");
-                                        t1 = (T) method.invoke(obj, referencedBeans.getField(), n);
+                                        t1 = (T) method.invoke(obj, referencedModel.getField(), n);
 
                                     } else {
                                         //Test.msg(" voy a optional String");
-                                        value = (String) doc.get(referencedBeans.getField());
+                                        value = (String) doc.get(referencedModel.getField());
                                         paramString[1] = String.class;
                                         Class parent = cls.getSuperclass();
                                         method = parent.getDeclaredMethod("search", paramString);
 //                                        method = cls.getMethod("search", paramString);
                                         //method = cls.getMethod("search", paramString);
 
-                                        String[] param = {referencedBeans.getField(), value};
+                                        String[] param = {referencedModel.getField(), value};
 
                                         t1 = (T) method.invoke(obj, param);
                                     }
@@ -223,19 +225,93 @@ public class DocumentToJavaMongoDB<T> {
 
                     } else {
                         //Test.msg("    No es[Embebido] ni  [Referenciado]");
-                        List<BasicDBObject> foundDocument = (ArrayList<BasicDBObject>) dbObject;
-                        List list = (List) fieldDescriptor.newInstance();
 
-                        for (Object listEl : foundDocument) {
-                            if (ReflectionUtils.isSimpleClass(listEl.getClass())) {
-                                list.add(listEl);
+                        // aqui validar que sea @Microservices
+                        if (isReferenced(fieldDescriptor.getName())) {
+                            //Referenciado
+                            //Test.msg("     [es Referenciado]");
+                            if (referencedModel.getLazy()) {
+                                //Test.msg("[    Lazy == true no carga los relacionados ]");
+
+                                List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
+                                List list = (List) fieldDescriptor.newInstance();
+                                for (Object listEl : dbList) {
+                                    if (ReflectionUtils.isSimpleClass(listEl.getClass())) {
+                                        list.add(listEl);
+                                    } else {
+                                        list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedModelList, referencedModelList, microservicesModelList));
+                                    }
+                                }
+
+                                return list;
                             } else {
+                                //Test.msg("[    Lazy == false carga los relacionados ]");
+//
+                                List<BasicDBObject> dbList = (ArrayList<BasicDBObject>) dbObject;
+                                List list = (List) fieldDescriptor.newInstance();
 
-                                list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedBeansList, referencedBeansList));
+                                for (Object listEl : dbList) {
+
+                                    if (ReflectionUtils.isSimpleClass(listEl.getClass())) {
+                                        list.add(listEl);
+                                    } else {
+                                        Document doc = (Document) listEl;
+                                        Class[] paramString = new Class[2];
+                                        paramString[0] = String.class;
+                                        Class cls = Class.forName(referencedModel.getRepository());
+//                                    Object obj = cls.newInstance();
+                                        Object obj = lookUpClassInBeanManager(cls);
+                                        Method method;
+                                        String value = "";
+                                        if (referencedModel.getJavatype().toLowerCase().equals("integer")) {
+                                            //@Id de tipo Integer
+                                            Integer n = (Integer) doc.get(referencedModel.getField());
+                                            //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+                                            //Invocar el metodod de la superclase
+                                            Class parent = cls.getSuperclass();
+                                            method = parent.getDeclaredMethod("search", String.class, Integer.class);
+
+//////Test.msg(" voy a optional Integer");
+                                            t1 = (T) method.invoke(obj, referencedModel.getField(), n);
+
+                                        } else {
+                                            //Test.msg(" voy a optional String");
+                                            value = (String) doc.get(referencedModel.getField());
+                                            paramString[1] = String.class;
+                                            Class parent = cls.getSuperclass();
+                                            method = parent.getDeclaredMethod("search", paramString);
+//                                        method = cls.getMethod("search", paramString);
+                                            //method = cls.getMethod("search", paramString);
+
+                                            String[] param = {referencedModel.getField(), value};
+
+                                            t1 = (T) method.invoke(obj, param);
+                                        }
+
+                                        list.add(t1);
+
+                                    }
+                                }
+
+                                return list;
                             }
+
+                        } else {
+                            List<BasicDBObject> foundDocument = (ArrayList<BasicDBObject>) dbObject;
+                            List list = (List) fieldDescriptor.newInstance();
+
+                            for (Object listEl : foundDocument) {
+                                if (ReflectionUtils.isSimpleClass(listEl.getClass())) {
+                                    list.add(listEl);
+                                } else {
+
+                                    list.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedModelList, referencedModelList, microservicesModelList));
+                                }
+                            }
+
+                            return list;
                         }
 
-                        return list;
                     }
                 }
 
@@ -250,7 +326,7 @@ public class DocumentToJavaMongoDB<T> {
                         set.add(listEl);
                     } else {
 
-                        set.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedBeansList, referencedBeansList));
+                        set.add(fromDocument(ReflectionUtils.genericType(fieldDescriptor.getField()), (Document) listEl, embeddedModelList, referencedModelList, microservicesModelList));
                     }
                 }
                 return set;
@@ -268,7 +344,7 @@ public class DocumentToJavaMongoDB<T> {
 
                         map.put(key,
                                 fromDocument(ReflectionUtils.genericTypeOfMapValue(fieldDescriptor.getField()),
-                                        (Document) mapEl, embeddedBeansList, referencedBeansList));
+                                        (Document) mapEl, embeddedModelList, referencedModelList, microservicesModelList));
                     }
                 }
                 return map;
@@ -296,12 +372,12 @@ public class DocumentToJavaMongoDB<T> {
                     if (isReferenced(fieldDescriptor.getName())) {
                         //Referenciado
                         //Test.msg("         [es Referenciado] ");
-                        if (referencedBeans.getLazy()) {
+                        if (referencedModel.getLazy()) {
                             //Test.msg("[    {Lazy == true} No carga los relacionados ]");
                             Object object = fieldDescriptor.newInstance();
                             for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
                                 try {
-                                    if (childDescriptor.getField().getName().equals(referencedBeans.getField())) {
+                                    if (childDescriptor.getField().getName().equals(referencedModel.getField())) {
 
                                         childDescriptor.getField()
                                                 .set(object,
@@ -320,13 +396,13 @@ public class DocumentToJavaMongoDB<T> {
 //                       
                         } else {
                             //Test.msg("                 [   Lazy == false carga los relacionados ]");
-                            Class cls = Class.forName(referencedBeans.getRepository());
+                            Class cls = Class.forName(referencedModel.getRepository());
 
                             Object obj = lookUpClassInBeanManager(cls);
                             Method method;
 
                             //             
-                            if (referencedBeans.getJavatype().toLowerCase().equals("integer")) {
+                            if (referencedModel.getJavatype().toLowerCase().equals("integer")) {
                                 //@Id de tipo Integer
                                 Class[] paramString = new Class[2];
                                 Class parent = cls.getSuperclass();
@@ -335,13 +411,13 @@ public class DocumentToJavaMongoDB<T> {
 
                                 Integer value = 0;
                                 for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
-                                    if (childDescriptor.getField().getName().equals(referencedBeans.getField())) {
+                                    if (childDescriptor.getField().getName().equals(referencedModel.getField())) {
                                         Object x = ((Document) dbObject).get(childDescriptor.getName());
                                         value = (Integer) childDescriptor.getSimpleValue(x);
                                     }
                                 }
 
-                                t1 = (T) method.invoke(obj, referencedBeans.getField(), value);
+                                t1 = (T) method.invoke(obj, referencedModel.getField(), value);
 
                             } else {
                                 Class[] paramString = new Class[2];
@@ -353,12 +429,12 @@ public class DocumentToJavaMongoDB<T> {
 
                                 String value = "";
                                 for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
-                                    if (childDescriptor.getField().getName().equals(referencedBeans.getField())) {
+                                    if (childDescriptor.getField().getName().equals(referencedModel.getField())) {
                                         Object x = ((Document) dbObject).get(childDescriptor.getName());
                                         value = (String) childDescriptor.getSimpleValue(x);
                                     }
                                 }
-                                String[] param = {referencedBeans.getField(), value};
+                                String[] param = {referencedModel.getField(), value};
                                 t1 = (T) method.invoke(obj, param);
                             }
 
@@ -366,24 +442,103 @@ public class DocumentToJavaMongoDB<T> {
 
                         }
                     } else {
-                        //Test.msg("                   [No es Referenced]");
-                        //Test.msg("      Intentare...Reflexionar..............................");
-                        
-                        //Test.msg("Convertir object a Class: " +fieldDescriptor.getClass().getName());
-                     /*
+                        /**
+                         * Verifico si es microservicio
+                         */
+                        if (isMicroservices(fieldDescriptor.getName())) {
+
+                            //Microservices
+                            //Test.msg("         [es Microservices] ");
+                            if (microservicesModel.getLazy()) {
+                                //Test.msg("[    {Lazy == true} No carga los relacionados ]");
+                                Object object = fieldDescriptor.newInstance();
+                                for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
+                                    try {
+                                        if (childDescriptor.getField().getName().equals(microservicesModel.getField())) {
+
+                                            childDescriptor.getField()
+                                                    .set(object,
+                                                            fromDocumentRecursive(((Document) dbObject).get(childDescriptor.getName()),
+                                                                    childDescriptor));
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("------------------------------------------------------------------------------------------------");
+                                        System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+                                        System.out.println("Error " + e.getLocalizedMessage());
+                                        System.out.println("------------------------------------------------------------------------------------------------");
+                                        throw new JmoordbException("Failed to set field value " + childDescriptor.getName(), e);
+                                    }
+                                }
+                                return object;
+//                       
+                            } else {
+                                //Test.msg("                 [   Lazy == false carga los relacionados ]");
+                                Class cls = Class.forName(microservicesModel.getRepository());
+
+                                Object obj = lookUpClassInBeanManager(cls);
+                                Method method;
+
+                                //             
+                                if (microservicesModel.getJavatype().toLowerCase().equals("integer")) {
+                                    //@Id de tipo Integer
+                                    Class[] paramString = new Class[2];
+                                    Class parent = cls.getSuperclass();
+                                    //  method = cls.getDeclaredMethod("findById", String.class, Integer.class);
+                                    method = parent.getDeclaredMethod("clientEndPoint", MicroservicesModel.class, String.class, Integer.class);
+
+                                    Integer value = 0;
+                                    for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
+                                        if (childDescriptor.getField().getName().equals(microservicesModel.getField())) {
+                                            Object x = ((Document) dbObject).get(childDescriptor.getName());
+                                            value = (Integer) childDescriptor.getSimpleValue(x);
+                                        }
+                                    }
+
+                                    t1 = (T) method.invoke(obj, microservicesModel,microservicesModel.getField(), value);
+
+                                } else {
+                                    Class[] paramString = new Class[3];
+                                    paramString[0] = MicroservicesModel.class;
+                                    paramString[1] = String.class;
+                                    paramString[2] = String.class;
+                                    Class parent = cls.getSuperclass();
+                                    //method = cls.getDeclaredMethod("findById", paramString);
+                                    method = parent.getDeclaredMethod("clientEndPoint", paramString);
+
+                                    String value = "";
+                                    for (FieldDescriptor childDescriptor : fieldDescriptor.getChildren()) {
+                                        if (childDescriptor.getField().getName().equals(microservicesModel.getField())) {
+                                            Object x = ((Document) dbObject).get(childDescriptor.getName());
+                                            value = (String) childDescriptor.getSimpleValue(x);
+                                        }
+                                    }
+                                    Object[] param = {microservicesModel,microservicesModel.getField(), value};
+                                    t1 = (T) method.invoke(obj, param);
+                                }
+
+                                return t1;
+
+                            }
+                        } else {
+
+                            //Test.msg("                   [No es @Referenced, Ni @Embedded Ni @Microservices]");
+                            //Test.msg("      Intentare...Reflexionar..............................");
+                            //Test.msg("Convertir object a Class: " +fieldDescriptor.getClass().getName());
+                            /*
                         Trato de hacer reflexion
-                        */
-                        final Field[] fields = fieldDescriptor.getClass().getDeclaredFields();
-                        
-                           //Test.msg("      Obtuve los campos..invocare al analizdor");
-                        Analizador analizador = new Analizador();
-                        analizador.analizar(fields);
-                        //Test.msg("Regreso del analizador... y hare la invovacion");
-                        fromDocument(fieldDescriptor.getClass(), documentMaster,analizador.getEmbeddedBeansList(), analizador.getReferencedBeansList());
-                        //Test.msg("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx");
-                        //Test.msg("    NO se si debe devolver esto....");
-                        new JmoordbException("@Embedded or @Reference is required for this field " + fieldDescriptor.getName());
-                        return new Document();
+                             */
+                            final Field[] fields = fieldDescriptor.getClass().getDeclaredFields();
+
+                            //Test.msg("      Obtuve los campos..invocare al analizdor");
+                            Analizador analizador = new Analizador();
+                            analizador.analizar(fields);
+                            //Test.msg("Regreso del analizador... y hare la invovacion");
+                            fromDocument(fieldDescriptor.getClass(), documentMaster, analizador.getEmbeddedBeansList(), analizador.getReferencedBeansList(), analizador.getMicroservicesModelList());
+                            //Test.msg("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx");
+                            //Test.msg("    NO se si debe devolver esto....");
+                            new JmoordbException("@Embedded or @Reference or @Microservices is required for this field " + fieldDescriptor.getName());
+                            return new Document();
+                        }
                     }
                 }
 
@@ -398,6 +553,7 @@ public class DocumentToJavaMongoDB<T> {
         return null;
     }
 
+    // </editor-fold>
 //    public Object getBeanByName(String name) // eg. name=availableCountryDao
 //    {
 //        Object o = null;
@@ -426,9 +582,10 @@ public class DocumentToJavaMongoDB<T> {
 //        return (BeanManager) servletContext
 //                .getAttribute("javax.enterprise.inject.spi.BeanManager");
 //    }
+    // <editor-fold defaultstate="collapsed" desc="Boolean isEmbedded(String name)">    
     private Boolean isEmbedded(String name) {
         try {
-            if (embeddedBeansList.stream().anyMatch((eb) -> (eb.getName().equals(name)))) {
+            if (embeddedModelList.stream().anyMatch((eb) -> (eb.getName().equals(name)))) {
                 return true;
             }
             return false;
@@ -441,7 +598,9 @@ public class DocumentToJavaMongoDB<T> {
         }
         return false;
     }
+// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Boolean isReferenced(String name)">    
     /**
      *
      * @param name
@@ -450,9 +609,9 @@ public class DocumentToJavaMongoDB<T> {
     private Boolean isReferenced(String name) {
         try {
 
-            for (ReferencedBeans eb : referencedBeansList) {
+            for (ReferencedModel eb : referencedModelList) {
                 if (eb.getName().equals(name)) {
-                    referencedBeans = eb;
+                    referencedModel = eb;
                     ////Test.msg("Referenced() " + eb.toString());
                     return true;
                 }
@@ -467,11 +626,42 @@ public class DocumentToJavaMongoDB<T> {
         }
         return false;
     }
+// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Boolean isMicroservices(String name) ">    
 
+    /**
+     *
+     * @param name
+     * @return
+     */
+    private Boolean isMicroservices(String name) {
+        try {
+
+            for (MicroservicesModel eb : microservicesModelList) {
+                if (eb.getName().equals(name)) {
+                    microservicesModel = eb;
+                    ////Test.msg("Microservices() " + eb.toString());
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println("------------------------------------------------------------------------------------------------");
+            System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
+            System.out.println("Error " + e.getLocalizedMessage());
+            System.out.println("------------------------------------------------------------------------------------------------");
+            new JmoordbException("isMicroservices()) " + e.getLocalizedMessage());
+        }
+        return false;
+    }
+// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="static <T> T lookUpClassInBeanManager(Class<T> clazz)">    
     private static <T> T lookUpClassInBeanManager(Class<T> clazz) {
         BeanManager bm = CDI.current().getBeanManager();
         Bean<T> bean = (Bean<T>) bm.getBeans(clazz).iterator().next();
         CreationalContext<T> ctx = bm.createCreationalContext(bean);
         return (T) bm.getReference(bean, clazz, ctx);
     }
+    // </editor-fold>
 }

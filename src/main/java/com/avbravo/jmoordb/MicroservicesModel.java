@@ -13,7 +13,7 @@ package com.avbravo.jmoordb;
  * @author avbravo
  */
 
-public class ReferencedBeans {
+public class MicroservicesModel {
     private String name;
     private String type;
     private String document;
@@ -21,8 +21,11 @@ public class ReferencedBeans {
     private String javatype;
     private String repository;
     private Boolean lazy;
+    private String url;
+    private String user;
+    private String password;
 
-    public ReferencedBeans() {
+    public MicroservicesModel() {
     }
 
     @Override
@@ -84,6 +87,30 @@ public class ReferencedBeans {
 
     public void setLazy(Boolean lazy) {
         this.lazy = lazy;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
    

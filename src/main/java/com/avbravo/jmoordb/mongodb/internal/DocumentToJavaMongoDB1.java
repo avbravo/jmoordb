@@ -5,9 +5,9 @@
  */
 package com.avbravo.jmoordb.mongodb.internal;
 
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.JmoordbException;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.ReferencedModel;
 import com.avbravo.jmoordb.util.Analizador;
 import com.avbravo.jmoordb.util.ClassDescriptor;
 import com.avbravo.jmoordb.util.ClassDescriptorsCache;
@@ -47,13 +47,13 @@ public class DocumentToJavaMongoDB1<T> {
     Document documentMaster = new Document();
 
     private ClassDescriptorsCache cache = new ClassDescriptorsCache();
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
-    ReferencedBeans referencedBeans = new ReferencedBeans();
+    List<EmbeddedModel> embeddedBeansList = new ArrayList<>();
+    List<ReferencedModel> referencedBeansList = new ArrayList<>();
+    ReferencedModel referencedBeans = new ReferencedModel();
     T t1;
 
     @SuppressWarnings("unchecked")
-    public <T> T fromDocument(Class<T> clazz, Document document, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
+    public <T> T fromDocument(Class<T> clazz, Document document, List<EmbeddedModel> embeddedBeansList, List<ReferencedModel> referencedBeansList) {
 
         if (document == null) {
             return null;
@@ -443,7 +443,7 @@ public class DocumentToJavaMongoDB1<T> {
     private Boolean isReferenced(String name) {
         try {
 
-            for (ReferencedBeans eb : referencedBeansList) {
+            for (ReferencedModel eb : referencedBeansList) {
                 if (eb.getName().equals(name)) {
                     referencedBeans = eb;
                     ////Test.msg("Referenced() " + eb.toString());

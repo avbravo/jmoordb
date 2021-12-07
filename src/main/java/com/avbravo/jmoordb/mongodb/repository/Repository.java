@@ -8,12 +8,13 @@ package com.avbravo.jmoordb.mongodb.repository;
 
 import com.avbravo.jmoordb.CompositeKey;
 import com.avbravo.jmoordb.DatePatternBeans;
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.FieldBeans;
 import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.JmoordbStatistics;
+import com.avbravo.jmoordb.MicroservicesModel;
 import com.avbravo.jmoordb.PrimaryKey;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.ReferencedModel;
 import com.avbravo.jmoordb.SecondaryKey;
 import com.avbravo.jmoordb.TertiaryKey;
 import com.avbravo.jmoordb.metafactory.JmoordbLambdaMetaFactory;
@@ -28,7 +29,6 @@ import com.avbravo.jmoordb.query.Sorter;
 import com.avbravo.jmoordb.util.Analizador;
 import com.avbravo.jmoordb.util.JmoordbDateUtil;
 import com.avbravo.jmoordb.util.JmoordbUtil;
-import com.avbravo.jmoordb.util.Test;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
 import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
 import com.mongodb.Block;
@@ -86,9 +86,22 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.servlet.ServletContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.xml.registry.infomodel.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.glassfish.jersey.client.JerseyClient;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 // </editor-fold>
 
 /**
@@ -128,8 +141,9 @@ public abstract class Repository<T> implements InterfaceRepository {
     List<TertiaryKey> tertiaryKeyList = new ArrayList<>();
     List<CompositeKey> compositeKeyList = new ArrayList<>();
 
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
+    List<EmbeddedModel> embeddedModelList = new ArrayList<>();
+    List<ReferencedModel> referencedModelList = new ArrayList<>();
+    List<MicroservicesModel> microservicesModelList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
     List<FieldBeans> fieldBeansList = new ArrayList<>();
     Exception exception;
@@ -138,6 +152,17 @@ public abstract class Repository<T> implements InterfaceRepository {
 //MongoDatabase db_;
 // <editor-fold defaultstate="collapsed" desc="get/set">
 
+    public List<MicroservicesModel> getMicroservicesModelList() {
+        return microservicesModelList;
+    }
+
+    public void setMicroservicesModelList(List<MicroservicesModel> microservicesModelList) {
+        this.microservicesModelList = microservicesModelList;
+    }
+
+   
+    
+    
     public Document getQuerySorter() {
         return querySorter;
     }
@@ -245,8 +270,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         secondaryKeyList = new ArrayList<>();
         tertiaryKeyList = new ArrayList<>();
         compositeKeyList = new ArrayList<>();
-        embeddedBeansList = new ArrayList<>();
-        referencedBeansList = new ArrayList<>();
+        embeddedModelList = new ArrayList<>();
+        referencedModelList = new ArrayList<>();
+       microservicesModelList= new ArrayList<>(); 
         datePatternBeansList = new ArrayList<>();
         fieldBeansList = new ArrayList<>();
 
@@ -260,8 +286,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         secondaryKeyList = analizador.getSecondaryKeyList();
         tertiaryKeyList = analizador.getTertiaryKeyList();
         compositeKeyList = analizador.getCompositeKeyList();
-        embeddedBeansList = analizador.getEmbeddedBeansList();
-        referencedBeansList = analizador.getReferencedBeansList();
+        embeddedModelList = analizador.getEmbeddedBeansList();
+        referencedModelList = analizador.getReferencedBeansList();
+        microservicesModelList = analizador.getMicroservicesModelList();
         datePatternBeansList = analizador.getDatePatternBeansList();
         fieldBeansList = analizador.getFieldBeansList();
 
@@ -321,8 +348,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         secondaryKeyList = new ArrayList<>();
         tertiaryKeyList = new ArrayList<>();
         compositeKeyList = new ArrayList<>();
-        embeddedBeansList = new ArrayList<>();
-        referencedBeansList = new ArrayList<>();
+        embeddedModelList = new ArrayList<>();
+        referencedModelList = new ArrayList<>();
+        microservicesModelList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
         fieldBeansList = new ArrayList<>();
 
@@ -336,8 +364,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         secondaryKeyList = analizador.getSecondaryKeyList();
         tertiaryKeyList = analizador.getTertiaryKeyList();
         compositeKeyList = analizador.getCompositeKeyList();
-        embeddedBeansList = analizador.getEmbeddedBeansList();
-        referencedBeansList = analizador.getReferencedBeansList();
+        embeddedModelList = analizador.getEmbeddedBeansList();
+        referencedModelList = analizador.getReferencedBeansList();
+        microservicesModelList = analizador.getMicroservicesModelList();
         datePatternBeansList = analizador.getDatePatternBeansList();
         fieldBeansList = analizador.getFieldBeansList();
 
@@ -397,8 +426,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         secondaryKeyList = new ArrayList<>();
         tertiaryKeyList = new ArrayList<>();
         compositeKeyList = new ArrayList<>();
-        embeddedBeansList = new ArrayList<>();
-        referencedBeansList = new ArrayList<>();
+        embeddedModelList = new ArrayList<>();
+        referencedModelList = new ArrayList<>();
+        microservicesModelList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
         fieldBeansList = new ArrayList<>();
 
@@ -412,8 +442,9 @@ public abstract class Repository<T> implements InterfaceRepository {
         secondaryKeyList = analizador.getSecondaryKeyList();
         tertiaryKeyList = analizador.getTertiaryKeyList();
         compositeKeyList = analizador.getCompositeKeyList();
-        embeddedBeansList = analizador.getEmbeddedBeansList();
-        referencedBeansList = analizador.getReferencedBeansList();
+        embeddedModelList = analizador.getEmbeddedBeansList();
+        referencedModelList = analizador.getReferencedBeansList();
+       microservicesModelList = analizador.getMicroservicesModelList();
         datePatternBeansList = analizador.getDatePatternBeansList();
         fieldBeansList = analizador.getFieldBeansList();
 
@@ -488,7 +519,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             if (verificate) {
                 //Buscar llave primaria
 
-                t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+                t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedModelList, referencedModelList, microservicesModelList);
                 T t_ = (T) findInternal(findDocPrimaryKey(t1));
 
                 if (t_ == null) {
@@ -516,7 +547,7 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return devuelve el Pojo convertido a documento.
      */
     public Document toDocument(Object t) {
-        return javaToDocument.toDocument(t, embeddedBeansList, referencedBeansList);
+        return javaToDocument.toDocument(t, embeddedModelList, referencedModelList);
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Document findDocPrimaryKey(T t2)">
@@ -881,7 +912,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Optional<T> findById(Document doc) {
 
         try {
-            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedModelList, referencedModelList);
             T t_ = (T) find(doc);
 
             if (t_ == null) {
@@ -906,7 +937,7 @@ public abstract class Repository<T> implements InterfaceRepository {
     public Boolean isFound(Document doc) {
 
         try {
-            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedModelList, referencedModelList);
             T t_ = (T) find(doc);
 
             if (t_ == null) {
@@ -972,7 +1003,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 sortQuery = mongoDBQueryHolder.getSort();
             }
 
-            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedModelList, referencedModelList);
             T t_ = (T) find(doc);
 
             if (t_ == null) {
@@ -1003,7 +1034,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 public void apply(final Document document) {
                     try {
                         haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
                     } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
@@ -1071,6 +1102,10 @@ public abstract class Repository<T> implements InterfaceRepository {
 //        return null;
     }
 // </editor-fold>
+    
+    
+    
+    
 
     // <editor-fold defaultstate="collapsed" desc="T search(String key, Object value)">
     public T search(String key, Object value) {
@@ -1090,7 +1125,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 public void apply(final Document document) {
                     try {
                         haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
                    } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
@@ -1128,7 +1163,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 public void apply(final Document document) {
                     try {
                         haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
                     } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
@@ -1166,7 +1201,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 public void apply(final Document document) {
                     try {
                         haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
                     } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
@@ -1284,7 +1319,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 public void apply(final Document document) {
                     try {
                         haveElements = true;
-                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
                     } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
@@ -1318,7 +1353,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                     try {
                         //Test.msg("..........................................................................");
                         //Test.msg("Prueba: iterable: "+document.toJson());
-                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
                         l.add(t1);
                     } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
@@ -1341,7 +1376,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 @Override
                 public void apply(final Document document) {
                     try {
-                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedBeansList, referencedBeansList);
+                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
                         l.add(t1);
                     } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
@@ -1693,7 +1728,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             try {
 
-                t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
+                t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedModelList, referencedModelList, microservicesModelList);
 
            } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
@@ -1737,7 +1772,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Document iterable = db.getCollection(collection).findOneAndUpdate(doc, inc, findOneAndUpdateOptions);
 
             try {
-                t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
+                t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedModelList, referencedModelList, microservicesModelList);
 //                Method method = entityClass.getDeclaredMethod("toPojo", Document.class);
 //                list.add((T) method.invoke(t, iterable));
              } catch (Exception e) {          
@@ -1773,7 +1808,7 @@ public abstract class Repository<T> implements InterfaceRepository {
             Document iterable = db.getCollection(collection).findOneAndUpdate(doc, inc, findOneAndUpdateOptions);
 
             try {
-                t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedBeansList, referencedBeansList);
+                t1 = (T) documentToJava.fromDocument(entityClass, iterable, embeddedModelList, referencedModelList, microservicesModelList);
 
            } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
@@ -5957,7 +5992,7 @@ if(contador == 0){
     public Optional<T> findByCompositeKey(Document doc) {
 
         try {
-            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedBeansList, referencedBeansList);
+            //  t1 = (T) documentToJava.fromDocument(entityClass, doc, embeddedModelList, referencedModelList);
             T t_ = (T) find(doc);
 
             if (t_ == null) {
@@ -7097,6 +7132,194 @@ fieldtype = fieldtype.toLowerCase();
         // </editor-fold>
         
         
+  // <editor-fold defaultstate="collapsed" desc="T search(String key, Integer value)">
+
+    public T clientEndPoint(MicroservicesModel microservicesModel, String key, Integer value) {
+        try {
+ HttpAuthenticationFeature httpAuthenticationFeature = null;
+            System.out.println("Test --> microservicesModel.getUser() "+microservicesModel.getUser());
+            System.out.println("Test --> microservicesModel.getPassword() "+microservicesModel.getPassword());
+            System.out.println("Test -->microservicesModel.getUrl() "+microservicesModel.getUrl());
+            System.out.println("Test -->microservicesModel.getField() "+microservicesModel.getField());
+            System.out.println("Test -->value "+value);
+            Client client = ClientBuilder.newClient();
+            client.register(httpAuthenticationFeature(microservicesModel.getUser(),microservicesModel.getPassword()));
+          tlocal = (T) client
+                    .target(microservicesModel.getUrl())
+                    .path("/{" +microservicesModel.getField() +"}")
+                    .resolveTemplate(microservicesModel.getField(), value)
+                    .request(MediaType.APPLICATION_JSON)
+                    .get(tlocal.getClass());
+          
+          return tlocal;
+           
+         } catch (Exception e) {    
+             System.out.println("clientEndPoint() "+e.getLocalizedMessage());
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
+
+        return null;
+
+    }// </editor-fold>
+    
+  // <editor-fold defaultstate="collapsed" desc="T search(String key, String value)">
+
+    public T clientEndPoint(MicroservicesModel microservicesModel, String key, String value) {
+        try {
+            
+             HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basicBuilder()
+          .credentials(JmoordbUtil.desencriptar(microservicesModel.getUser()), JmoordbUtil.desencriptar(microservicesModel.getPassword()))
+          .build();
+// HttpAuthenticationFeature httpAuthenticationFeature =  
+//          HttpAuthenticationFeature.basic(
+//                 JmoordbUtil.desencriptar(microservicesModel.getUser()),
+//                 JmoordbUtil.desencriptar(microservicesModel.getPassword()));
+            System.out.println("Test --> microservicesModel.getUser() "+JmoordbUtil.desencriptar(microservicesModel.getUser()));
+            System.out.println("Test --> microservicesModel.getPassword() "+JmoordbUtil.desencriptar(microservicesModel.getPassword()));
+            System.out.println("Test -->microservicesModel.getUrl() "+microservicesModel.getUrl());
+            System.out.println("Test -->microservicesModel.getField() "+microservicesModel.getField());
+            System.out.println("Test -->value "+value);
+//            System.out.println("Text-->tlocal.getClass() "+tlocal.getClass());
+
+            System.out.println("Test--> fijo");
+ Client client = ClientBuilder.newClient();
+ client.register(httpAuthenticationFeature);
+//  WebTarget webTarget = client.target("http://localhost:9001/autentificacion/resources/user/search").path("username")
+//    .path("/aristides.villarreal");
+//  Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+//  Response response = invocationBuilder.put(Entity.entity(user, MediaType.APPLICATION_JSON));
+
   
-      
+    String entity = client.target("http://localhost:9001/autentificacion/resources/user").path("search").path("username/aristides.villarreal")
+    .request(MediaType.APPLICATION_JSON).get(String.class);
+
+  System.out.println("Test--> entity" +entity);
+//  String userJson = response.readEntity(String.class);
+//
+//  System.out.println(response.getStatus());
+//  System.out.println(userJson);
+
+// JerseyClient jerseyClient = JerseyClientBuilder.createClient();
+//  jerseyClient.register(httpAuthenticationFeature);
+  
+//  String entity = client.target("http://localhost:8080/jersey-crud-example/api").path("users").path("user/100")
+//  WebTarget target = jerseyClient.target(microservicesModel.getUrl());
+//    WebTarget target = jerseyClient.target(microservicesModel.getUrl()).path(microservicesModel.getField().trim()).path(value);
+//            System.out.println("Test--> target "+target.getUri().getPath());
+//    Response response = target.request(MediaType.APPLICATION_JSON).get();
+//            System.out.println("Test-->response.toString() "+ response.toString());
+//    // Status HTTP de retorno
+//    int status = response.getStatus();
+//            System.out.println("Test---> status"+status);
+//    // Lï¿½ um Carro (converte diretamente da string do JSON)
+//    T c = (T)response.readEntity(tlocal.getClass());
+    
+//  Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON_TYPE);
+//  String response = invocationBuilder.put(Entity.entity(requestBody, MediaType.APPLICATION_JSON_TYPE)).readEntity(String.class);
+
+
+
+//  return response;
+  
+// 
+//            Client client = ClientBuilder.newClient();
+//            client.register(httpAuthenticationFeature);
+//            System.out.println("Test--> name ");
+//            String path ="/{" +microservicesModel.getField().trim() +"}";
+//            System.out.println("Test-->path "+path);
+//           String field =microservicesModel.getField().trim();
+//            System.out.println("Test-->field "+field);
+//       String  json =client
+//                    .target(microservicesModel.getUrl())
+//                    .path(path)
+//                    .resolveTemplate(microservicesModel.getField().trim(), value)
+//                    .request(MediaType.APPLICATION_JSON)
+//                    .get(String.class);
+       
+//       
+//        tlocal = (T)client
+//                    .target(microservicesModel.getUrl())
+//                    .path(path)
+//                    .resolveTemplate(field, value)
+//                    .request(MediaType.APPLICATION_JSON)
+//                    .get(tlocal.getClass());
+//            System.out.println("==================================================");
+////            System.out.println("Test--> json "+json);
+//            System.out.println("==================================================");
+//            Jsonb jsonb = JsonbBuilder.create();
+//     tlocal  = jsonb.fromJson(jsonb,(T)tlocal);
+//             tlocal = (T)client
+//                    .target(microservicesModel.getUrl())
+//                    .path("/{" +microservicesModel.getField().trim() +"}")
+//                    .resolveTemplate(microservicesModel.getField().trim(), value)
+//                    .request(MediaType.APPLICATION_JSON)
+//                    .get(tlocal.getClass());
+             
+
+             
+//          tlocal =(T)client
+//                    .target(microservicesModel.getUrl())
+//                    .path("/{" +microservicesModel.getField().trim() +"}")
+//                    .resolveTemplate(microservicesModel.getField().trim(), value)
+//                    .request(MediaType.APPLICATION_JSON)
+//                    .get(new GenericEntity<tlocal>());
+//          tlocal =client
+//                    .target(microservicesModel.getUrl())
+//                    .path("/{" +microservicesModel.getField().trim() +"}")
+//                    .resolveTemplate(microservicesModel.getField().trim(), value)
+//                    .request(MediaType.APPLICATION_JSON)
+//                    .get( new GenericType<T>() {});
+          
+//          (Class<T>) 
+         ;
+//          tlocal = (T) client
+//                    .target(microservicesModel.getUrl())
+//                    .path("/{" +microservicesModel.getField().trim() +"}")
+//                    .resolveTemplate(microservicesModel.getField().trim(), value)
+//                    .request(MediaType.APPLICATION_JSON)
+//                    .get(tlocal.getClass());
+          
+          
+          
+          
+          return tlocal;
+          
+           
+         } catch (Exception e) {    
+             System.out.println("clientEndPoint() "+e.getLocalizedMessage());
+          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        }
+
+        return null;
+
+    }// </editor-fold>
+    
+  
+    
+ 
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="HttpAuthenticationFeature httpAuthenticationFeature()">
+    /**
+     * Devuelve la autentificacion para ser usada con el Client
+     *
+     * @return
+     */
+    public HttpAuthenticationFeature httpAuthenticationFeature(String user, String password) {
+        HttpAuthenticationFeature httpAuthenticationFeature = null;
+        try {
+          String   userAutentification = JmoordbUtil.desencriptar(user);
+            String passwordAutentification = JmoordbUtil.desencriptar(password);
+            httpAuthenticationFeature = HttpAuthenticationFeature.basic(userAutentification,  passwordAutentification);
+
+        } catch (Exception e) {
+            
+            System.out.println(" httpAuthenticationFeature() "+e.getLocalizedMessage());
+ 
+        }
+
+        return httpAuthenticationFeature;
+    }
+
+    // </editor-fold>
 }

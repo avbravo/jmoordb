@@ -14,14 +14,14 @@ package com.avbravo.jmoordb;
  */
  
  
-public class EmbeddedBeans {
+public class EmbeddedModel {
     private String name;
     private String type;
 
-    public EmbeddedBeans() {
+    public EmbeddedModel() {
     }
 
-    public EmbeddedBeans(String name, String type) {
+    public EmbeddedModel(String name, String type) {
         this.name = name;
         this.type = type;
     }

@@ -7,16 +7,18 @@ package com.avbravo.jmoordb.util;
 
 import com.avbravo.jmoordb.CompositeKey;
 import com.avbravo.jmoordb.DatePatternBeans;
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.FieldBeans;
+import com.avbravo.jmoordb.MicroservicesModel;
 import com.avbravo.jmoordb.PrimaryKey;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.ReferencedModel;
 import com.avbravo.jmoordb.SecondaryKey;
 import com.avbravo.jmoordb.TertiaryKey;
 import com.avbravo.jmoordb.anotations.Composite;
 import com.avbravo.jmoordb.anotations.DatePattern;
 import com.avbravo.jmoordb.anotations.Embedded;
 import com.avbravo.jmoordb.anotations.Id;
+import com.avbravo.jmoordb.anotations.Microservices;
 import com.avbravo.jmoordb.anotations.Referenced;
 import com.avbravo.jmoordb.anotations.Secondary;
 import com.avbravo.jmoordb.anotations.Tertiary;
@@ -30,18 +32,30 @@ import java.util.List;
  * @author avbravo
  */
 public class Analizador {
+// <editor-fold defaultstate="collapsed" desc="fields ">    
 
     List<PrimaryKey> primaryKeyList = new ArrayList<>();
     List<SecondaryKey> secondaryKeyList = new ArrayList<>();
     List<TertiaryKey> tertiaryKeyList = new ArrayList<>();
     List<CompositeKey> compositeKeyList = new ArrayList<>();
     
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
+    List<EmbeddedModel> embeddedModelList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
     List<FieldBeans> fieldBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
+    List<ReferencedModel> referencedModelList = new ArrayList<>();
+     List<MicroservicesModel> microservicesModelList = new ArrayList<>();
 
     Exception exception;
+// </editor-fold>
+   
+
+    // <editor-fold defaultstate="collapsed" desc="set/get ">
+     public List<MicroservicesModel> getMicroservicesModelList() {
+        return microservicesModelList;
+    }
+    public void setMicroservicesModelList(List<MicroservicesModel> microservicesModelList) {
+        this.microservicesModelList = microservicesModelList;
+    }
 
     public List<TertiaryKey> getTertiaryKeyList() {
         return tertiaryKeyList;
@@ -78,12 +92,12 @@ public class Analizador {
         this.secondaryKeyList = secondaryKeyList;
     }
 
-    public List<EmbeddedBeans> getEmbeddedBeansList() {
-        return embeddedBeansList;
+    public List<EmbeddedModel> getEmbeddedBeansList() {
+        return embeddedModelList;
     }
 
-    public void setEmbeddedBeansList(List<EmbeddedBeans> embeddedBeansList) {
-        this.embeddedBeansList = embeddedBeansList;
+    public void setEmbeddedBeansList(List<EmbeddedModel> embeddedModelList) {
+        this.embeddedModelList = embeddedModelList;
     }
 
     public List<DatePatternBeans> getDatePatternBeansList() {
@@ -110,25 +124,30 @@ public class Analizador {
         this.exception = exception;
     }
 
-    public List<ReferencedBeans> getReferencedBeansList() {
-        return referencedBeansList;
+    public List<ReferencedModel> getReferencedBeansList() {
+        return referencedModelList;
     }
 
-    public void setReferencedBeansList(List<ReferencedBeans> referencedBeansList) {
-        this.referencedBeansList = referencedBeansList;
+    public void setReferencedBeansList(List<ReferencedModel> referencedModelList) {
+        this.referencedModelList = referencedModelList;
     }
+// </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="Analizador() ">    
 
     public Analizador() {
         primaryKeyList = new ArrayList<>();
         secondaryKeyList = new ArrayList<>();
         tertiaryKeyList = new ArrayList<>();
         compositeKeyList = new ArrayList<>();
-        embeddedBeansList = new ArrayList<>();
-        referencedBeansList = new ArrayList<>();
+        embeddedModelList = new ArrayList<>();
+        referencedModelList = new ArrayList<>();
+        microservicesModelList = new ArrayList<>();
         datePatternBeansList = new ArrayList<>();
         fieldBeansList = new ArrayList<>();
     }
-
+// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="analizar(Field[] fields)">
 /**
  * Analiza el entity pasado
@@ -145,10 +164,12 @@ public class Analizador {
                 Annotation anotacionComposite = field.getAnnotation(Composite.class);
                 Annotation anotacionEmbedded = field.getAnnotation(Embedded.class);
                 Annotation anotacionReferenced = field.getAnnotation(Referenced.class);
+                Annotation anotacionMicroservices = field.getAnnotation(Microservices.class);
                 Annotation anotacionDateFormat = field.getAnnotation(DatePattern.class);
 
                 Embedded embedded = field.getAnnotation(Embedded.class);
                 Referenced referenced = field.getAnnotation(Referenced.class);
+                Microservices microservices = field.getAnnotation(Microservices.class);
                 DatePattern datePattern = field.getAnnotation(DatePattern.class);
 
                 field.setAccessible(true);
@@ -200,6 +221,12 @@ public class Analizador {
 
                     verifyReferenced(field, anotacionReferenced, referenced);
                     fieldBeans.setIsReferenced(true);
+
+                }
+                if (anotacionMicroservices != null) {
+
+                    verifyMicroservices(field, anotacionMicroservices, microservices);
+                    fieldBeans.setIsMicroservices(true);
 
                 }
                 if (anotacionDateFormat != null) {
@@ -373,16 +400,19 @@ public class Analizador {
     private Boolean verifyEmbedded(Field variable, Annotation anotacion) {
         try {
             // final Embedded anotacionPK = (Embedded) anotacionEmbedded;
-            EmbeddedBeans embeddedBeans = new EmbeddedBeans();
-            embeddedBeans.setName(variable.getName());
-            embeddedBeans.setType(variable.getType().getName());
-            embeddedBeansList.add(embeddedBeans);
+            EmbeddedModel embeddedModel = new EmbeddedModel();
+            embeddedModel.setName(variable.getName());
+            embeddedModel.setType(variable.getType().getName());
+            embeddedModelList.add(embeddedModel);
             return true;
         } catch (Exception e) {
             ////Test.msg("verifyEmbedded() " + e.getLocalizedMessage());
         }
         return false;
     }
+
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean verifyReferenced(Field variable, Annotation anotacion, Referenced referenced) ">    
 
     /**
      * guarda la informacion de la anotacion
@@ -395,22 +425,64 @@ public class Analizador {
     private Boolean verifyReferenced(Field variable, Annotation anotacion, Referenced referenced) {
         try {
 
-            ReferencedBeans referencedBeans = new ReferencedBeans();
-            referencedBeans.setName(variable.getName());
-            referencedBeans.setType(variable.getType().getName());
-            referencedBeans.setDocument(referenced.collection());
-            referencedBeans.setField(referenced.field());
-            referencedBeans.setJavatype(referenced.javatype());
-            referencedBeans.setRepository(referenced.repository());
-            referencedBeans.setLazy(referenced.lazy());
+            ReferencedModel referencedModel = new ReferencedModel();
+            referencedModel.setName(variable.getName());
+            referencedModel.setType(variable.getType().getName());
+            referencedModel.setDocument(referenced.collection());
+            referencedModel.setField(referenced.field());
+            referencedModel.setJavatype(referenced.javatype());
+            referencedModel.setRepository(referenced.repository());
+            referencedModel.setLazy(referenced.lazy());
 
-            referencedBeansList.add(referencedBeans);
+            referencedModelList.add(referencedModel);
             return true;
         } catch (Exception e) {
             ////Test.msg("verifyReferenced() " + e.getLocalizedMessage());
         }
         return false;
     }
+    
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Boolean verifyMicroservices(Field variable, Annotation anotacion, Microservices microservices) ">    
+
+    /**
+     * guarda la informacion de la anotacion
+     *
+     * @param variable
+     * @param anotacion
+     * @param referenced
+     * @return
+     */
+    private Boolean verifyMicroservices(Field variable, Annotation anotacion, Microservices microservices) {
+        try {
+
+            MicroservicesModel microservicesModel = new MicroservicesModel();
+            microservicesModel.setName(variable.getName());
+            microservicesModel.setType(variable.getType().getName());
+            microservicesModel.setDocument(microservices.collection());
+            microservicesModel.setField(microservices.field());
+            microservicesModel.setJavatype(microservices.javatype());
+            microservicesModel.setRepository(microservices.repository());
+            microservicesModel.setUrl(microservices.url());
+            microservicesModel.setUser(microservices.user());
+            microservicesModel.setPassword(microservices.password());
+            microservicesModel.setLazy(microservices.lazy());
+
+            microservicesModelList.add(microservicesModel);
+            return true;
+        } catch (Exception e) {
+            ////Test.msg("verifyReferenced() " + e.getLocalizedMessage());
+            System.out.println("Analizador.verifyMicroservices() "+e.getLocalizedMessage());
+        }
+        return false;
+    }
+    
+    // </editor-fold>
+    
+    
+
+    
+    // <editor-fold defaultstate="collapsed" desc="Boolean verifyDatePattern(Field variable, Annotation anotacion, DatePattern datePattern)">    
 
     /**
      *
@@ -435,5 +507,5 @@ public class Analizador {
         }
         return false;
     }
-
+// </editor-fold>
 }

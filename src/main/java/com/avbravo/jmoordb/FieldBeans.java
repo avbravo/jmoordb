@@ -20,6 +20,7 @@ public class FieldBeans {
     private Boolean isKey;
     private Boolean isEmbedded;
     private Boolean isReferenced;
+    private Boolean isMicroservices;
     private Boolean isSecondary;
     private Boolean isTertiary;
     private Boolean isComposite;
@@ -29,15 +30,24 @@ public class FieldBeans {
 
    
 
-    public FieldBeans(String name, String type, Boolean isKey, Boolean isEmbedded, Boolean isReferenced, Boolean isSecondary, Boolean isTertiary, Boolean isComposite) {
+    public FieldBeans(String name, String type, Boolean isKey, Boolean isEmbedded, Boolean isReferenced,Boolean isMicroservices, Boolean isSecondary, Boolean isTertiary, Boolean isComposite) {
         this.name = name;
         this.type = type;
         this.isKey = isKey;
         this.isEmbedded = isEmbedded;
         this.isReferenced = isReferenced;
+        this.isMicroservices = isMicroservices;
         this.isSecondary = isSecondary;
         this.isTertiary = isTertiary;
         this.isComposite = isComposite;
+    }
+
+    public Boolean getIsMicroservices() {
+        return isMicroservices;
+    }
+
+    public void setIsMicroservices(Boolean isMicroservices) {
+        this.isMicroservices = isMicroservices;
     }
 
     
