@@ -5,9 +5,9 @@
  */
 package com.avbravo.jmoordb.mongodb.internal;
 
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.JmoordbException;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.ReferencedModel;
 import com.avbravo.jmoordb.util.ClassDescriptor;
 import com.avbravo.jmoordb.util.ClassDescriptorsCache;
 import com.avbravo.jmoordb.util.FieldDescriptor;
@@ -44,13 +44,13 @@ public class DocumentToJavaJmoordbResult<T> {
     private static final Logger LOG = Logger.getLogger(DocumentToJavaJmoordbResult.class.getName());
 
     private ClassDescriptorsCache cache = new ClassDescriptorsCache();
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
-    ReferencedBeans referencedBeans = new ReferencedBeans();
+    List<EmbeddedModel> embeddedBeansList = new ArrayList<>();
+    List<ReferencedModel> referencedBeansList = new ArrayList<>();
+    ReferencedModel referencedBeans = new ReferencedModel();
     T t1;
 
     @SuppressWarnings("unchecked")
-    public <T> T fromDocument(Class<T> clazz, Document dbObject, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
+    public <T> T fromDocument(Class<T> clazz, Document dbObject, List<EmbeddedModel> embeddedBeansList, List<ReferencedModel> referencedBeansList) {
 
         if (dbObject == null) {
             return null;
@@ -414,7 +414,7 @@ public class DocumentToJavaJmoordbResult<T> {
     private Boolean isReferenced(String name) {
         try {
 
-            for (ReferencedBeans eb : referencedBeansList) {
+            for (ReferencedModel eb : referencedBeansList) {
                 if (eb.getName().equals(name)) {
                     referencedBeans = eb;
                     ////Test.msg("Referenced() " + eb.toString());

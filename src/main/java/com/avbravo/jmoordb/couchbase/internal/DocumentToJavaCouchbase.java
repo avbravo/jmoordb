@@ -5,9 +5,9 @@
  */
 package com.avbravo.jmoordb.couchbase.internal;
 
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.JmoordbException;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.ReferencedModel;
 import com.avbravo.jmoordb.util.ClassDescriptor;
 import com.avbravo.jmoordb.util.ClassDescriptorsCache;
 import com.avbravo.jmoordb.util.FieldDescriptor;
@@ -34,13 +34,13 @@ import org.bson.Document;
 public class DocumentToJavaCouchbase<T> {
 
     private ClassDescriptorsCache cache = new ClassDescriptorsCache();
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
-    ReferencedBeans referencedBeans = new ReferencedBeans();
+    List<EmbeddedModel> embeddedBeansList = new ArrayList<>();
+    List<ReferencedModel> referencedBeansList = new ArrayList<>();
+    ReferencedModel referencedBeans = new ReferencedModel();
     T t1;
 
     @SuppressWarnings("unchecked")
-    public <T> T fromDocument(Class<T> clazz, Document dbObject, List<EmbeddedBeans> embeddedBeansList, List<ReferencedBeans> referencedBeansList) {
+    public <T> T fromDocument(Class<T> clazz, Document dbObject, List<EmbeddedModel> embeddedBeansList, List<ReferencedModel> referencedBeansList) {
        
          ////Test.msg("public <T> T fromDocument()");
        
@@ -370,7 +370,7 @@ public class DocumentToJavaCouchbase<T> {
     private Boolean isReferenced(String name) {
         try {
 
-            for (ReferencedBeans eb : referencedBeansList) {
+            for (ReferencedModel eb : referencedBeansList) {
                 if (eb.getName().equals(name)) {
                     referencedBeans = eb;
                     //   System.out.println("Referenced() "+eb.toString());

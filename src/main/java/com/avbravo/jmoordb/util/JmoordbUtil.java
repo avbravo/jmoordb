@@ -55,6 +55,8 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import org.apache.commons.beanutils.BeanUtils;
 import org.bson.BsonDocument;
 import org.bson.Document;
@@ -2760,4 +2762,42 @@ public class JmoordbUtil {
         return isLinux() ? (addUserHome ? userHome() + pahtLinux : pahtLinux) : pathWindows;
     }
     // </editor-fold>
+    
+      // <editor-fold defaultstate="collapsed" desc="String jsonToString(Object obj)>
+    public static String jsonToString(Object obj) {
+        String content = "";
+        try {
+            Jsonb jsonb = JsonbBuilder.create();
+            content = jsonb.toJson(obj);
+        } catch (Exception e) {
+            System.out.println("jsonToString() " + e.getLocalizedMessage());
+        }
+
+        return content;
+    }
+    // </editor-fold>
+    
+     // <editor-fold defaultstate="collapsed" desc="Boolean equals(Object object1, Object object2)">
+    
+    /**
+     * Compara dos objectos, lo hacemos convirtiendoslos a JSOn y luebo comparando esos objetos json
+     * @param object1
+     * @param object2
+     * @return 
+     */
+    public static Boolean equals(Object object1, Object object2){
+        try {
+            Jsonb jsonb = JsonbBuilder.create();
+                    String json1 = jsonb.toJson(object1);
+                    
+                    String json2 = jsonb.toJson(object2);
+                    if(json1.equals(json2)){
+                        return true;
+                    }
+        } catch (Exception e) {
+             errorDialog(nameOfMethod(), e.getLocalizedMessage());
+        }
+        return false;
+    }
+// </editor-fold>
 }

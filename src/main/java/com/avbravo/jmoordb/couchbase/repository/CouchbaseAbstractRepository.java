@@ -6,11 +6,11 @@
 package com.avbravo.jmoordb.couchbase.repository;
 
 import com.avbravo.jmoordb.DatePatternBeans;
-import com.avbravo.jmoordb.EmbeddedBeans;
+import com.avbravo.jmoordb.EmbeddedModel;
 import com.avbravo.jmoordb.FieldBeans;
 import com.avbravo.jmoordb.JmoordbException;
 import com.avbravo.jmoordb.PrimaryKey;
-import com.avbravo.jmoordb.ReferencedBeans;
+import com.avbravo.jmoordb.ReferencedModel;
 import com.avbravo.jmoordb.couchbase.internal.DocumentToJavaCouchbase;
 import com.avbravo.jmoordb.couchbase.internal.JavaToDocumentCouchbase;
 import com.avbravo.jmoordb.util.Analizador;
@@ -58,8 +58,8 @@ public abstract class CouchbaseAbstractRepository<T> implements CouchbaseAbstrac
     private Boolean lazy;
     List<T> list = new ArrayList<>();
     List<PrimaryKey> primaryKeyList = new ArrayList<>();
-    List<EmbeddedBeans> embeddedBeansList = new ArrayList<>();
-    List<ReferencedBeans> referencedBeansList = new ArrayList<>();
+    List<EmbeddedModel> embeddedBeansList = new ArrayList<>();
+    List<ReferencedModel> referencedBeansList = new ArrayList<>();
     List<DatePatternBeans> datePatternBeansList = new ArrayList<>();
     List<FieldBeans> fieldBeansList = new ArrayList<>();
     Exception exception;
