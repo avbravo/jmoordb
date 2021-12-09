@@ -7167,9 +7167,7 @@ fieldtype = fieldtype.toLowerCase();
     public T clientEndPoint(MicroservicesModel microservicesModel, String key, String value) {
         try {
             
-             HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basicBuilder()
-          .credentials(JmoordbUtil.desencriptar(microservicesModel.getUser()), JmoordbUtil.desencriptar(microservicesModel.getPassword()))
-          .build();
+           
 // HttpAuthenticationFeature httpAuthenticationFeature =  
 //          HttpAuthenticationFeature.basic(
 //                 JmoordbUtil.desencriptar(microservicesModel.getUser()),
@@ -7182,6 +7180,9 @@ fieldtype = fieldtype.toLowerCase();
 //            System.out.println("Text-->tlocal.getClass() "+tlocal.getClass());
 
             System.out.println("Test--> fijo");
+              HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basicBuilder()
+          .credentials(JmoordbUtil.desencriptar(microservicesModel.getUser()), JmoordbUtil.desencriptar(microservicesModel.getPassword()))
+          .build();
  Client client = ClientBuilder.newClient();
  client.register(httpAuthenticationFeature);
 //  WebTarget webTarget = client.target("http://localhost:9001/autentificacion/resources/user/search").path("username")
@@ -7190,8 +7191,10 @@ fieldtype = fieldtype.toLowerCase();
 //  Response response = invocationBuilder.put(Entity.entity(user, MediaType.APPLICATION_JSON));
 
   
-    String entity = client.target("http://localhost:9001/autentificacion/resources/user").path("search").path("username/aristides.villarreal")
+    String entity = client.target("http://localhost:9001/autentificacion/resources/javaee8")
     .request(MediaType.APPLICATION_JSON).get(String.class);
+//    String entity = client.target("http://localhost:9001/autentificacion/resources/user/search").path("username/aristides.villarreal")
+//    .request(MediaType.APPLICATION_JSON).get(String.class);
 
   System.out.println("Test--> entity" +entity);
 //  String userJson = response.readEntity(String.class);
