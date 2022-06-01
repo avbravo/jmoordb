@@ -111,7 +111,21 @@ Video
 ## Release
 ### release-2.5
    - Soporte para MongoDB Java Driver 4.0+
-   - Integración Microprofile Config
+   - Ya no necesitas usar la clase JmoordbConection
+```
+//            JmoordbConnection jmc = new JmoordbConnection.Builder()
+//                    .withSecurity(false)
+//                    .withDatabase("basededato")
+//                    .withHost("locahost")
+//                    .withPort(27017)
+//                    .withUsername("")
+//                    .withPassword("")
+//                    .withUri("")
+//                    .build();
+
+```
+
+   - En su lugar se integro Microprofile Config
      Define el uri de conexion mongodb.uri en el archivo microprofile-config.properties
 ```
 Atlas
