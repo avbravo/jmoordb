@@ -107,3 +107,18 @@ JPA AND MICROSERVICES, RXJAVA, CRUD AND TX, GRADLE, CROSS FIELD VALIDATION, LICE
 Video
 <https://www.youtube.com/watch?v=eSoJYBOgIHk>
 
+
+## Release
+### release-2.5
+   - Soporte para MongoDB Java Driver 4.0+
+   - Integración Microprofile Config
+     Define el uri de conexion mongodb.uri en el archivo microprofile-config.properties
+```
+Atlas
+mongodb.uri=mongodb+srv://user:password@mogodbAtlas
+
+Local
+
+mongodb.uri=mongodb://localhost:27017
+```
+

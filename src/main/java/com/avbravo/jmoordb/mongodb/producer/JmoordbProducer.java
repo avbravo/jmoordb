@@ -7,17 +7,27 @@ package com.avbravo.jmoordb.mongodb.producer;
 
 import com.avbravo.jmoordb.configuration.JmoordbContext;
 import com.avbravo.jmoordb.util.JmoordbUtil;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.Block;
+import com.mongodb.MongoClientSettings;
+//import com.mongodb.MongoClient;
+//import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClients;
+import com.mongodb.connection.ClusterSettings;
 import java.util.ArrayList;
 import java.util.Arrays;
+import static java.util.Collections.singletonList;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
  *
@@ -26,50 +36,21 @@ import javax.inject.Singleton;
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class JmoordbProducer {
-
+@Inject
+    private Config config;
+    @Inject
+    @ConfigProperty(name = "mongodb.uri")
+    private String mongodburi;
     @Produces
     @ApplicationScoped
     public MongoClient mongoClient() {
-        MongoClient mongo = new MongoClient("localhost", 27017);
-        try {
-            String uri = JmoordbContext.get("uri") == null ? "" : (String) JmoordbContext.get("uri");
-            if (uri == null || uri.isEmpty()) {
-                String username = JmoordbContext.get("username") == null ? "" : (String) JmoordbContext.get("username");
-                String password = JmoordbContext.get("password") == null ? "" : (String) JmoordbContext.get("password");
-                String database = JmoordbContext.get("database") == null ? "" : (String) JmoordbContext.get("database");
-                String host = JmoordbContext.get("host") == null ? "" : (String) JmoordbContext.get("host");
-                String port = JmoordbContext.get("port") == null ? "" : (String) JmoordbContext.get("port");
-                Boolean security = JmoordbContext.get("security") == null ? false : (Boolean) JmoordbContext.get("security");
-                if (security == null && username == null) {
-                    security = false;
-                }
-                if (security) {
-
-                    char[] charArray = password.toCharArray();
-                    MongoCredential credential = MongoCredential.createCredential(username, database, charArray);
-                    ServerAddress serverAddress = new ServerAddress(host, Integer.parseInt(port));
-//             mongo = new MongoClient(serverAddress, new ArrayList<>());
-
-                    mongo = new MongoClient(serverAddress, new ArrayList<MongoCredential>() {
-                        {
-                            add(credential);
-                        }
-                    });
-//           
-                } else {
-                    mongo = new MongoClient();
-                }
-            } else {
-                System.out.println("--->conectacndose a MongoDB Atlas");
-                //Para conexion por uri generalmente de MongoDB Atlas
-                mongo = new MongoClient(new MongoClientURI(uri));
-            }
-
-        } catch (Exception e) {
-            System.out.println("error() " + e.getLocalizedMessage());
-            //       JmoordbUtil.errorMessage("conecction() "+e.getLocalizedMessage());
-        }
-
-        return mongo;
+           System.out.println("###############################################");
+        System.out.println("Microprofile Config");
+        System.out.println("Microprofile mongodburi "+mongodburi);
+        System.out.println("###############################################");
+            MongoClient mongoClient = MongoClients.create(mongodburi);
+            System.out.println("@Produces :{Connected successfully to server.}");
+        return mongoClient;
+     
     }
 }
