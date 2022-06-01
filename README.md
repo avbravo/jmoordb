@@ -16,14 +16,14 @@ Sintaxis similiar a JPA
  ##Documentación y Libro <https://app.gitbook.com/@avbravo-2/s/jmoordb/>
  
  ##Taller Jmoordb <https://avbravo-2.gitbook.io/jmoordbtaller/>
-  
+  ```
 Dependencias
  
       <dependencies>
           <dependency>
 	    <groupId>com.github.avbravo</groupId>
 	    <artifactId>jmoordb</artifactId>
-	    <version>0.27</version>
+	    <version>2.5</version>
 	 </dependency>
      </dependencies>
 
@@ -33,12 +33,12 @@ Dependencias
 		    <url>https://jitpack.io</url>
 		</repository>
 	</repositories>
+```
 
-
-###Entity
+### Entity
  
 
- 
+ ```
 
 public class Paises {
 
@@ -58,11 +58,12 @@ public class Paises {
   
 }
 
+```
 <h2>Repository</h2>
 
 Las operaciones CRUD se implementan atraves de un Repository
 
-
+```
 import com.avbravo.jmoordb.mongodb.repository.Repository;
 
 import com.avbravo.transporteejb.entity.Rol;
@@ -83,10 +84,11 @@ public class PaisRepository extends Repository<Pais> {
     
    
 }
-
+```
 
   <h3>save()</h3>
-  
+
+  ```
    Paises paises = new Paises("pa","Panama");
    
    paisesRepository.save(paises);
@@ -94,7 +96,7 @@ public class PaisRepository extends Repository<Pais> {
    <h3>find()</h3>
    Paises paises = paisesRepository.find("idpais","pa");
    
-   
+   ```
    
    
 # jmoordb Documentación y Libro <https://www.gitbook.com/book/avbravo/jmoordb/details>
