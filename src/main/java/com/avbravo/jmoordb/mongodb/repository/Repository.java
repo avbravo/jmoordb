@@ -31,10 +31,13 @@ import com.avbravo.jmoordb.util.JmoordbDateUtil;
 import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
 import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
-import com.mongodb.Block;
 import com.mongodb.CursorType;
 import com.mongodb.Function;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.MongoCredential;
+
+//import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
@@ -75,6 +78,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -86,21 +90,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 import javax.servlet.ServletContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.xml.registry.infomodel.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.glassfish.jersey.client.JerseyClient;
-import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 // </editor-fold>
 
@@ -1028,25 +1023,19 @@ public abstract class Repository<T> implements InterfaceRepository {
 
             FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
 
-            haveElements = false;
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
-                    } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
+           
 
-                }
-            });
-            if (haveElements) {
+            Consumer<Document> printConsumer = document
+                    -> tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
+
+            db.getCollection(collection).find(new Document(key, value)).forEach(printConsumer);
+
+ 
+            if (tlocal != null) {
 
                 return Optional.of(tlocal);
             }
             return Optional.empty();
-
         } catch (Exception e) {          
           excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
@@ -1117,22 +1106,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return null;
             } else {
             }
-            FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
-            ////Test.msg("+++ paso iterable");
-            haveElements = false;
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
-                   } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
+            Consumer<Document> printConsumer = document
+                    -> tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
 
-                }
-            });
-            if (haveElements) {
+            db.getCollection(collection).find(new Document(key, value)).forEach(printConsumer);
+
+            if (tlocal != null) {
                 return tlocal;
             }
             return null;
@@ -1155,22 +1134,12 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return null;
             } else {
             }
-            FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
-            ////Test.msg("+++ paso iterable");
-            haveElements = false;
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
-                    } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
+             Consumer<Document> printConsumer = document
+                    -> tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
 
-                }
-            });
-            if (haveElements) {
+            db.getCollection(collection).find(new Document(key, value)).forEach(printConsumer);
+          
+            if (tlocal != null) {
                 return tlocal;
             }
             return null;
@@ -1193,28 +1162,18 @@ public abstract class Repository<T> implements InterfaceRepository {
                 return null;
             } else {
             }
-            FindIterable<Document> iterable = db.getCollection(collection).find(new Document(key, value));
-            ////Test.msg("+++ paso iterable");
-            haveElements = false;
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        haveElements = true;
-                        tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
-                    } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
 
-                }
-            });
-            if (haveElements) {
+            Consumer<Document> printConsumer = document
+                    -> tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
+
+            db.getCollection(collection).find(new Document(key, value)).forEach(printConsumer);
+            if (tlocal != null) {
                 return tlocal;
             }
             return null;
 
-        } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return null;
@@ -1310,31 +1269,22 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return
      */
     private T iterableSimple(FindIterable<Document> iterable) {
-        try {
-            //      ////Test.msg("$$$$$$$iterable simple");
+         try {
+          
             haveElements = false;
 
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        haveElements = true;
-                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
-                    } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
+            Consumer<Document> printConsumer = document
+                    -> tlocal = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
 
-                }
-            });
+            iterable.forEach(printConsumer);
 
-        } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         if (haveElements) {
             return (T) t1;
         }
         return null;
-
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="iterableList(FindIterable<Document> iterable)">
@@ -1347,46 +1297,31 @@ public abstract class Repository<T> implements InterfaceRepository {
         List< T> l = new ArrayList<>();
         try {
             //Test.msg("-->IterableList::");
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        //Test.msg("..........................................................................");
-                        //Test.msg("Prueba: iterable: "+document.toJson());
-                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
-                        l.add(t1);
-                    } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
 
-                }
-            });
+            Consumer<Document> printConsumer = document
+                    -> l.add((T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList));
 
-       } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+            iterable.forEach(printConsumer);
+
+
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return l;
     }// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="iterableList(FindIterable<Document> iterable)">
 
     private List< T> processAggregateIterable(AggregateIterable<Document> iterable) {
-        List< T> l = new ArrayList<>();
+       List< T> l = new ArrayList<>();
         try {
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
-                        t1 = (T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList);
-                        l.add(t1);
-                    } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
+              Consumer<Document> printConsumer = document
+                    -> l.add((T) documentToJava.fromDocument(entityClass, document, embeddedModelList, referencedModelList, microservicesModelList));
 
-                }
-            });
+            iterable.forEach(printConsumer);
+        
 
-       } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return l;
@@ -1394,37 +1329,30 @@ public abstract class Repository<T> implements InterfaceRepository {
     // <editor-fold defaultstate="collapsed" desc="processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable)">
 
     private List< JmoordbResult> processAggregateIterableJmoordbResult(AggregateIterable<Document> iterable) {
-        List<JmoordbResult> l = new ArrayList<>();
+         List<JmoordbResult> l = new ArrayList<>();
         List<Map<String, Object>> lObject = new ArrayList<>();
         try {
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
+              Consumer<Document> printConsumer = document -> 
+                               lObject.add(new HashMap<>(document));
+                   
+                    
+            
+iterable.forEach(printConsumer);
 
-                        // document.remove("_id");
-                        Map<String, Object> map = new HashMap<>(document);
-                        lObject.add(map);
-
-                    } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
-
-                }
-            });
+           
             for (Map m : lObject) {
                 JmoordbResult jmoordbResult = new JmoordbResult();
                 for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
                     Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
-//                    System.out.println("====>key "+entry.getKey() + " value "+entry.getValue().toString());
+
                     jmoordbResult.put(entry.getKey(), entry.getValue().toString());
 
                 }
                 l.add(jmoordbResult);
             }
 
-        } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
 
         return l;
@@ -1486,42 +1414,22 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @return el numero de documentos en la coleccion
      */
     public Integer count(Document... doc) {
-        try {
+         try {
             contador = 0;
             Document documento = new Document();
             if (doc.length != 0) {
                 documento = doc[0];
                 //nuev a version ejecuta el count con documento como filtro
-                 contador = (int) mongoClient.getDatabase(database).getCollection(collection).count(documento);
-                //Version anterior hace un find y recorre la lista
-//                MongoDatabase db = mongoClient.getDatabase(database);
-//                FindIterable<Document> iterable = db.getCollection(collection).find(documento);
-//
-//                iterable.forEach(new Block<Document>() {
-//                    @Override
-//                    public void apply(final Document document) {
-//                        try {
-//                            contador++;
-//                        } catch (Exception e) {
-//                           
-//                            
-//                            
-//                           
-//                            Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
-//                            exception = new Exception("count()", e);
-//                        }
-//                    }
-//                });
+                contador = (int) mongoClient.getDatabase(database).getCollection(collection).countDocuments(documento);
 
             } else {
-                // no tiene parametros
-                
-                contador = (int) mongoClient.getDatabase(database).getCollection(collection).count();
+
+                contador = (int) mongoClient.getDatabase(database).getCollection(collection).countDocuments();
 
             }
 
-       } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return contador;
     }// </editor-fold>
@@ -1532,35 +1440,18 @@ public abstract class Repository<T> implements InterfaceRepository {
      * @param doc
      * @return el numero de documentos en la coleccion
      */
-    public Integer count(Bson filter) {
+     public Integer count(Bson filter) {
         try {
             contador = 0;
             //Nueva version cuenta directamente con el filtro
- contador = (int) mongoClient.getDatabase(database).getCollection(collection).count(filter);
- //Version anterior carga una lista de docuemnntos y luego cuenta
-//            MongoDatabase db = mongoClient.getDatabase(database);
-//            FindIterable<Document> iterable = db.getCollection(collection).find(filter);
-//
-//            iterable.forEach(new Block<Document>() {
-//                @Override
-//                public void apply(final Document document) {
-//                    try {
-//                        contador++;
-//                    } catch (Exception e) {
-//                       
-//                        
-//                        
-//                       
-//                        Logger.getLogger(Repository.class.getName() + "count()").log(Level.SEVERE, null, e);
-//                        exception = new Exception("count()", e);
-//                    }
-//                }
-//            });
- } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+            contador = (int) mongoClient.getDatabase(database).getCollection(collection).countDocuments(filter);
+
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return contador;
-    }// </editor-fold>
+    }
+// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="findAll(Document... docSort) ">
     /**
@@ -2364,7 +2255,7 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     // <editor-fold defaultstate="collapsed" desc="FindIterable<Document> getIterable()">
     private FindIterable<Document> getIterable() {
-        FindIterable<Document> iterable = new FindIterable<Document>() {
+       FindIterable<Document> iterable = new FindIterable<Document>() {
             @Override
             public FindIterable<Document> filter(Bson bson) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -2390,11 +2281,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
-            @Override
-            public FindIterable<Document> modifiers(Bson bson) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
+           
             @Override
             public FindIterable<Document> projection(Bson bson) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -2445,10 +2332,7 @@ public abstract class Repository<T> implements InterfaceRepository {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
-            @Override
-            public void forEach(Block<? super Document> block) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+         
 
             @Override
             public <A extends Collection<? super Document>> A into(A a) {
@@ -2480,10 +2364,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
-            @Override
-            public FindIterable<Document> maxScan(long l) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          
+          
 
             @Override
             public FindIterable<Document> returnKey(boolean bln) {
@@ -2495,9 +2377,15 @@ public abstract class Repository<T> implements InterfaceRepository {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
+          
             @Override
-            public FindIterable<Document> snapshot(boolean bln) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            public FindIterable<Document> hintString(String string) {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
+            @Override
+            public MongoCursor<Document> cursor() {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
         };
         return iterable;
@@ -4965,22 +4853,18 @@ public abstract class Repository<T> implements InterfaceRepository {
 
     // <editor-fold defaultstate="collapsed" desc="processUnknownIterableJmoordbResult(AggregateIterable<Document> iterable)">
     private List< JmoordbResult> processUnknownIterableJmoordbResult(FindIterable<Document> iterable) {
-        List<JmoordbResult> l = new ArrayList<>();
+          List<JmoordbResult> l = new ArrayList<>();
         List<Map<String, Object>> lObject = new ArrayList<>();
         try {
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    try {
+            
+                      Consumer<Document> printConsumer = document -> 
+                               lObject.add(new HashMap<>(document));
+                   
+                    
+            
+iterable.forEach(printConsumer);
 
-                        Map<String, Object> map = new HashMap<>(document);
-                        lObject.add(map);
-
-                  } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
-        }
-                }
-            });
+           
             for (Map m : lObject) {
                 JmoordbResult jmoordbResult = new JmoordbResult();
                 for (Iterator it = m.entrySet().iterator(); it.hasNext();) {
@@ -4991,8 +4875,8 @@ public abstract class Repository<T> implements InterfaceRepository {
                 l.add(jmoordbResult);
             }
 
-        } catch (Exception e) {          
-          excepcionManager(JmoordbUtil.nameOfClass() , JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            excepcionManager(JmoordbUtil.nameOfClass(), JmoordbUtil.nameOfMethod(), e.getLocalizedMessage(), e);
         }
         return l;
     }// </editor-fold>
