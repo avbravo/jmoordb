@@ -5,21 +5,10 @@
  */
 package com.avbravo.jmoordb.mongodb.producer;
 
-import com.avbravo.jmoordb.configuration.JmoordbContext;
-import com.avbravo.jmoordb.util.JmoordbUtil;
-import com.mongodb.Block;
-import com.mongodb.MongoClientSettings;
 //import com.mongodb.MongoClient;
 //import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
-import com.mongodb.client.MongoClients;
-import com.mongodb.connection.ClusterSettings;
-import java.util.ArrayList;
-import java.util.Arrays;
-import static java.util.Collections.singletonList;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.enterprise.context.ApplicationScoped;
@@ -44,10 +33,7 @@ public class JmoordbProducer {
     @Produces
     @ApplicationScoped
     public MongoClient mongoClient() {
-           System.out.println("###############################################");
-        System.out.println("Microprofile Config");
-        System.out.println("Microprofile mongodburi "+mongodburi);
-        System.out.println("###############################################");
+          
             MongoClient mongoClient = MongoClients.create(mongodburi);
             System.out.println("@Produces :{Connected successfully to server.}");
         return mongoClient;
