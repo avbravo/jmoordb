@@ -4,7 +4,7 @@
 
     <groupId>com.avbravo</groupId>
     <artifactId>jmoordb</artifactId>
-    <version>2.5</version>
+    <version>2.5.1</version>
     <packaging>ejb</packaging>
 
     <name>jmoordb</name>
@@ -20,6 +20,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <microprofile.version>4.0.1</microprofile.version>
+        <openpdf.version>1.3.27</openpdf.version>
     </properties>
 
     <dependencies>
@@ -53,17 +54,7 @@
             <version>2.34</version>
             <type>jar</type>
         </dependency>
-        <!--        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-common</artifactId>
-            <version>2.31</version>
-            <type>jar</type>
-        </dependency>-->
-        <!--        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.1</version>
-        </dependency>-->
+       
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
@@ -76,12 +67,7 @@
             <version>1.9.4</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>com.lowagie</groupId>
-            <artifactId>itext</artifactId>
-            <version>2.1.7</version>
-            <type>jar</type>
-        </dependency>
+       
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -91,12 +77,7 @@
         
 
  
-<!--        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver</artifactId>
-            <version>3.6.0</version>
-        </dependency>-->
- <dependency>
+        <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.0.6</version>
@@ -115,12 +96,21 @@
             <version>1.10</version>
         </dependency>
         <!--
-Para report
+        Primefaes
         -->
         <dependency>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports</artifactId>
-            <version>5.5.0</version>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>8.0</version>
+        </dependency>
+        <!--
+Para report
+        -->
+        
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>${openpdf.version}</version>
         </dependency>
         <dependency>
             <groupId>jfree</groupId>
@@ -128,10 +118,17 @@ Para report
             <version>1.0.13</version>
         </dependency>
         <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <version>8.0</version>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.4.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+       
+   
          
     </dependencies>
 

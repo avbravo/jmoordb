@@ -2702,7 +2702,7 @@ public class JmoordbUtil {
     }
       
       
-   // <editor-fold defaultstate="collapsed" desc="desencritpar">  
+   // <editor-fold defaultstate="collapsed" desc="String desencriptar(String textoencriptado, String key)">  
     /**
      * Encripta un texto en base a una llave
      *
@@ -2711,18 +2711,18 @@ public class JmoordbUtil {
      * @param key : mykey
      * @return
      */
-    public static String desencriptar(String textoencriptado) {
+    public static String desencriptar(String textoencriptado, String key) {
         try {
-            JmoordbCryptoConverter cryptoConverter = new JmoordbCryptoConverter(); 
+                      JmoordbCipher jmoordbCipher = new JmoordbCipher();
 
-            return cryptoConverter.convertToEntityAttribute(textoencriptado);
+            return jmoordbCipher.decryptMessage(textoencriptado.getBytes(), key.getBytes());
         } catch (Exception e) {
             errorMessage("desencriptar() " + e.getLocalizedMessage());
         }
         return "";
     }// </editor-fold>
 
-     // <editor-fold defaultstate="collapsed" desc="encriptar">  
+     // <editor-fold defaultstate="collapsed" desc="String encriptar(String texto, String key)">  
     /**
      * Encripta un texto en base a una llave
      *
@@ -2730,12 +2730,13 @@ public class JmoordbUtil {
      * @param key : mykey
      * @return
      */
-    public static String encriptar(String texto) {
+    public static String encriptar(String texto, String key) {
 
         try {
-            JmoordbCryptoConverter cryptoConverter = new JmoordbCryptoConverter();
 
-            return cryptoConverter.convertToDatabaseColumn(texto);
+            JmoordbCipher jmoordbCipher = new JmoordbCipher();
+
+            return jmoordbCipher.encryptMessage(texto.getBytes(), key.getBytes());
         } catch (Exception e) {
             errorMessage("encriptar() " + e.getLocalizedMessage());
         }

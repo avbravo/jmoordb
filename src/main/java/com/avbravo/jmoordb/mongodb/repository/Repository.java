@@ -7018,7 +7018,7 @@ fieldtype = fieldtype.toLowerCase();
         
   // <editor-fold defaultstate="collapsed" desc="T search(String key, Integer value)">
 
-    public T clientEndPoint(MicroservicesModel microservicesModel, String key, Integer value) {
+    public T clientEndPoint(MicroservicesModel microservicesModel, String key, Integer value, String privatekey) {
         try {
  HttpAuthenticationFeature httpAuthenticationFeature = null;
             System.out.println("Test --> microservicesModel.getUser() "+microservicesModel.getUser());
@@ -7027,7 +7027,7 @@ fieldtype = fieldtype.toLowerCase();
             System.out.println("Test -->microservicesModel.getField() "+microservicesModel.getField());
             System.out.println("Test -->value "+value);
             Client client = ClientBuilder.newClient();
-            client.register(httpAuthenticationFeature(microservicesModel.getUser(),microservicesModel.getPassword()));
+            client.register(httpAuthenticationFeature(microservicesModel.getUser(),microservicesModel.getPassword(), privatekey));
           tlocal = (T) client
                     .target(microservicesModel.getUrl())
                     .path("/{" +microservicesModel.getField() +"}")
@@ -7048,18 +7048,18 @@ fieldtype = fieldtype.toLowerCase();
     
   // <editor-fold defaultstate="collapsed" desc="T search(String key, String value)">
 
-    public T clientEndPoint(MicroservicesModel microservicesModel, String key, String value) {
+    public T clientEndPoint(MicroservicesModel microservicesModel, String key, String value, String privateKey) {
         try {
             
              HttpAuthenticationFeature httpAuthenticationFeature = HttpAuthenticationFeature.basicBuilder()
-          .credentials(JmoordbUtil.desencriptar(microservicesModel.getUser()), JmoordbUtil.desencriptar(microservicesModel.getPassword()))
+          .credentials(JmoordbUtil.desencriptar(microservicesModel.getUser(),privateKey), JmoordbUtil.desencriptar(microservicesModel.getPassword(), privateKey))
           .build();
 // HttpAuthenticationFeature httpAuthenticationFeature =  
 //          HttpAuthenticationFeature.basic(
 //                 JmoordbUtil.desencriptar(microservicesModel.getUser()),
 //                 JmoordbUtil.desencriptar(microservicesModel.getPassword()));
-            System.out.println("Test --> microservicesModel.getUser() "+JmoordbUtil.desencriptar(microservicesModel.getUser()));
-            System.out.println("Test --> microservicesModel.getPassword() "+JmoordbUtil.desencriptar(microservicesModel.getPassword()));
+            System.out.println("Test --> microservicesModel.getUser() "+JmoordbUtil.desencriptar(microservicesModel.getUser(), privateKey));
+            System.out.println("Test --> microservicesModel.getPassword() "+JmoordbUtil.desencriptar(microservicesModel.getPassword(),privateKey));
             System.out.println("Test -->microservicesModel.getUrl() "+microservicesModel.getUrl());
             System.out.println("Test -->microservicesModel.getField() "+microservicesModel.getField());
             System.out.println("Test -->value "+value);
@@ -7189,11 +7189,11 @@ fieldtype = fieldtype.toLowerCase();
      *
      * @return
      */
-    public HttpAuthenticationFeature httpAuthenticationFeature(String user, String password) {
+    public HttpAuthenticationFeature httpAuthenticationFeature(String user, String password, String key) {
         HttpAuthenticationFeature httpAuthenticationFeature = null;
         try {
-          String   userAutentification = JmoordbUtil.desencriptar(user);
-            String passwordAutentification = JmoordbUtil.desencriptar(password);
+          String   userAutentification = JmoordbUtil.desencriptar(user, key);
+            String passwordAutentification = JmoordbUtil.desencriptar(password, key);
             httpAuthenticationFeature = HttpAuthenticationFeature.basic(userAutentification,  passwordAutentification);
 
         } catch (Exception e) {
