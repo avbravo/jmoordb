@@ -67,8 +67,8 @@ public class JmoordbDocument {
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
-              Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JmoordbUtil.nameOfClass() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+              Logger.getLogger(JmoordbUtil.nameOfClass() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
             exception = new Exception(JmoordbUtil.nameOfMethod(), e);
         }
         return sort;
@@ -104,8 +104,8 @@ switch(sorter){
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
-              Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JmoordbDocument.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+              Logger.getLogger(JmoordbDocument.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
             exception = new Exception(JmoordbUtil.nameOfMethod(), e);
      }
      return ordernumber;
@@ -155,8 +155,8 @@ fieldtype = fieldtype.toLowerCase();
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
-   Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JmoordbUtil.nameOfClass()+ JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+   Logger.getLogger(JmoordbUtil.nameOfClass()+ JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
             exception = new Exception(JmoordbUtil.nameOfMethod(), e);
         }
             return null;
@@ -209,7 +209,7 @@ return filter;
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JmoordbUtil.nameOfClass()+ JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
             exception = new Exception(JmoordbUtil.nameOfMethod(), e);
         }
 
@@ -240,7 +240,7 @@ return filter;
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JmoordbUtil.nameOfClass()+ JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
             exception = new Exception(JmoordbUtil.nameOfMethod(), e);
         }
 
@@ -260,7 +260,7 @@ json = asBsonDocument.toJson();
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JmoordbUtil.nameOfClass()+ JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
             exception = new Exception(JmoordbUtil.nameOfMethod(), e);
         }
         return json;
@@ -277,7 +277,7 @@ json = asBsonDocument.toJson();
             System.out.println("Class:" + JmoordbUtil.nameOfClass() + " Metodo:" + JmoordbUtil.nameOfMethod());
             System.out.println("Error " + e.getLocalizedMessage());
             System.out.println("------------------------------------------------------------------------------------------------");
-            Logger.getLogger(Repository.class.getName() + JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JmoordbUtil.nameOfClass()+ JmoordbUtil.nameOfMethod()).log(Level.SEVERE, null, e);
             exception = new Exception(JmoordbUtil.nameOfMethod(), e);
         }
     return query;
