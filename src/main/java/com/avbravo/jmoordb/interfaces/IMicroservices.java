@@ -14,7 +14,7 @@ import com.avbravo.jmoordb.configuration.JmoordbControllerEnvironment;
 import com.avbravo.jmoordb.metafactory.JmoordbIntrospection;
 import com.avbravo.jmoordb.mongodb.repository.Repository;
 import com.avbravo.jmoordb.services.RevisionHistoryServices;
-import com.avbravo.jmoordb.util.JmoordbPrinter;
+
 import com.avbravo.jmoordb.util.JmoordbUtil;
 
 import java.util.ArrayList;
@@ -2075,7 +2075,7 @@ public interface IMicroservices<T> {
             List<Object> list = new ArrayList<Object>();
             list.add(entity);
 
-            JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
+//            JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
         } catch (Exception ex) {
 
             JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
@@ -2138,7 +2138,7 @@ public interface IMicroservices<T> {
             Document doc = new Document(repository.primaryKeyName(entity), 1);
             List<Object> list = repository.findAll(doc);
 
-            JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
+//            JmoordbPrinter.imprimir(list, pathReportDetail, parameters);
         } catch (Exception ex) {
 
             JmoordbUtil.errorMessage(nameOfMethod() + " " + ex.getLocalizedMessage());
