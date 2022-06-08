@@ -32,6 +32,7 @@ import com.avbravo.jmoordb.util.JmoordbUtil;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
 import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
 import com.mongodb.CursorType;
+import com.mongodb.ExplainVerbosity;
 import com.mongodb.Function;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -94,6 +95,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
+import org.bson.BsonValue;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -2387,6 +2389,41 @@ iterable.forEach(printConsumer);
             public MongoCursor<Document> cursor() {
                 throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
+
+           @Override
+           public FindIterable<Document> comment(BsonValue bv) {
+               throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           }
+
+           @Override
+           public FindIterable<Document> let(Bson bson) {
+               throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           }
+
+           @Override
+           public FindIterable<Document> allowDiskUse(Boolean bln) {
+               throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           }
+
+           @Override
+           public Document explain() {
+               throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           }
+
+           @Override
+           public Document explain(ExplainVerbosity ev) {
+               throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           }
+
+           @Override
+           public <E> E explain(Class<E> type) {
+               throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           }
+
+           @Override
+           public <E> E explain(Class<E> type, ExplainVerbosity ev) {
+               throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           }
         };
         return iterable;
     }// </editor-fold>
