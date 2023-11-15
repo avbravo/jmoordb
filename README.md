@@ -2,6 +2,20 @@
 Object Documment Mapper for Java 
 Mapper for MongoDB ,OrientDB and Couchbase
 
+## Importante
+
+Hemos creado nuevas implementaciones que estan disponibles en los siguientes proyectos
+
+**JmoordbCore**
+
+[Jmoordbcore](https://github.com/avbravo/jmoordbcore)
+
+**JmoordbCore-NoSQL** : Integra JakartaData y JakartaNoSQL
+[Jmoordbcore-nosql](https://github.com/avbravo/jmoordb-core-jnosql)
+
+
+
+
 Es un Framework para integrar MongoDB/OrientDB/Cochbase con las aplicaciones Java de una manera sencilla.
 
 Sintaxis similiar a JPA
