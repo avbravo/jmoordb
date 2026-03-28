@@ -2174,6 +2174,10 @@ public class JmoordbUtil {
 
                     File destinationPath = new File(zipPath, entry.getName());
 
+                    if (!destinationPath.toPath().normalize().startsWith(zipPath)) {
+                        throw new IOException("Bad zip entry");
+                    }
+
                     //create parent directories
                     destinationPath.getParentFile().mkdirs();
 
